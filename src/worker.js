@@ -257,6 +257,22 @@ function httpsEnforced(env) {
   return env.ALLOW_INSECURE_HTTP !== '1';
 }
 
+/**
+ * Whether this request reached us over plaintext.
+ *
+ * Two independent signals, OR'd rather than picking one: `url.protocol` is the
+ * scheme the Worker was invoked with, and `CF-Visitor` carries the scheme the
+ * client used at the edge. The failure modes are asymmetric — trusting a single
+ * signal that turns out unreliable means the upgrade silently never fires and
+ * looks correct indefinitely, whereas a false positive is a redirect loop that
+ * is obvious within seconds. Requiring both signals to be wrong at once makes
+ * the silent failure far less likely.
+ */
+function isPlaintext(request, url) {
+  const visitor = request.headers.get('CF-Visitor') || '';
+  return url.protocol === 'http:' || visitor.includes('"scheme":"http"');
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -264,11 +280,18 @@ export default {
     // Upgrade before anything else runs. Answering a plaintext request with the
     // 401 challenge would invite the client to send the password in the clear,
     // so http: gets no challenge, no asset, and no D1 access.
-    if (url.protocol === 'http:' && httpsEnforced(env)) {
-      url.protocol = 'https:';
-      // 301 matches Cloudflare's own "Always Use HTTPS" behaviour and is cached
-      // by browsers, so repeat visits skip plaintext entirely.
-      return Response.redirect(url.toString(), 301);
+    if (isPlaintext(request, url) && httpsEnforced(env)) {
+      const target = new URL(url);
+      target.protocol = 'https:';
+      // Only redirect somewhere genuinely different. If CF-Visitor claims http
+      // while the Worker was already invoked over https, redirecting would point
+      // at the current URL and loop forever, taking the site down; fall through
+      // and let HSTS carry it instead.
+      if (target.toString() !== url.toString()) {
+        // 308 preserves the method, so a PUT to /api/save is not silently
+        // downgraded to a GET by a client that follows the redirect.
+        return Response.redirect(target.toString(), 308);
+      }
     }
 
     const response = await route(request, env, url);

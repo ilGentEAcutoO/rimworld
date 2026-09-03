@@ -293,14 +293,57 @@ describe('plaintext HTTP', () => {
   // the auth challenge that would prompt a client to send credentials.
   it('redirects an unauthenticated http request instead of challenging it', async () => {
     const res = await call('http://example.com/');
-    expect(res.status).toBe(301);
+    expect(res.status).toBe(308);
     expect(res.headers.get('Location')).toBe('https://example.com/');
     expect(res.headers.get('WWW-Authenticate')).toBeNull();
   });
 
+  // Second, independent signal: the edge reports the client's real scheme here,
+  // so an https-looking invocation is still upgraded if CF-Visitor says http.
+  it('redirects when only CF-Visitor reports plaintext', async () => {
+    const res = await call('https://example.com/api/save', {
+      headers: {
+        'CF-Visitor': '{"scheme":"http"}',
+        Authorization: basic(USER, PASS),
+      },
+    });
+    // Same-URL redirect would loop, so this falls through to a served response
+    // rather than a redirect — but it must never be a plaintext auth challenge.
+    expect(res.headers.get('WWW-Authenticate')).toBeNull();
+    expect(res.status).toBe(200);
+  });
+
+  it('upgrades an http request that CF-Visitor also reports as plaintext', async () => {
+    const res = await call('http://example.com/', {
+      headers: { 'CF-Visitor': '{"scheme":"http"}' },
+    });
+    expect(res.status).toBe(308);
+    expect(res.headers.get('Location')).toBe('https://example.com/');
+    expect(res.headers.get('WWW-Authenticate')).toBeNull();
+  });
+
+  it('serves normally when CF-Visitor confirms https', async () => {
+    const res = await call('https://example.com/', {
+      headers: { 'CF-Visitor': '{"scheme":"https"}' },
+    });
+    expect(res.status).toBe(401);
+  });
+
+  // A redirect must never point at the URL that produced it.
+  it('never redirects to the request URL itself', async () => {
+    for (const hdr of [{}, { 'CF-Visitor': '{"scheme":"http"}' }]) {
+      for (const target of ['http://example.com/x', 'https://example.com/x']) {
+        const res = await call(target, { headers: hdr });
+        if (res.status === 308) {
+          expect(res.headers.get('Location')).not.toBe(target);
+        }
+      }
+    }
+  });
+
   it('preserves path and query string in the upgrade', async () => {
     const res = await call('http://example.com/api/save?a=2&tab=food');
-    expect(res.status).toBe(301);
+    expect(res.status).toBe(308);
     expect(res.headers.get('Location')).toBe('https://example.com/api/save?a=2&tab=food');
   });
 
@@ -308,7 +351,7 @@ describe('plaintext HTTP', () => {
     const res = await call('http://example.com/api/save', {
       headers: { Authorization: basic(USER, PASS) },
     });
-    expect(res.status).toBe(301);
+    expect(res.status).toBe(308);
     expect(res.headers.get('Location')).toBe('https://example.com/api/save');
   });
 
@@ -340,7 +383,7 @@ describe('plaintext HTTP', () => {
       'still enforces HTTPS when the flag is %o',
       async (value) => {
         env.ALLOW_INSECURE_HTTP = value;
-        expect((await call('http://example.com/')).status).toBe(301);
+        expect((await call('http://example.com/')).status).toBe(308);
       },
     );
   });
@@ -351,7 +394,7 @@ describe('plaintext HTTP', () => {
       headers: { Authorization: basic(USER, PASS), 'Content-Type': 'application/json' },
       body: JSON.stringify(validPayload()),
     });
-    expect(res.status).toBe(301);
+    expect(res.status).toBe(308);
     const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM saves').first();
     expect(row.n).toBe(0);
   });

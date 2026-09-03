@@ -206,23 +206,73 @@ async function handlePutSave(request, env, username) {
   return json({ ok: true });
 }
 
+/**
+ * Adds HSTS so that after one HTTPS visit the browser refuses plaintext by
+ * itself — which is what actually defeats an sslstrip attempt, since the very
+ * first plaintext request is the one a redirect cannot protect.
+ *
+ * The zone-level "Always Use HTTPS"/HSTS setting would normally cover this, but
+ * it is not reachable with the deploy token's scopes, so the Worker sets it.
+ * Deliberately without `includeSubDomains`: this must not impose HTTPS on other
+ * hosts under jairukchan.com that this project does not own.
+ *
+ * Rebuilding the Response is required because asset responses have immutable
+ * headers. Null-body statuses (e.g. a 304 from a conditional asset request)
+ * already carry a null body, so passing it through stays legal.
+ */
+function withHsts(response) {
+  const out = new Response(response.body, response);
+  out.headers.set('Strict-Transport-Security', 'max-age=31536000');
+  return out;
+}
+
+async function route(request, env, url) {
+  const username = await authenticate(request, env);
+  if (!username) return unauthorized();
+
+  if (url.pathname === '/api/save') {
+    if (request.method === 'GET') return handleGetSave(env, username);
+    if (request.method === 'PUT') return handlePutSave(request, env, username);
+    return json({ error: 'method not allowed' }, 405, { Allow: 'GET, PUT' });
+  }
+
+  if (url.pathname.startsWith('/api/')) {
+    return json({ error: 'not found' }, 404);
+  }
+
+  return env.ASSETS.fetch(request);
+}
+
+/**
+ * Whether to force plaintext requests up to HTTPS.
+ *
+ * `wrangler dev` presents requests as `http://<the routes hostname>/`, i.e. the
+ * production host over plaintext — not localhost. So a naive scheme check
+ * redirects the developer to the real site instead of serving locally. The
+ * escape hatch lives in `.dev.vars` (gitignored, local only); production has no
+ * such variable, so the default is to enforce HTTPS. Fail-safe by construction:
+ * a missing or misspelt value enforces rather than skips.
+ */
+function httpsEnforced(env) {
+  return env.ALLOW_INSECURE_HTTP !== '1';
+}
+
 export default {
   async fetch(request, env) {
-    const username = await authenticate(request, env);
-    if (!username) return unauthorized();
-
     const url = new URL(request.url);
 
-    if (url.pathname === '/api/save') {
-      if (request.method === 'GET') return handleGetSave(env, username);
-      if (request.method === 'PUT') return handlePutSave(request, env, username);
-      return json({ error: 'method not allowed' }, 405, { Allow: 'GET, PUT' });
+    // Upgrade before anything else runs. Answering a plaintext request with the
+    // 401 challenge would invite the client to send the password in the clear,
+    // so http: gets no challenge, no asset, and no D1 access.
+    if (url.protocol === 'http:' && httpsEnforced(env)) {
+      url.protocol = 'https:';
+      // 301 matches Cloudflare's own "Always Use HTTPS" behaviour and is cached
+      // by browsers, so repeat visits skip plaintext entirely.
+      return Response.redirect(url.toString(), 301);
     }
 
-    if (url.pathname.startsWith('/api/')) {
-      return json({ error: 'not found' }, 404);
-    }
-
-    return env.ASSETS.fetch(request);
+    const response = await route(request, env, url);
+    // HSTS is only meaningful over HTTPS; clients must ignore it otherwise.
+    return url.protocol === 'https:' ? withHsts(response) : response;
   },
 };

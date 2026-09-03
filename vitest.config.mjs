@@ -15,6 +15,10 @@ export default defineConfig({
         bindings: {
           AUTH_USER: 'testuser',
           AUTH_PASS: 'test-pass-not-real',
+          // .dev.vars is also loaded here and sets this to "1" for local dev;
+          // pin it off so tests exercise the production HTTPS-enforcing path by
+          // default. The escape-hatch tests set it explicitly.
+          ALLOW_INSECURE_HTTP: '',
           TEST_MIGRATIONS: migrations,
         },
       },

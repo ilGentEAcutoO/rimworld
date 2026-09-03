@@ -1,5 +1,5 @@
 import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import worker from './worker.js';
 
 const USER = 'testuser';
@@ -10,7 +10,10 @@ function basic(user, pass) {
 }
 
 async function call(path, init = {}) {
-  const request = new Request(`https://example.com${path}`, init);
+  // `path` may be a bare path (defaults to https) or a full URL, so scheme-
+  // specific behaviour can be exercised.
+  const url = /^https?:\/\//.test(path) ? path : `https://example.com${path}`;
+  const request = new Request(url, init);
   const ctx = createExecutionContext();
   const res = await worker.fetch(request, env, ctx);
   await waitOnExecutionContext(ctx);
@@ -281,6 +284,102 @@ describe('PUT /api/save', () => {
       body: JSON.stringify(validPayload()),
     });
     expect(res.status).toBe(413);
+  });
+});
+
+describe('plaintext HTTP', () => {
+  // An attacker who can sslstrip the connection would otherwise read the
+  // password verbatim, so no request is answered over http: at all — not even
+  // the auth challenge that would prompt a client to send credentials.
+  it('redirects an unauthenticated http request instead of challenging it', async () => {
+    const res = await call('http://example.com/');
+    expect(res.status).toBe(301);
+    expect(res.headers.get('Location')).toBe('https://example.com/');
+    expect(res.headers.get('WWW-Authenticate')).toBeNull();
+  });
+
+  it('preserves path and query string in the upgrade', async () => {
+    const res = await call('http://example.com/api/save?a=2&tab=food');
+    expect(res.status).toBe(301);
+    expect(res.headers.get('Location')).toBe('https://example.com/api/save?a=2&tab=food');
+  });
+
+  it('redirects even when valid credentials are presented over http', async () => {
+    const res = await call('http://example.com/api/save', {
+      headers: { Authorization: basic(USER, PASS) },
+    });
+    expect(res.status).toBe(301);
+    expect(res.headers.get('Location')).toBe('https://example.com/api/save');
+  });
+
+  // `wrangler dev` hands the Worker the production hostname over plaintext, so
+  // the upgrade has to be switched off explicitly for local work — otherwise
+  // local requests get redirected to the real site.
+  describe('local dev escape hatch', () => {
+    afterEach(() => {
+      delete env.ALLOW_INSECURE_HTTP;
+    });
+
+    it('serves plaintext normally when ALLOW_INSECURE_HTTP=1', async () => {
+      env.ALLOW_INSECURE_HTTP = '1';
+      expect((await call('http://example.com/')).status).toBe(401);
+      const ok = await call('http://example.com/api/save', {
+        headers: { Authorization: basic(USER, PASS) },
+      });
+      expect(ok.status).toBe(200);
+    });
+
+    it('still omits HSTS when serving over plaintext', async () => {
+      env.ALLOW_INSECURE_HTTP = '1';
+      const res = await call('http://example.com/');
+      expect(res.headers.get('Strict-Transport-Security')).toBeNull();
+    });
+
+    // Fail-safe: only the exact string "1" disables the upgrade.
+    it.each(['0', 'true', 'yes', '', 'TRUE'])(
+      'still enforces HTTPS when the flag is %o',
+      async (value) => {
+        env.ALLOW_INSECURE_HTTP = value;
+        expect((await call('http://example.com/')).status).toBe(301);
+      },
+    );
+  });
+
+  it('does not touch D1 for an http write attempt', async () => {
+    const res = await call('http://example.com/api/save', {
+      method: 'PUT',
+      headers: { Authorization: basic(USER, PASS), 'Content-Type': 'application/json' },
+      body: JSON.stringify(validPayload()),
+    });
+    expect(res.status).toBe(301);
+    const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM saves').first();
+    expect(row.n).toBe(0);
+  });
+});
+
+describe('HSTS', () => {
+  // The zone-level "Always Use HTTPS"/HSTS toggle is not reachable with the
+  // deploy token's scopes, so the Worker sets the header itself.
+  it('sets Strict-Transport-Security on a 401', async () => {
+    const res = await call('https://example.com/');
+    expect(res.status).toBe(401);
+    expect(res.headers.get('Strict-Transport-Security')).toMatch(/max-age=\d+/);
+  });
+
+  it('sets Strict-Transport-Security on an authenticated API response', async () => {
+    const res = await authed('/api/save');
+    expect(res.headers.get('Strict-Transport-Security')).toMatch(/max-age=\d+/);
+  });
+
+  it('sets Strict-Transport-Security on a served static asset', async () => {
+    const res = await authed('/');
+    expect(res.status).toBe(200);
+    expect(res.headers.get('Strict-Transport-Security')).toMatch(/max-age=\d+/);
+  });
+
+  it('does not send HSTS over plaintext, where it must be ignored anyway', async () => {
+    const res = await call('http://example.com/');
+    expect(res.headers.get('Strict-Transport-Security')).toBeNull();
   });
 });
 

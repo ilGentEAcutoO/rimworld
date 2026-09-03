@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gravship-worker-web",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-02",
+  "account_id": "a24ce30584273b42333051f1cdec48e2",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    // Basic Auth must gate the static files too, so the Worker runs on EVERY
+    // request. Without `true` here, /index.html and /*.js would be served
+    // straight from the asset store and never reach the auth check.
+    "run_worker_first": true,
+    "not_found_handling": "none"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gravship-d1-main",
+      "database_id": "b610df16-b825-4eb7-8070-df66358cfb64",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}

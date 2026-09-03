@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workflow · งานที่ทำอยู่</title>
+<style>/* =============================================================
+   DESIGN SYSTEM — primitives + swappable themes
+   Style is NOT locked. Themes are starters; artifacts can pick
+   one with [data-theme="..."], override inline, or invent fresh.
+   Light-only (forced) · self-contained · Thai-friendly
+   Never ship a full-page dark brief — even if the OS/app is dark.
+   ============================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+
+/* ---------- BASE TOKENS (defaults = indigo theme) ---------- */
+:root{
+  /* surfaces */
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  /* ink */
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  /* accent (theme primary) */
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  /* semantic */
+  --ok:#14C7A1; --ok-rgb:20,199,161; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-rgb:255,107,107; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --info:#4FB8E5; --info-soft:#DCF1FB;
+  --pop:#FF80B5;
+  /* shape & motion */
+  --r:14px; --r-s:10px; --r-xs:7px;
+  --shadow-sm:0 1px 2px rgba(21,23,43,.05),0 3px 10px -3px rgba(21,23,43,.08);
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(var(--accent-rgb),.18);
+  --shadow-lg:0 4px 8px rgba(21,23,43,.08),0 20px 50px -12px rgba(var(--accent-rgb),.25);
+  /* hero mesh (theme decides the wash) */
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(110,90,230,.18), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(20,199,161,.14), transparent 60%),
+    radial-gradient(420px 280px at 55% 40%, rgba(255,128,181,.08), transparent 70%);
+  /* dark code panel — usually theme-stable */
+  --dark:#15172B; --dark-2:#1F2240; --dark-ink:#E8EAF5; --dark-dim:#7F84A8;
+  --code-k:#C58FFF; --code-s:#7EE6BD; --code-n:#FFB47A;
+  /* type */
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',
+    'Sukhumvit Set','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+
+/* ---------- THEME : mono (brutalist tech - mono font, hard shadows) ---------- */
+[data-theme="mono"]{
+  --bg:#FFFEF5; --card:#FFFFFF; --card-2:#F5F4ED;
+  --chrome:#F0EFE6; --line:#1A1A1A; --line-2:#1A1A1A;
+  --ink:#0A0A0A; --ink-2:#404040; --ink-3:#737373; --ink-4:#A3A3A3;
+  --accent:#171717; --accent-rgb:23,23,23;
+  --accent-soft:#E8FF6B; --accent-line:#1A1A1A; --accent-deep:#000000;
+  --ok:#16A34A; --ok-rgb:22,163,74; --ok-soft:#DCFCE7; --ok-line:#1A1A1A; --ok-deep:#15803D;
+  --bad:#DC2626; --bad-rgb:220,38,38; --bad-soft:#FEE2E2; --bad-line:#1A1A1A; --bad-deep:#B91C1C;
+  --warn:#CA8A04; --warn-soft:#FEF9C3; --warn-deep:#854D0E;
+  --sans:'JetBrains Mono','SF Mono',ui-monospace,Menlo,'Sukhumvit Set',monospace;
+  --r:2px; --r-s:2px; --r-xs:2px;
+  --shadow-sm:3px 3px 0 #1A1A1A;
+  --shadow:4px 4px 0 #1A1A1A;
+  --shadow-lg:6px 6px 0 #1A1A1A;
+  --hero-mesh:
+    radial-gradient(700px 380px at 90% -10%, rgba(232,255,107,.3), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(23,23,23,.04), transparent 60%);
+}
+
+/* ---------- THEME : warm (editorial - serif type, italic kicker, calm) ---------- */
+[data-theme="warm"]{
+  --bg:#F5F1E8; --card:#FFFFFF; --card-2:#FBF8F0;
+  --chrome:#EBE5D6; --line:#E0DAC8; --line-2:#CFC6AE;
+  --ink:#1B1A17; --ink-2:#55514A; --ink-3:#8B8678; --ink-4:#B0AB99;
+  --accent:#C8623E; --accent-rgb:200,98,62;
+  --accent-soft:#F2E0D6; --accent-line:#E0A98E; --accent-deep:#A5512F;
+  --ok:#6F864F; --ok-rgb:111,134,79; --ok-soft:#E4E8D8; --ok-line:#AEBE8E; --ok-deep:#516534;
+  --bad:#B4452F; --bad-rgb:180,69,47; --bad-soft:#F3DDD5; --bad-line:#DDA993; --bad-deep:#8D3322;
+  --warn:#B98828; --warn-soft:#F1E6CC; --warn-deep:#7A5715;
+  --sans:'Iowan Old Style','Georgia','Palatino','Sukhumvit Set',serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r:8px; --r-s:6px;
+  --shadow:0 1px 2px rgba(27,26,23,.04),0 14px 32px -12px rgba(200,98,62,.16);
+  --shadow-lg:0 2px 4px rgba(27,26,23,.05),0 22px 48px -14px rgba(200,98,62,.2);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(200,98,62,.14), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(111,134,79,.1), transparent 60%);
+}
+[data-theme="warm"] .kicker{font-family:var(--sans);font-style:italic;
+  letter-spacing:.02em;text-transform:none;font-weight:500;font-size:14px}
+[data-theme="warm"] h1,[data-theme="warm"] h2,[data-theme="warm"] h3{
+  font-weight:600;letter-spacing:-.005em}
+
+/* ---------- THEME : fresh (Y2K playful - blob shapes, drop shadows, sherbet) ---------- */
+[data-theme="fresh"]{
+  --bg:#FFF4EC; --card:#FFFFFF; --card-2:#FFEDDF;
+  --chrome:#FFE0C9; --line:#FFCEB0; --line-2:#FFB088;
+  --ink:#2D1B1F; --ink-2:#6E4548; --ink-3:#9B7A7D; --ink-4:#C9ADB0;
+  --accent:#FF5E8E; --accent-rgb:255,94,142;
+  --accent-soft:#FFD6E3; --accent-line:#FFA8C3; --accent-deep:#E03570;
+  --ok:#14B89A; --ok-rgb:20,184,154; --ok-soft:#D4F5EC; --ok-line:#7DDDC2; --ok-deep:#0E8970;
+  --bad:#D63060; --bad-rgb:214,48,96; --bad-soft:#FCE0E8; --bad-line:#F09AB3; --bad-deep:#A41E48;
+  --warn:#FFA826; --warn-soft:#FFE9C5; --warn-deep:#9A5F00;
+  --r:22px; --r-s:16px; --r-xs:10px;
+  --shadow:0 6px 0 rgba(255,94,142,.18),0 18px 36px -10px rgba(255,94,142,.35);
+  --shadow-lg:0 8px 0 rgba(255,94,142,.22),0 28px 56px -14px rgba(255,94,142,.45);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(255,94,142,.22), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(255,168,38,.18), transparent 60%),
+    radial-gradient(420px 280px at 55% 40%, rgba(20,184,154,.14), transparent 70%);
+}
+
+/* ---------- THEME : mist (sage + slate, calm minimal) ---------- */
+[data-theme="mist"]{
+  --bg:#F2F4F1; --card:#FFFFFF; --card-2:#F8FAF7;
+  --chrome:#E8ECE6; --line:#DBE0D8; --line-2:#C2CABC;
+  --ink:#1A2620; --ink-2:#475C50; --ink-3:#7A8D80; --ink-4:#A8B5AC;
+  --accent:#4A6B5C; --accent-rgb:74,107,92;
+  --accent-soft:#E5EBE6; --accent-line:#A8BFB1; --accent-deep:#324A41;
+  --ok:#7A9D6C; --ok-rgb:122,157,108; --ok-soft:#E4EEDF; --ok-line:#B5CDA8; --ok-deep:#557448;
+  --bad:#B85650; --bad-rgb:184,86,80; --bad-soft:#F0DFDD; --bad-line:#DBA8A4; --bad-deep:#893E39;
+  --warn:#A8862F; --warn-soft:#EDE4C6; --warn-deep:#705915;
+  --r:10px; --r-s:7px;
+  --shadow:0 1px 2px rgba(26,38,32,.05),0 10px 24px -10px rgba(74,107,92,.16);
+  --shadow-lg:0 2px 4px rgba(26,38,32,.06),0 18px 42px -14px rgba(74,107,92,.2);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(74,107,92,.14), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(168,134,47,.09), transparent 60%);
+}
+
+/* ============================================================
+   SHARED COMPONENTS — read tokens above, work in any theme
+   ============================================================ */
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* ---- type ---- */
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+h2{font-size:22px} h3{font-size:18px}
+.lead{font-size:16.5px;color:var(--ink-2);line-height:1.65}
+.mono{font-family:var(--mono)}
+a{color:var(--accent);text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);
+  padding:2px 7px;border-radius:5px;color:var(--accent-deep);font-weight:500}
+
+/* ---- window chrome ---- */
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 24px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 22px;box-shadow:var(--shadow-sm)}
+
+/* ---- pills / tags / badges ---- */
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:20px;
+  border:1px solid transparent;text-transform:uppercase}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.95}
+.pill.todo{background:var(--card-2);color:var(--ink-3);border-color:var(--line)}
+.pill.doing{background:var(--accent-soft);color:var(--accent-deep);border-color:var(--accent-line)}
+.pill.impl{background:var(--warn-soft);color:var(--warn-deep);border-color:var(--warn)}
+.pill.done{background:var(--ok-soft);color:var(--ok-deep);border-color:var(--ok-line)}
+.pill.block{background:var(--bad-soft);color:var(--bad-deep);border-color:var(--bad-line)}
+
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.badge{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;padding:3px 8px;border-radius:5px}
+.badge.hi{background:var(--bad-soft);color:var(--bad-deep)}
+.badge.mid{background:var(--warn-soft);color:var(--warn-deep)}
+.badge.lo{background:var(--card-2);color:var(--ink-3);border:1px solid var(--line)}
+
+/* ---- toggle / sliders ---- */
+.tg{appearance:none;cursor:pointer;width:44px;height:24px;border-radius:14px;
+  background:var(--line-2);position:relative;transition:background .2s;flex:none}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;
+  border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(21,23,43,.25);transition:left .2s}
+.tg:checked{background:var(--accent)}
+.tg:checked::after{left:23px}
+.range{appearance:none;width:100%;height:6px;border-radius:3px;background:var(--line);outline:none}
+.range::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--accent);cursor:pointer;border:3px solid #fff;
+  box-shadow:0 2px 8px rgba(var(--accent-rgb),.45);transition:transform .15s}
+.range::-webkit-slider-thumb:hover{transform:scale(1.18)}
+
+/* ---- buttons ---- */
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;
+  padding:10px 20px;border-radius:var(--r-s);border:1px solid transparent;transition:all .15s}
+.btn.primary{background:var(--accent);color:#fff;
+  box-shadow:0 1px 2px rgba(21,23,43,.1),0 6px 18px -4px rgba(var(--accent-rgb),.45)}
+.btn.primary:hover{background:var(--accent-deep);transform:translateY(-1px)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line-2)}
+.btn:active{transform:translateY(1px)}
+
+/* ---- stat ---- */
+.stat{background:var(--card-2);border:1px solid var(--line);border-radius:var(--r-s);
+  padding:18px 20px}
+.stat .n{font-size:34px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.stat .l{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:8px;font-weight:600}
+.stat.good .n{color:var(--ok)} .stat.bad .n{color:var(--bad)} .stat.key .n{color:var(--accent)}
+
+/* ---- notes ---- */
+.note{border-radius:var(--r-s);padding:13px 16px;font-size:14px;border:1px solid;
+  display:flex;gap:11px;line-height:1.55}
+.note .ic{font-weight:800;flex:none}
+.note.info{background:var(--info-soft);border-color:var(--info);color:var(--ink-2)}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok-deep)}
+.note.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad-deep)}
+
+/* ---- code panel ---- */
+.code{background:var(--dark);border-radius:var(--r-s);overflow:hidden;
+  font-family:var(--mono);font-size:12.5px;line-height:1.7}
+.code .top{background:var(--dark-2);padding:8px 14px;display:flex;justify-content:space-between;
+  color:var(--dark-dim);font-size:11.5px;font-weight:500}
+.code pre{padding:14px 16px;color:var(--dark-ink);overflow-x:auto}
+.code .c{color:var(--dark-dim)} .code .k{color:var(--code-k);font-weight:600}
+.code .s{color:var(--code-s)} .code .n{color:var(--code-n)}
+
+/* ---- approach cards ---- */
+.approach{background:var(--card-2);border:1.5px solid var(--line);border-radius:var(--r);
+  padding:18px;cursor:pointer;transition:all .2s}
+.approach:hover:not(.pick){transform:translateY(-3px);
+  box-shadow:0 1px 2px rgba(21,23,43,.06),0 18px 36px -12px rgba(var(--accent-rgb),.2);
+  border-color:var(--accent-line)}
+.approach.pick{border-color:var(--accent);background:var(--card);
+  box-shadow:0 0 0 4px var(--accent-soft),0 2px 6px rgba(21,23,43,.08),
+             0 18px 36px -12px rgba(var(--accent-rgb),.3)}
+.approach .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px}
+.approach .hd strong{font-size:15px;font-weight:700}
+.approach .hd .id{font-family:var(--mono);font-size:13px;color:var(--ink-4);font-weight:700}
+.approach.pick .id{color:var(--accent)}
+.approach .pro{color:var(--ok-deep);font-family:var(--mono);font-size:12.5px;font-weight:600}
+.approach .con{color:var(--bad-deep);font-family:var(--mono);font-size:12.5px;font-weight:600}
+
+/* ---- board ---- */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.col-h{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:700;padding:0 2px 8px;display:flex;justify-content:space-between}
+.tk{background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);
+  padding:13px 14px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+.tk .tkn{font-weight:700;font-size:14px;margin:7px 0 8px;line-height:1.4}
+.tk .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bar-track{height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--ok),var(--accent));border-radius:4px}
+
+/* ---- table ---- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2);font-weight:700}
+td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+
+/* ---- helpers ---- */
+.row{display:flex;gap:10px;align-items:center}
+.between{display:flex;justify-content:space-between;align-items:center}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ---- BRIEF tab nav ---- */
+.brief-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.btab{font-family:var(--sans);font-size:13px;cursor:pointer;font-weight:700;
+  padding:10px 18px;border-radius:var(--r-s);border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .18s}
+.btab:hover{border-color:var(--accent-line);color:var(--accent-deep);
+  background:var(--accent-soft);transform:translateY(-1px)}
+.btab.on{background:var(--ink);color:var(--card);border-color:var(--ink);
+  box-shadow:0 2px 4px rgba(0,0,0,.08),0 8px 20px -4px rgba(0,0,0,.25)}
+.btab .swatch{display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--theme-swatch,var(--accent));margin-right:6px;vertical-align:1px}
+
+.brief{display:none}
+.brief.on{display:block;animation:b-fade .35s ease}
+
+/* ---- CTA strip ---- */
+.cta-strip{margin-top:16px;padding:13px 16px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--ok-soft) 100%);
+  border:1px solid var(--accent-line);border-radius:var(--r-s);
+  font-size:13px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{color:var(--accent);font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{color:var(--accent-deep);font-weight:600;background:var(--card);
+  padding:4px 10px;border-radius:6px;border:1px solid var(--accent-line);
+  font-family:var(--mono);font-size:12px}
+
+/* ---- asymmetric grids ---- */
+.b-grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start}
+.b-grid-55{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
+
+/* ---- notes list ---- */
+.notes-list{font-size:14px;line-height:1.65;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:10px 0;border-bottom:1px solid var(--line);
+  display:flex;gap:11px;align-items:flex-start}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;line-height:1;
+  background:var(--accent-soft)}
+
+/* ---- flat task ---- */
+.flat-task{display:flex;align-items:center;gap:10px;padding:11px 14px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);margin-bottom:6px;
+  transition:all .15s}
+.flat-task:hover{border-color:var(--accent-line);transform:translateX(2px)}
+.flat-task .tn{font-weight:600;flex:1;font-size:14px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+/* ---- product screen ---- */
+.screen{background:#fff;border:1px solid var(--line);border-radius:var(--r-s);
+  padding:22px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+.field{display:flex;align-items:center;gap:10px;border:1.5px solid var(--accent-line);
+  border-radius:var(--r-s);padding:12px 14px;font-size:14px;color:var(--ink-3);background:#fff;
+  box-shadow:0 0 0 4px var(--accent-soft)}
+.result-row{display:flex;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line);
+  align-items:center}
+.result-row:last-child{border-bottom:none}
+.thumb{width:42px;height:42px;border-radius:var(--r-s);flex:none;
+  background:linear-gradient(135deg,var(--accent-soft),var(--accent-line))}
+.preview-box{background:linear-gradient(135deg,var(--accent-soft),var(--ok-soft));
+  border:1px dashed var(--accent-line);border-radius:var(--r-s);
+  display:flex;align-items:center;justify-content:center;padding:32px}
+
+/* ---- details fold ---- */
+details.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+details.fold>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"+ "}
+details.fold[open]>summary::before{content:"− "}
+details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
+
+/* ---- animations ---- */
+@keyframes b-up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+@keyframes b-grad{0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(4%,-3%) scale(1.08)}}
+@keyframes b-caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+.reveal{opacity:0}
+.reveal.in{animation:b-up .75s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+.caret::after{content:"";display:inline-block;width:2px;height:1em;background:var(--accent);
+  margin-left:2px;vertical-align:-2px;animation:b-caret 1s steps(1) infinite}
+.flow-packet{filter:drop-shadow(0 0 8px rgba(var(--accent-rgb),.55))}
+
+/* ---- hero gradient (theme-driven) ---- */
+.hero-deco{position:absolute;inset:-30px;pointer-events:none;z-index:0;
+  background:var(--hero-mesh);animation:b-grad 26s ease-in-out infinite}
+
+/* ---- responsive ---- */
+@media(max-width:760px){
+  .b-grid-2,.b-grid-55,.grid-3,.grid-2,.board,.stat-row{grid-template-columns:1fr}
+  .window>.body{padding:18px 16px}
+}
+@media print{
+  body{background:#fff}
+  .window{box-shadow:none;break-inside:avoid}
+  .brief-tabs{display:none}
+}
+
+.page{max-width:1000px;margin:0 auto;padding:30px 22px 70px}
+.resume-banner{background:var(--accent-soft);border:1px solid var(--accent-line);
+  border-radius:var(--r);padding:16px 18px;margin-bottom:22px}
+.empty{text-align:center;padding:60px 20px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== STATE ISLAND : agents edit ONLY this JSON ===== -->
+  <script type="application/json" id="workflow-state">
+{
+  "schemaVersion": 2,
+  "session": "feature / rimworld-hydro-online",
+  "updated": "2026-09-03 07:22",
+  "updatedBy": "claude",
+  "modelPolicy": {
+    "registryVersion": 1,
+    "standard": {
+      "claude": {
+        "model": "opus",
+        "fallbacks": [
+          "fable",
+          "sonnet"
+        ]
+      },
+      "codex": {
+        "model": "gpt-5.6-sol",
+        "reasoning": "max",
+        "strict": true
+      },
+      "kimi": {
+        "model": "k3",
+        "reasoning": "max",
+        "strict": true
+      },
+      "grok": {
+        "model": "grok-4.5",
+        "strict": true
+      }
+    },
+    "security": {
+      "claude": {
+        "model": "opus",
+        "strict": true
+      },
+      "codex": {
+        "model": "gpt-5.6-sol",
+        "reasoning": "max",
+        "strict": true
+      },
+      "kimi": {
+        "model": "k3",
+        "reasoning": "max",
+        "strict": true
+      },
+      "grok": {
+        "model": "grok-4.5",
+        "strict": true
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "ตั้งโครง repo rimworld + ย้ายไฟล์แอปเข้ามา",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler",
+        "cloudflare-naming",
+        "git-commit"
+      ],
+      "files": [
+        "index.html",
+        "calc.js",
+        "grow.js",
+        "drugs.js",
+        "power.js",
+        "package.json",
+        "wrangler.jsonc"
+      ],
+      "note": "scaffold clean, confirmed by reviewer-backend",
+      "progress": 100
+    },
+    {
+      "id": "TASK-002",
+      "name": "สร้าง D1 database + schema ตาราง save",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "migrations/0001_init.sql",
+        "wrangler.jsonc"
+      ],
+      "note": "D1 created + schema written + local migration verified; remote migration required step now tracked on TASK-008",
+      "progress": 100
+    },
+    {
+      "id": "TASK-003",
+      "name": "Basic Auth คุมทั้งเว็บใน Worker",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "security",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "src/worker.ts"
+      ],
+      "note": "Basic Auth verified live (401 on all paths incl. static assets), constant-time compare confirmed by reviewer-backend",
+      "progress": 100
+    },
+    {
+      "id": "TASK-004",
+      "name": "API บันทึก/โหลด save ผ่าน D1 + เชื่อมหน้าเว็บเดิม",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "src/worker.ts",
+        "index.html"
+      ],
+      "note": "API done; prototype-pollution bypass found + fixed + verified by mutation testing",
+      "progress": 100
+    },
+    {
+      "id": "TASK-005",
+      "name": "unit test: auth middleware + save/load API",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler",
+        "superpowers:test-driven-development"
+      ],
+      "files": [
+        "src/worker.test.ts"
+      ],
+      "note": "128 tests green (93 app + 35 worker), reviewer verified 11 of 12 new tests fail without the fix",
+      "progress": 100
+    },
+    {
+      "id": "TASK-006",
+      "name": "E2E: login flow + save ข้ามเครื่อง/เบราว์เซอร์",
+      "status": "progress",
+      "priority": "medium",
+      "assigned": "reviewer-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "frontend-test"
+      ],
+      "files": [],
+      "note": "E2E via headed Playwright against local wrangler dev: login prompt, wrong/right creds, reload persistence, cross-context persistence, URL-beats-D1, no first-load clobber"
+    },
+    {
+      "id": "TASK-007",
+      "name": "push ขึ้น GitHub ilGentEAcutoO/rimworld",
+      "status": "progress",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "git-commit",
+        "git-push"
+      ],
+      "files": [],
+      "note": "git init + commit + push to ilGentEAcutoO/rimworld / next: verify remote"
+    },
+    {
+      "id": "TASK-008",
+      "name": "deploy Worker + ผูก rim.jairukchan.com + ตั้งรหัสผ่านจริง",
+      "status": "progress",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler",
+        "cloudflare",
+        "deploy"
+      ],
+      "files": [
+        "wrangler.jsonc"
+      ],
+      "note": "generate real creds, migrate:remote, set secrets, wrangler deploy, attach rim.jairukchan.com / next: verify live site"
+    },
+    {
+      "id": "TASK-009",
+      "name": "security review รอบสุดท้ายก่อนปิดงาน",
+      "status": "pending",
+      "priority": "high",
+      "assigned": "unassigned",
+      "executionProfile": "security",
+      "model": "opus",
+      "executedBy": null,
+      "skills": [
+        "security-review"
+      ],
+      "files": []
+    }
+  ],
+  "fileLocks": [],
+  "resume": null
+}
+  </script>
+
+  <div id="app"></div>
+</div>
+
+<script>
+/* todos.html renderer — rebuilds the board from the JSON island.
+   Agents must NEVER hand-edit the markup below; edit the JSON above. */
+(function(){
+  var S;
+  try { S = JSON.parse(document.getElementById('workflow-state').textContent); }
+  catch(e){ document.getElementById('app').innerHTML =
+    '<div class="note danger"><span class="ic">!</span><div>State JSON is invalid: '
+    +esc(e.message)+'</div></div>'; return; }
+
+  var COLS = [
+    {key:'todo',   label:'ยังไม่เริ่ม',     has:function(s){return s==='pending';}},
+    {key:'doing',  label:'กำลังทำ',       has:function(s){return s==='progress'||s==='impl'||s==='blocked';}},
+    {key:'done',   label:'เสร็จแล้ว',       has:function(s){return s==='done';}}
+  ];
+  var PILL = {pending:['todo','pending'],progress:['doing','in&nbsp;progress'],
+    impl:['impl','implemented'],done:['done','tested'],blocked:['block','blocked']};
+  var BADGE = {high:['hi','high'],medium:['mid','med'],low:['lo','low']};
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+
+  function card(t){
+    var p = PILL[t.status]||PILL.pending;
+    var b = t.priority?BADGE[t.priority]:null;
+    var h = '<div class="tk"'+(t.status==='blocked'
+        ?' style="border-color:var(--bad-line);box-shadow:0 0 0 3px var(--bad-soft)"'
+        :t.status==='progress'
+        ?' style="border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)"':'')+'>';
+    h += '<div class="row"><span class="pill '+p[0]+'">'+p[1]+'</span>';
+    if(b) h += '<span class="badge '+b[0]+'">'+b[1]+'</span>';
+    h += '<span class="mono small muted" style="margin-left:auto">'+esc(t.id)+'</span></div>';
+    h += '<div class="tkn">'+esc(t.name)+'</div>';
+    var meta = [];
+    (t.files||[]).forEach(function(f){meta.push('<span class="tag">'+esc(f)+'</span>');});
+    (t.skills||[]).forEach(function(s){meta.push('<span class="tag" style="color:var(--info)">'+esc(s)+'</span>');});
+    if(t.assigned && t.assigned!=='unassigned')
+      meta.push('<span class="tag" style="color:var(--accent)">'+esc(t.assigned)+'</span>');
+    if(t.executedBy){
+      var ran = esc(t.executedBy.agent)+': '+esc(t.executedBy.model);
+      if(t.executedBy.reasoning) ran += ' · '+esc(t.executedBy.reasoning);
+      meta.push('<span class="tag" style="color:var(--accent-deep)">'+ran+'</span>');
+    } else if(t.model) {
+      meta.push('<span class="tag" style="color:var(--accent-deep)">'+esc(t.model)+'</span>');
+    }
+    if(meta.length) h += '<div class="meta">'+meta.join('')+'</div>';
+    if(typeof t.progress==='number' && t.status!=='done')
+      h += '<div class="bar-track" style="margin-top:9px"><div class="bar-fill" style="width:'
+        +Math.max(0,Math.min(100,t.progress))+'%"></div></div>';
+    if(t.note) h += '<div class="small muted" style="margin-top:8px">'+esc(t.note)+'</div>';
+    return h+'</div>';
+  }
+
+  var tasks = S.tasks||[];
+  var doneN = tasks.filter(function(t){return t.status==='done';}).length;
+  var pct = tasks.length? Math.round(doneN/tasks.length*100):0;
+  var C = 2*Math.PI*19, off = C*(1-pct/100);
+
+  var html = '';
+
+  if(S.resume){
+    var r = S.resume;
+    html += '<div class="resume-banner"><div class="kicker" style="color:var(--accent);'
+      +'margin-bottom:6px">Session paused — resume context</div>'
+      +'<strong>'+esc(r.reason||'saved')+'</strong>'
+      +'<span class="small muted"> · '+esc(r.exitTime||'')+'</span>';
+    if(r.goal){
+      html += '<div class="small" style="margin-top:8px"><span class="tag" '
+        +'style="color:var(--accent-deep)">GOAL ค้างอยู่</span> '+esc(r.goal)
+        +' <span class="muted">— ตั้งต่อผ่านคำสั่ง goal ของ active host เมื่อรองรับ</span></div>';
+    }
+    if(r.agents&&r.agents.length){
+      html += '<div style="margin-top:10px;display:grid;gap:6px">';
+      r.agents.forEach(function(a){
+        html += '<div class="small"><strong>'+esc(a.name)+'</strong> — '+esc(a.task||'')
+          +' · ทำต่อ: '+esc(a.nextStep||'')+'</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  html += '<div class="between" style="margin-bottom:18px">'
+    +'<div><div class="kicker">Session</div>'
+    +'<h2 style="font-size:21px">'+esc(S.session)+'</h2></div>'
+    +'<div class="row" style="gap:16px">'
+    +'<div style="text-align:right"><div class="kicker">Updated</div>'
+    +'<strong class="mono small">'+esc(S.updated)+'</strong>'
+    +'<div class="small muted">by '+esc(S.updatedBy||'unknown')+'</div></div>'
+    +'<svg width="46" height="46" viewBox="0 0 46 46">'
+    +'<circle cx="23" cy="23" r="19" fill="none" stroke="#E3DACC" stroke-width="6"/>'
+    +'<circle cx="23" cy="23" r="19" fill="none" stroke="#6F864F" stroke-width="6" '
+    +'stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" '
+    +'stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 23 23)"/>'
+    +'<text x="23" y="27" text-anchor="middle" font-family="var(--mono)" '
+    +'font-size="11" font-weight="700" fill="#1B1A17">'+pct+'</text></svg></div></div>';
+
+  if(!tasks.length){
+    html += '<div class="window"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>'
+      +'<span class="title">todos.html</span></div>'
+      +'<div class="empty">ยังไม่มี task &mdash; <code>workflow-plan</code> จะเพิ่มเข้ามาเอง</div></div>';
+  } else {
+    html += '<div class="board">';
+    COLS.forEach(function(col){
+      var items = tasks.filter(function(t){return col.has(t.status);});
+      html += '<div><div class="col-h"><span>'+col.label+'</span><span>'+items.length+'</span></div>';
+      html += items.map(card).join('') ||
+        '<div class="small muted" style="padding:8px 2px">—</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  if((S.fileLocks||[]).length){
+    html += '<details class="fold"><summary>File locks ('+S.fileLocks.length+')</summary>'
+      +'<div class="inner"><table><thead><tr><th>ไฟล์</th><th>โดย</th><th>ตั้งแต่</th></tr></thead><tbody>';
+    S.fileLocks.forEach(function(l){
+      html += '<tr><td><code>'+esc(l.file)+'</code></td><td>'+esc(l.by)+'</td>'
+        +'<td class="mono">'+esc(l.since)+'</td></tr>';
+    });
+    html += '</tbody></table></div></details>';
+  }
+
+  document.getElementById('app').innerHTML = html;
+})();
+</script>
+</body>
+</html>

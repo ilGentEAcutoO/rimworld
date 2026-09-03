@@ -1,0 +1,22 @@
+{
+  "name": "gravship-life-support",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RimWorld hydroponics / life-support calculator on Cloudflare Workers + D1",
+  "scripts": {
+    "test": "npm run test:app && npm run test:worker",
+    "test:app": "node --test public/calc.test.js public/power.test.js public/grow.test.js public/drugs.test.js",
+    "test:worker": "vitest run",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate:local": "wrangler d1 migrations apply gravship-d1-main --local",
+    "migrate:remote": "cross-env CLOUDFLARE_ACCOUNT_ID=a24ce30584273b42333051f1cdec48e2 wrangler d1 migrations apply gravship-d1-main --remote",
+    "migrate:remote:list": "cross-env CLOUDFLARE_ACCOUNT_ID=a24ce30584273b42333051f1cdec48e2 wrangler d1 migrations list gravship-d1-main --remote"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.1.3",
+    "cross-env": "^10.1.0",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.125.0"
+  }
+}

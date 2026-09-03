@@ -1,0 +1,10 @@
+node_modules/
+.wrangler/
+.dev.vars
+agent-temp/
+
+# transient lock guard written by the workflow-state helper
+*.lock.guard
+
+# Playwright MCP scratch output
+.playwright-mcp/

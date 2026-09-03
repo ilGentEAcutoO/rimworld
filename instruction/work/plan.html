@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="th" data-theme="mono">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Plan — rim.jairukchan.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+:root{
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  --ok:#14C7A1; --ok-rgb:20,199,161; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-rgb:255,107,107; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --info:#4FB8E5; --info-soft:#DCF1FB;
+  --pop:#FF80B5;
+  --r:14px; --r-s:10px; --r-xs:7px;
+  --shadow-sm:0 1px 2px rgba(21,23,43,.05),0 3px 10px -3px rgba(21,23,43,.08);
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(var(--accent-rgb),.18);
+  --shadow-lg:0 4px 8px rgba(21,23,43,.08),0 20px 50px -12px rgba(var(--accent-rgb),.25);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(110,90,230,.18), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(20,199,161,.14), transparent 60%),
+    radial-gradient(420px 280px at 55% 40%, rgba(255,128,181,.08), transparent 70%);
+  --dark:#15172B; --dark-2:#1F2240; --dark-ink:#E8EAF5; --dark-dim:#7F84A8;
+  --code-k:#C58FFF; --code-s:#7EE6BD; --code-n:#FFB47A;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',
+    'Sukhumvit Set','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+[data-theme="mono"]{
+  --bg:#FFFEF5; --card:#FFFFFF; --card-2:#F5F4ED;
+  --chrome:#F0EFE6; --line:#1A1A1A; --line-2:#1A1A1A;
+  --ink:#0A0A0A; --ink-2:#404040; --ink-3:#737373; --ink-4:#A3A3A3;
+  --accent:#171717; --accent-rgb:23,23,23;
+  --accent-soft:#E8FF6B; --accent-line:#1A1A1A; --accent-deep:#000000;
+  --ok:#16A34A; --ok-rgb:22,163,74; --ok-soft:#DCFCE7; --ok-line:#1A1A1A; --ok-deep:#15803D;
+  --bad:#DC2626; --bad-rgb:220,38,38; --bad-soft:#FEE2E2; --bad-line:#1A1A1A; --bad-deep:#B91C1C;
+  --warn:#CA8A04; --warn-soft:#FEF9C3; --warn-deep:#854D0E;
+  --sans:'JetBrains Mono','SF Mono',ui-monospace,Menlo,'Sukhumvit Set',monospace;
+  --r:2px; --r-s:2px; --r-xs:2px;
+  --shadow-sm:3px 3px 0 #1A1A1A;
+  --shadow:4px 4px 0 #1A1A1A;
+  --shadow-lg:6px 6px 0 #1A1A1A;
+  --hero-mesh:
+    radial-gradient(700px 380px at 90% -10%, rgba(232,255,107,.3), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(23,23,23,.04), transparent 60%);
+}
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+h2{font-size:22px} h3{font-size:16px}
+.lead{font-size:15.5px;color:var(--ink-2);line-height:1.6}
+.mono{font-family:var(--mono)}
+a{color:var(--accent-deep);text-decoration:none;font-weight:500}
+code{font-family:var(--mono);font-size:.86em;background:var(--accent-soft);
+  padding:2px 7px;border-radius:2px;color:var(--accent-deep);font-weight:600}
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden;max-width:980px;margin:22px auto}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:12px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 26px 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px;box-shadow:var(--shadow-sm)}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:var(--card-2);border:1px solid var(--line);border-radius:2px;padding:3px 8px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:2px;
+  border:1px solid var(--line);text-transform:uppercase}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.hi{background:var(--bad-soft);color:var(--bad-deep);border-color:var(--bad-line)}
+.pill.md{background:var(--warn-soft);color:var(--warn-deep);border-color:var(--warn)}
+.pill.sec{background:var(--accent-soft);color:var(--accent-deep);border-color:var(--accent-line)}
+.pill.model{background:var(--card-2);color:var(--ink-2)}
+.note{border-radius:var(--r-s);padding:12px 15px;font-size:13.5px;border:1px solid;
+  display:flex;gap:10px;line-height:1.55;margin-bottom:10px}
+.note .ic{font-weight:800;flex:none}
+.note.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad-deep)}
+.note.info{background:var(--info-soft);border-color:var(--info);color:var(--ink-2)}
+.notes-list{font-size:14px;line-height:1.6;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:10px}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent-deep);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:2px;line-height:1;
+  background:var(--accent-soft)}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.muted{color:var(--ink-3)} .small{font-size:12.5px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:7px 9px;border-bottom:1px solid var(--line-2);font-weight:700}
+td{padding:8px 9px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+blockquote{border-left:3px solid var(--accent);background:var(--card-2);
+  padding:14px 16px;margin:10px 0;font-size:14.5px;color:var(--ink);border-radius:0 var(--r-s) var(--r-s) 0;
+  white-space:pre-wrap}
+
+/* tabs */
+.brief-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.btab{font-family:var(--sans);font-size:12.5px;cursor:pointer;font-weight:700;
+  padding:8px 14px;border-radius:2px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .15s}
+.btab:hover{border-color:var(--ink);color:var(--ink)}
+.btab.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.brief{display:none}
+.brief.on{display:block}
+
+.cta-strip{margin-top:14px;padding:12px 15px;
+  background:var(--accent-soft);
+  border:1px solid var(--accent-line);border-radius:2px;
+  font-size:12.5px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{color:var(--ink);font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{color:var(--ink);font-weight:700;background:var(--card);
+  padding:4px 10px;border-radius:2px;border:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px}
+
+/* journey row */
+.journey{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:8px;margin:18px 0}
+.jstep{background:var(--card-2);border:1.5px solid var(--line);border-radius:var(--r-s);
+  padding:16px 12px;text-align:center}
+.jstep .ico{font-size:26px;margin-bottom:6px}
+.jstep .t{font-weight:700;font-size:13px}
+.jstep .s{font-size:11.5px;color:var(--ink-3);margin-top:3px;font-family:var(--mono)}
+.jarrow{font-size:20px;color:var(--ink-3);font-weight:700}
+.jstep.now{border-color:var(--line);opacity:.65}
+.jstep.end{border-color:var(--ok-line);background:var(--ok-soft)}
+
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.stat{background:var(--card-2);border:1px solid var(--line);border-radius:var(--r-s);padding:14px 16px}
+.stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:6px;font-weight:700}
+.stat .n{font-size:16px;font-weight:800}
+.stat .d{font-size:12px;color:var(--ink-3);margin-top:4px}
+
+.flat-task{display:flex;align-items:center;gap:10px;padding:10px 13px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);margin-bottom:6px}
+.flat-task .idx{font-family:var(--mono);font-size:11px;color:var(--ink-4);flex:none;width:20px}
+.flat-task .tn{font-weight:600;flex:1;font-size:13.5px}
+.flat-task .meta{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+
+@media(max-width:760px){
+  .journey{grid-template-columns:1fr}
+  .jarrow{transform:rotate(90deg)}
+  .stat-row{grid-template-columns:1fr}
+  .window>.body{padding:16px 14px}
+}
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="title">plan.html — rimworld hydro calc → online</div></div>
+  <div class="body">
+
+    <nav class="brief-tabs">
+      <button class="btab on" data-t="overview">ภาพรวม</button>
+      <button class="btab" data-t="req">ความต้องการ</button>
+      <button class="btab" data-t="arch">สถาปัตยกรรม</button>
+      <button class="btab" data-t="sec">ความปลอดภัย</button>
+      <button class="btab" data-t="test">เทสต์</button>
+      <button class="btab" data-t="work">งานที่ต้องทำ</button>
+    </nav>
+
+    <!-- ===================== OVERVIEW ===================== -->
+    <section class="brief on" data-tab="overview">
+      <div class="kicker">แผน · 2026-09-03</div>
+      <h2 style="margin-top:6px">จากไฟล์ในเครื่อง → เว็บจริงที่ล็อกอินได้</h2>
+      <p class="lead" style="margin-top:6px">เครื่องคำนวณ hydroponics/life-support ของ RimWorld ที่ตอนนี้เปิดจากไฟล์บนเครื่อง จะย้ายขึ้นเป็นเว็บไซต์จริงที่ <strong class="mono">rim.jairukchan.com</strong> เก็บโค้ดใน GitHub และย้าย "save" จาก localStorage ไปเก็บออนไลน์ — เปิดเครื่องไหนก็เจอค่าล่าสุด</p>
+
+      <div class="journey">
+        <div class="jstep now"><div class="ico">📄</div><div class="t">ไฟล์ในเครื่อง</div><div class="s">file://…index.html</div></div>
+        <div class="jarrow">→</div>
+        <div class="jstep"><div class="ico">🐙</div><div class="t">GitHub</div><div class="s">ilGentEAcutoO/rimworld</div></div>
+        <div class="jarrow">→</div>
+        <div class="jstep"><div class="ico">☁️</div><div class="t">Cloudflare</div><div class="s">Worker + D1</div></div>
+        <div class="jarrow">→</div>
+        <div class="jstep end"><div class="ico">🔒</div><div class="t">rim.jairukchan.com</div><div class="s">ต้อง login</div></div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="l">โดเมน</div><div class="n mono">rim.jairukchan.com</div><div class="d">ผูกกับโดเมนที่มีอยู่แล้ว ไม่ต้องซื้อใหม่</div></div>
+        <div class="stat"><div class="l">การเข้าถึง</div><div class="n">username / password</div><div class="d">สุ่มรหัสให้ตอน deploy เสร็จ แล้วแจ้งใน chat ทันที</div></div>
+        <div class="stat"><div class="l">Save ข้อมูล</div><div class="n">localStorage → ออนไลน์</div><div class="d">เปิดคนละเครื่อง/เบราว์เซอร์ ก็ยังเจอค่าล่าสุด</div></div>
+      </div>
+
+      <div class="note info"><span class="ic">i</span><div><strong>repo ใหม่จะมีแค่เครื่องคำนวณตัวนี้อย่างเดียว</strong> — ไม่ดึงไฟล์อื่นจากโปรเจกต์ <code>game</code> เข้ามาด้วย (เช่นไฟล์ unity ที่ไม่เกี่ยวกัน) ถ้าอยากรวมทั้งโปรเจกต์บอกได้ในแชท</div></div>
+      <div class="note warn"><span class="ic">!</span><div>ถ้าผูกโดเมนอัตโนมัติกับ Cloudflare ไม่ผ่าน (สิทธิ์ DNS ของ token ที่ล็อกอินไว้จำกัดอยู่) จะมี 1 ขั้นตอนเสริมให้ทำเองใน Cloudflare dashboard — จะแจ้งเป็นขั้นตอนสั้น ๆ ตอนนั้น ไม่ใช่ตอนนี้</div></div>
+
+      <div class="cta-strip">
+        <span><span class="arrow">→</span> ตอบกลับในแชท: <strong>"ลุย"</strong> <strong>"เปลี่ยนชื่อ repo เป็น..."</strong> <strong>"ตั้ง username เป็น..."</strong></span>
+        <span class="muted">แผนนี้เป็นฉบับสมบูรณ์ ไม่ใช่ร่าง — ตอบ "ลุย" แล้วเริ่มทำได้เลย</span>
+      </div>
+    </section>
+
+    <!-- ===================== REQUIREMENTS ===================== -->
+    <section class="brief" data-tab="req">
+      <div class="kicker">ความต้องการต้นฉบับ</div>
+      <h3 style="margin-top:6px">เป้าหมายสั้น ๆ: เอา hydroponics calc ขึ้นเว็บจริง มีล็อกอิน เก็บ save ใน D1</h3>
+      <blockquote>เอาอันนี้ขึ้น online หน่อย ใส่ repo ของ ilgenteacto นะ rimworld ตรง ๆ เลยก็ได้ ส่วนชื่อ subdomain ขอเป็น rim.jairukchan.com ตัว save data ย้ายไปใช้ d1 แล้วก็มี username password กันไว้หน่อย บอก user pass มาด้วยนะ</blockquote>
+      <div class="divider"></div>
+      <table>
+        <tr><th>รายการ</th><th>ค่าที่ใช้</th></tr>
+        <tr><td>GitHub account</td><td class="mono">ilGentEAcutoO (ที่ login ไว้แล้วในเครื่องนี้ — ตรงกับ "ilgenteacto" ที่พิมพ์มา)</td></tr>
+        <tr><td>ชื่อ repo</td><td class="mono">rimworld</td></tr>
+        <tr><td>Subdomain</td><td class="mono">rim.jairukchan.com</td></tr>
+        <tr><td>โซนโดเมน jairukchan.com</td><td>อยู่ใน Cloudflare account "SORNKan Co., Ltd." ที่ login ไว้แล้ว</td></tr>
+        <tr><td>Save data</td><td>ย้ายจาก localStorage/URL → Cloudflare D1</td></tr>
+        <tr><td>การป้องกัน</td><td>username/password ทั้งเว็บ — สุ่มให้และแจ้งกลับ</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== ARCHITECTURE ===================== -->
+    <section class="brief" data-tab="arch">
+      <div class="kicker">สเปกสำหรับ agent · Architecture</div>
+      <h3 style="margin-top:6px">Cloudflare Worker เดียว คุมทั้งไฟล์เว็บและ API</h3>
+      <svg viewBox="0 0 720 260" style="width:100%;height:auto;margin:10px 0" role="img" aria-label="แผนผัง: เบราว์เซอร์เรียก Worker ที่เช็ค auth ก่อนส่งไฟล์เว็บหรืออ่าน/เขียน D1">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink)"></path>
+          </marker>
+        </defs>
+        <!-- browser -->
+        <rect x="16" y="95" width="140" height="70" rx="2" style="fill:var(--card);stroke:var(--line-2);stroke-width:1.5"></rect>
+        <text x="86" y="124" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)">เบราว์เซอร์</text>
+        <text x="86" y="142" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--ink-3)">rim.jairukchan.com</text>
+
+        <line x1="156" y1="130" x2="248" y2="130" style="stroke:var(--ink);stroke-width:1.5" marker-end="url(#ar)"></line>
+        <text x="202" y="122" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)">Basic Auth header</text>
+
+        <!-- worker -->
+        <rect x="252" y="80" width="190" height="100" rx="2" style="fill:var(--accent-soft);stroke:var(--ink);stroke-width:1.5"></rect>
+        <text x="347" y="115" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--ink)">Worker</text>
+        <text x="347" y="132" text-anchor="middle" style="font-family:var(--mono);font-size:10px;fill:var(--ink-2)">gravship-worker-web</text>
+        <text x="347" y="150" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--ink-2)">เช็ค user/pass ทุกคำขอ</text>
+        <text x="347" y="164" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--bad-deep)">ไม่ผ่าน → 401</text>
+
+        <line x1="442" y1="105" x2="560" y2="60" style="stroke:var(--ink);stroke-width:1.5" marker-end="url(#ar)"></line>
+        <text x="500" y="70" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)">GET /</text>
+
+        <line x1="442" y1="155" x2="560" y2="200" style="stroke:var(--ink);stroke-width:1.5" marker-end="url(#ar)"></line>
+        <text x="500" y="195" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)">GET/PUT /api/save</text>
+
+        <!-- static files -->
+        <rect x="564" y="24" width="150" height="72" rx="2" style="fill:var(--card);stroke:var(--line-2);stroke-width:1.5"></rect>
+        <text x="639" y="52" text-anchor="middle" style="font-family:var(--sans);font-size:12.5px;font-weight:700;fill:var(--ink)">ไฟล์เว็บแอป</text>
+        <text x="639" y="68" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)">index.html / *.js</text>
+        <text x="639" y="82" text-anchor="middle" style="font-family:var(--mono);font-size:9px;fill:var(--ink-4)">Worker static assets</text>
+
+        <!-- D1 -->
+        <rect x="564" y="164" width="150" height="72" rx="2" style="fill:var(--ok-soft);stroke:var(--ink);stroke-width:1.5"></rect>
+        <text x="639" y="192" text-anchor="middle" style="font-family:var(--sans);font-size:12.5px;font-weight:700;fill:var(--ink)">D1</text>
+        <text x="639" y="208" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px;fill:var(--ink-2)">gravship-d1-main</text>
+        <text x="639" y="222" text-anchor="middle" style="font-family:var(--mono);font-size:9px;fill:var(--ink-4)">table: saves</text>
+      </svg>
+
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div>
+          <h3>ทรัพยากรที่จะสร้าง</h3>
+          <ul class="notes-list">
+            <li><span class="mk">01</span>Worker <code>gravship-worker-web</code> — เสิร์ฟไฟล์ static ทั้งหมด + route <code>/api/save</code></li>
+            <li><span class="mk">02</span>D1 <code>gravship-d1-main</code> — ตาราง <code>saves(username TEXT PRIMARY KEY, data TEXT, updated_at TEXT)</code></li>
+            <li><span class="mk">03</span>Custom domain <code>rim.jairukchan.com</code> ผูกกับ Worker ผ่าน zone jairukchan.com (account SORNKan Co., Ltd.)</li>
+            <li><span class="mk">04</span>Secrets: <code>AUTH_USER</code>, <code>AUTH_PASS</code> (ตั้งผ่าน <code>wrangler secret put</code> ไม่ hardcode ในโค้ด)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>เส้นทางข้อมูล save</h3>
+          <ul class="notes-list">
+            <li><span class="mk">A</span>โหลดหน้า → Worker เช็ค Basic Auth → ผ่าน → ส่ง index.html ปกติ</li>
+            <li><span class="mk">B</span>หน้าเว็บเรียก <code>GET /api/save</code> → Worker query D1 → คืน state ล่าสุด (แทน localStorage)</li>
+            <li><span class="mk">C</span>ทุกครั้งที่ผู้ใช้แก้ค่า → <code>PUT /api/save</code> → Worker upsert แถวใน D1</li>
+            <li><span class="mk">D</span>URL query params ยังทำงานเหมือนเดิม (แชร์ลิงก์ได้) — D1 เป็นแหล่งบันทึกหลักเพิ่มเข้ามา ไม่ใช่แทนที่กลไกเดิมทั้งหมด</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SECURITY ===================== -->
+    <section class="brief" data-tab="sec">
+      <div class="kicker">สเปกสำหรับ agent · Security</div>
+      <h3 style="margin-top:6px">ช่องโหว่ที่ต้องกันไว้ตั้งแต่แรก</h3>
+
+      <div class="note danger"><span class="ic">1</span><div><strong>เดารหัสผ่านซ้ำ ๆ (brute force)</strong> — เว็บเปิดสู่อินเทอร์เน็ต ใครก็ยิง request ใส่ endpoint auth ได้ไม่จำกัด<br><span class="muted">กัน:</span> รหัสผ่านสุ่มยาว ≥16 ตัวอักษร (ตัวเลข+ตัวอักษร) ตั้งแต่แรก ไม่ใช่ค่า default ให้ผู้ใช้ตั้งเอง</div></div>
+
+      <div class="note danger"><span class="ic">2</span><div><strong>รหัสผ่านหลุดเข้าโค้ด/GitHub</strong> — ถ้า hardcode ใน worker.ts แล้ว push repo public จะเห็นรหัสทันที<br><span class="muted">กัน:</span> เก็บผ่าน <code>wrangler secret put</code> เท่านั้น, <code>.dev.vars</code> อยู่ใน .gitignore, ไม่มีรหัสจริงในซอร์สโค้ดที่ commit</div></div>
+
+      <div class="note danger"><span class="ic">3</span><div><strong>API รับข้อมูลมั่ว/ก้อนใหญ่ผิดปกติ</strong> — <code>PUT /api/save</code> เปิดให้ยิง JSON อะไรก็ได้ ถ้าไม่ตรวจจะยัดข้อมูลขยะหรือก้อนใหญ่ลง D1 ได้<br><span class="muted">กัน:</span> ตรวจ shape ของ field ที่อนุญาต + จำกัดขนาด payload (เช่น ≤ 8 KB) ก่อน upsert, ใช้ prepared statement เสมอ (D1 กัน SQL injection อยู่แล้วถ้าไม่ต่อ string เอง)</div></div>
+
+      <div class="note warn"><span class="ic">!</span><div><strong>Basic Auth ไม่มีระบบ rate-limit ในตัว</strong> — ยอมรับความเสี่ยงนี้ในสโคปนี้ (เว็บใช้คนเดียว ไม่ใช่ระบบสาธารณะ) ถ้าต้องการเพิ่ม Cloudflare rate-limit rule ทีหลังทำเพิ่มได้โดยไม่กระทบโครงสร้าง</div></div>
+    </section>
+
+    <!-- ===================== TESTS ===================== -->
+    <section class="brief" data-tab="test">
+      <div class="kicker">สเปกสำหรับ agent · Test specs (TDD)</div>
+      <h3 style="margin-top:6px">เขียนเทสก่อนโค้ด ตามรูปแบบเดิมของโปรเจกต์ (node --test)</h3>
+      <table>
+        <tr><th>ระดับ</th><th>เคส</th><th>คาดหวัง</th></tr>
+        <tr><td>Unit</td><td>auth middleware — ไม่ส่ง header</td><td>401 + <code>WWW-Authenticate: Basic</code></td></tr>
+        <tr><td>Unit</td><td>auth middleware — user/pass ผิด</td><td>401</td></tr>
+        <tr><td>Unit</td><td>auth middleware — user/pass ถูก</td><td>ผ่านเข้า handler ถัดไป</td></tr>
+        <tr><td>Unit</td><td><code>PUT /api/save</code> payload ถูก shape</td><td>200 + upsert แถวใน D1</td></tr>
+        <tr><td>Unit</td><td><code>PUT /api/save</code> payload ผิด shape / เกินขนาด</td><td>400 / 413 ไม่แตะ D1</td></tr>
+        <tr><td>Unit</td><td><code>GET /api/save</code> ยังไม่เคยมีแถว</td><td>คืนค่า default ไม่ error</td></tr>
+        <tr><td>E2E (Playwright)</td><td>เปิดเว็บโดยไม่ล็อกอิน</td><td>เจอ prompt Basic Auth ของเบราว์เซอร์ เข้าเนื้อหาไม่ได้</td></tr>
+        <tr><td>E2E (Playwright)</td><td>ใส่ user/pass ถูก → แก้ค่าจำนวนคน → reload</td><td>ค่ายังอยู่ (โหลดจาก D1 ไม่ใช่แค่ localStorage)</td></tr>
+        <tr><td>E2E (Playwright)</td><td>เปิดด้วย browser context ใหม่ (จำลองคนละเครื่อง) ด้วย user/pass เดิม</td><td>เห็นค่า save เดิมที่เคยบันทึกไว้</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== WORK ===================== -->
+    <section class="brief" data-tab="work">
+      <div class="kicker">สเปกสำหรับ agent · งานที่ต้องทำ (9 tasks — บันทึกใน todos.html แล้ว)</div>
+      <div class="flat-task"><span class="idx">01</span><span class="tn">ตั้งโครง repo rimworld + ย้ายไฟล์แอปเข้ามา</span><span class="meta"><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">02</span><span class="tn">สร้าง D1 database + schema ตาราง save</span><span class="meta"><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">03</span><span class="tn">Basic Auth คุมทั้งเว็บใน Worker</span><span class="meta"><span class="pill sec">security</span><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">04</span><span class="tn">API บันทึก/โหลด save ผ่าน D1 + เชื่อมหน้าเว็บเดิม</span><span class="meta"><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">05</span><span class="tn">unit test: auth middleware + save/load API</span><span class="meta"><span class="pill md">medium</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">06</span><span class="tn">E2E: login flow + save ข้ามเครื่อง/เบราว์เซอร์</span><span class="meta"><span class="pill md">medium</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">07</span><span class="tn">push ขึ้น GitHub ilGentEAcutoO/rimworld</span><span class="meta"><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">08</span><span class="tn">deploy Worker + ผูก rim.jairukchan.com + ตั้งรหัสผ่านจริง</span><span class="meta"><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="flat-task"><span class="idx">09</span><span class="tn">security review รอบสุดท้ายก่อนปิดงาน</span><span class="meta"><span class="pill sec">security</span><span class="pill hi">high</span><span class="pill model">opus</span></span></div>
+      <div class="note info" style="margin-top:12px"><span class="ic">i</span><div>รหัสผ่านจริงจะถูกสุ่มระหว่าง task 08 และแจ้งกลับในแชททันทีที่ deploy เสร็จ — จะไม่โผล่ในไฟล์แผนนี้หรือใน repo</div></div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.btab').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.btab').forEach(function(b){ b.classList.remove('on'); });
+    document.querySelectorAll('.brief').forEach(function(s){ s.classList.remove('on'); });
+    btn.classList.add('on');
+    document.querySelector('.brief[data-tab="'+btn.dataset.t+'"]').classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

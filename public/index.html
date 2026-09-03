@@ -1,0 +1,1937 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Gravship life support</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{
+  --bg:#E7F0E4; --card:#FFFEFA; --ink:#132016; --ink2:#3C5341; --ink3:#6D8571;
+  --line:#C3D6C0; --soft:#D8EDD6; --accent:#1B7A3C; --accent2:#14582B;
+  --warn:#8A6A12; --warn-bg:#FFF4D4; --warn-line:#E3C56A;
+  --meat:#8B3A2A; --meat-bg:#F8E4DE;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:
+    radial-gradient(620px 340px at 92% -8%, rgba(27,122,60,.14), transparent 58%),
+    radial-gradient(480px 280px at 4% 108%, rgba(196,154,42,.12), transparent 58%),
+    var(--bg);
+  color:var(--ink); min-height:100vh; padding:22px 16px 40px;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:980px;margin:0 auto}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;margin:6px 0 4px}
+.lead{color:var(--ink2);font-size:14.5px;text-wrap:pretty}
+.need{margin-top:8px;font-size:13px;color:var(--ink3)}
+
+.crew{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 12px}
+.g{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card);border-radius:16px;padding:6px 8px 6px 12px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 10px 24px -14px rgba(27,122,60,.28);
+}
+.g span{font-size:12px;font-weight:700;color:var(--ink2);min-width:52px}
+.g b{font-size:22px;min-width:24px;text-align:center}
+.g button{
+  width:40px;height:40px;border:0;border-radius:10px;background:var(--soft);
+  color:var(--accent2);font-size:18px;font-weight:800;cursor:pointer;
+  transition-property:transform,background-color;transition-duration:.15s;
+  transition-timing-function:cubic-bezier(.2,0,0,1);
+}
+.g button:hover{background:#c8e6c6}
+.g button:active{transform:scale(.96)}
+
+.buf{display:flex;align-items:center;gap:10px;margin:0 0 16px;color:var(--ink2);font-size:13px}
+.buf input{flex:1;max-width:220px;accent-color:var(--accent);cursor:pointer}
+.buf b{min-width:40px}
+
+.ranks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}
+.rk{
+  text-align:left;border:0;border-radius:16px;padding:14px 14px 12px;
+  background:var(--card);cursor:pointer;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 12px 28px -16px rgba(27,122,60,.3);
+  transition-property:transform,box-shadow,background-color;transition-duration:.18s;
+  transition-timing-function:cubic-bezier(.2,0,0,1);
+  min-height:214px;height:100%;
+  display:flex;flex-direction:column;align-items:stretch;
+}
+.rk:hover{transform:translateY(-2px)}
+.rk:active{transform:scale(.96)}
+.rk .who{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink3)}
+.rk.on{
+  background:linear-gradient(180deg,#E8F7EA,#FFFEFA 55%);
+  box-shadow:0 0 0 2px var(--accent),0 16px 32px -16px rgba(27,122,60,.4);
+}
+.rk.on .who{color:var(--accent2)}
+.rk h2{font-size:16px;margin:4px 0 8px}
+.rk .amt{font-size:36px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.rk .amt small{font-size:13px;font-weight:700;color:var(--ink3)}
+.rk ul{list-style:none;margin-top:10px;font-size:13px;color:var(--ink2);line-height:1.55;flex:1}
+.flag{
+  display:inline-block;margin-top:8px;font-size:11px;font-weight:700;
+  background:var(--meat-bg);color:var(--meat);padding:3px 7px;border-radius:6px;
+}
+.okflag{
+  display:inline-block;margin-top:8px;font-size:11px;font-weight:700;
+  background:var(--soft);color:var(--accent2);padding:3px 7px;border-radius:6px;
+}
+
+.pick{
+  margin-top:14px;background:var(--card);border-radius:18px;padding:16px 18px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+}
+.pick h3{font-size:15px;margin-bottom:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--soft);border-radius:12px;padding:10px 12px}
+.stat em{display:block;font-style:normal;font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink3);font-weight:700}
+.stat b{font-size:22px;font-weight:800}
+
+.corn{
+  margin-top:10px;display:grid;grid-template-columns:1.3fr .7fr;gap:10px;
+  background:var(--warn-bg);border-radius:16px;padding:14px 16px;
+  box-shadow:inset 0 0 0 1px var(--warn-line);
+}
+.corn strong{display:block}
+.corn p{font-size:13px;color:var(--ink2);margin-top:4px;text-wrap:pretty}
+.corn .n{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--warn)}
+
+.plants{
+  margin-top:10px;background:var(--card);border-radius:18px;padding:16px 18px 14px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+}
+.plants h3{font-size:15px;margin-bottom:4px}
+.plants .sub{font-size:13px;color:var(--ink2);margin-bottom:12px;text-wrap:pretty}
+.plist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pi{
+  background:var(--soft);border-radius:12px;padding:10px 12px;
+}
+.pi b{display:block;font-size:14px}
+.pi span{font-size:12px;color:var(--ink3)}
+.dim{margin-top:10px;font-size:12.5px;color:var(--ink3);text-wrap:pretty}
+
+.foot{margin-top:14px;font-size:12px;color:var(--ink3);text-wrap:pretty}
+
+.nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 16px}
+.nav button{
+  border:0;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;
+  background:var(--card);color:var(--ink2);cursor:pointer;
+  box-shadow:0 1px 2px rgba(19,32,22,.05);
+  transition-property:transform,background-color,color;transition-duration:.15s;
+}
+.nav button.on{background:var(--accent);color:#fff}
+.nav button:active{transform:scale(.96)}
+.nav .reset{
+  margin-left:auto;background:transparent;box-shadow:none;
+  color:var(--ink3);border:1.5px solid var(--line);
+}
+.nav .reset:hover{background:var(--card);color:var(--ink2)}
+.view{display:none}
+.view.on{display:block}
+
+.wattbox{
+  display:flex;align-items:baseline;gap:8px;
+  background:var(--card);border-radius:16px;padding:10px 14px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 10px 24px -14px rgba(27,122,60,.28);
+}
+.wattbox input{
+  width:160px;border:0;background:transparent;font-size:28px;font-weight:800;
+  letter-spacing:-.04em;color:var(--ink);font-family:inherit;
+  font-variant-numeric:tabular-nums;outline:none;
+}
+.wattbox input:focus{background:var(--soft);border-radius:10px;padding:2px 8px}
+.pwr-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px}
+.chip{
+  border:1.5px solid var(--line);background:var(--card);border-radius:999px;
+  padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink2);
+}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chip:active{transform:scale(.96)}
+.hero{display:flex;align-items:flex-end;gap:14px;margin:4px 0 10px}
+.hero .n{font-size:80px;font-weight:800;letter-spacing:-.06em;line-height:.85;color:var(--accent2)}
+.cells{display:flex;flex-wrap:wrap;gap:6px;min-height:36px;margin-bottom:10px}
+.bcell{
+  width:46px;height:28px;border-radius:5px;
+  background:linear-gradient(180deg,#6FCF7A,#2F8F4A);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);
+}
+.flare{margin-top:12px;background:var(--meat-bg);color:var(--meat);border-radius:12px;padding:10px 12px;font-size:13px}
+
+.rail{display:grid;height:46px;border-radius:12px;overflow:hidden;margin:8px 0 10px}
+.rail span{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;
+  padding:0 6px;text-align:center;line-height:1.2}
+.rail .sow{background:#D8EDD6;color:#14582B}
+.rail .growseg{background:linear-gradient(90deg,#7BC47A,#2F8F4A);color:#0F2A14}
+.rail .packseg{background:#F2C14A;color:#3A2A00}
+.rail .fly{background:#132016;color:#E7F0E4}
+.win{display:flex;align-items:flex-end;gap:12px;margin:4px 0 12px}
+.win .n{font-size:72px;font-weight:800;letter-spacing:-.06em;line-height:.85;color:var(--accent2)}
+.crops{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cr{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.2fr) auto;gap:8px;align-items:center;
+  background:var(--card);border-radius:12px;padding:8px 12px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05)}
+.cr b{font-size:14px}
+.cr .meta{font-size:12px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cr .meta b{color:var(--accent2);font-weight:800}
+.khead{grid-column:1/-1;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;
+  color:var(--accent2);padding:10px 4px 2px}
+.showbox{
+  margin:0 0 12px;background:var(--card);border-radius:18px;padding:12px 14px 10px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+}
+.showbox .krow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 4px}
+.showbox .krow:first-child{margin-top:0}
+.showbox .khead{grid-column:auto;padding:0;letter-spacing:.08em}
+.showbox .krow button{
+  border:0;background:transparent;color:var(--accent2);font-size:12px;font-weight:800;
+  cursor:pointer;min-height:32px;padding:0 4px;
+}
+.showbox .krow button:active{transform:scale(.96)}
+.showempty{grid-column:1/-1;color:var(--ink3);font-size:13px;padding:8px 4px}
+.tag{font-size:11px;font-weight:800;border-radius:6px;padding:3px 7px}
+.tag.go{background:var(--soft);color:var(--accent2)}
+.tag.plan{background:#FFF4D4;color:var(--warn)}
+.tag.no{background:var(--meat-bg);color:var(--meat)}
+.dxbox{
+  margin-top:12px;background:var(--card);border-radius:18px;padding:16px 18px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+}
+.dxbox h3{font-size:15px;margin-bottom:10px}
+.dxrow{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.dxrow label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
+.dxrow select,.dxrow input{
+  border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-weight:700;
+  background:var(--card);color:var(--ink);min-height:40px;
+}
+.dxout{margin-top:10px;background:#132016;color:#E7F0E4;border-radius:12px;padding:10px 12px;font-size:13px;text-wrap:pretty}
+.dxout strong{color:#F2C14A}
+.dxout .badge{display:inline-block;font-size:11px;font-weight:800;border-radius:6px;padding:3px 8px;margin-left:6px;vertical-align:middle}
+.dxout .badge.ok{background:#1B7A3C;color:#E7F0E4}
+.dxout .badge.warn{background:#8A6A12;color:#FFF4D4}
+.dxout .badge.bad{background:#8B3A2A;color:#F8E4DE}
+.dxout .drow{margin-top:6px}
+.dxout .drow:first-child{margin-top:0}
+.thermo{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.thermo label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
+.thermo input{
+  border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-weight:700;
+  background:var(--card);color:var(--ink);min-height:40px;width:96px;
+}
+.thermo .tsep{font-size:18px;font-weight:800;color:var(--ink3);padding-bottom:9px}
+.tfactor{
+  margin-left:auto;font-size:24px;font-weight:800;letter-spacing:-.02em;
+  background:var(--soft);color:var(--accent2);border-radius:14px;padding:8px 16px;
+  min-width:92px;text-align:center;line-height:1.2;
+}
+.tfactor small{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.tfactor.warn{background:#FFF4D4;color:var(--warn)}
+.tfactor.bad{background:var(--meat-bg);color:var(--meat)}
+.dxgroup{margin-top:14px}
+.dxgroup:first-child{margin-top:0}
+.dxglabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--accent2);padding:0 4px 6px}
+
+.refnote{font-size:13px;color:var(--ink2);margin:0 0 10px;text-wrap:pretty}
+.refnote:last-of-type{margin-bottom:0}
+.reftable-wrap{overflow-x:auto;margin-top:6px}
+.reftable-wrap+.refnote{margin-top:16px}
+.reftable{width:100%;border-collapse:collapse;font-size:13px;min-width:420px}
+.reftable th,.reftable td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+.reftable th{background:var(--soft);color:var(--accent2);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:800}
+.reftable td{color:var(--ink)}
+.reftable td.dim{color:var(--ink3);white-space:normal}
+.reftable tr:last-child td{border-bottom:0}
+.reftable-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--accent2);margin:14px 0 4px}
+.reftable-title:first-child{margin-top:0}
+
+.reftable tr.now td{background:#E8F7EA;font-weight:700;border-bottom-color:#AFD9AD}
+.reftable tr.now td:first-child{color:var(--accent2)}
+.reftable tr.now td.dim{color:var(--ink2)}
+.mnow{margin:10px 0 0;font-size:13px;color:var(--ink2)}
+.mnow b{color:var(--accent2)}
+
+.chip{display:inline-block;font-size:11px;font-weight:800;border-radius:6px;padding:3px 8px;white-space:nowrap}
+.chip.bad{background:var(--meat-bg);color:var(--meat)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.ok{background:var(--soft);color:var(--accent2)}
+.tagd{font-style:normal;font-size:10px;font-weight:800;margin-left:6px;padding:1px 5px;border-radius:5px;background:var(--soft);color:var(--accent2);vertical-align:1px;white-space:nowrap}
+
+.subnav{margin:0 0 8px}
+.reftable.sortable thead th{cursor:pointer;user-select:none}
+.reftable.sortable thead th:hover{color:var(--accent)}
+.reftable.sortable thead th.asc::after{content:" ▲";font-size:9px;letter-spacing:0}
+.reftable.sortable thead th.desc::after{content:" ▼";font-size:9px;letter-spacing:0}
+
+@media(max-width:800px){
+  .ranks,.stats,.corn,.plist,.crops{grid-template-columns:1fr}
+  h1{font-size:24px}
+  .hero .n,.win .n{font-size:60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">Gravship · basic life support</p>
+  <div class="nav" role="tablist">
+    <button type="button" class="on" data-tab="food" id="tabFood">อาหาร</button>
+    <button type="button" data-tab="power" id="tabPower">แบต</button>
+    <button type="button" data-tab="grow" id="tabGrow">โตจริง</button>
+    <button type="button" data-tab="drug" id="tabDrug">ยา</button>
+    <button type="button" data-tab="leather" id="tabLeather">ชุด</button>
+    <button type="button" data-tab="settings" id="tabSettings">ตั้งค่า</button>
+    <button type="button" class="reset" id="resetPrefs">ค่าเริ่มต้น</button>
+  </div>
+
+  <div class="view on" id="view-food">
+  <h1>ต้องใช้กี่ช่องในห้องปลูก</h1>
+  <p class="lead">ไม่มี nutrient paste — เทียบ simple meal, pemmican และ packaged survival meal จากลูกเรือที่ปนเด็กกับผู้ใหญ่</p>
+  <p class="need" id="need"></p>
+
+  <div class="crew" id="crew">
+    <div class="g">
+      <span>ผู้ใหญ่</span>
+      <button type="button" data-k="adults" data-d="-1" aria-label="ลดผู้ใหญ่">−</button>
+      <b id="nA">4</b>
+      <button type="button" data-k="adults" data-d="1" aria-label="เพิ่มผู้ใหญ่">+</button>
+    </div>
+    <div class="g">
+      <span>เด็ก 3–12</span>
+      <button type="button" data-k="kids" data-d="-1" aria-label="ลดเด็ก">−</button>
+      <b id="nK">2</b>
+      <button type="button" data-k="kids" data-d="1" aria-label="เพิ่มเด็ก">+</button>
+    </div>
+    <div class="g">
+      <span>ทารก</span>
+      <button type="button" data-k="babies" data-d="-1" aria-label="ลดทารก">−</button>
+      <b id="nB">0</b>
+      <button type="button" data-k="babies" data-d="1" aria-label="เพิ่มทารก">+</button>
+    </div>
+  </div>
+
+  <div class="buf">
+    <span>กันเหนียว</span>
+    <input id="buffer" type="range" min="0" max="50" value="20">
+    <b id="bufOut">20%</b>
+  </div>
+
+  <div class="ranks" id="ranks"></div>
+  <div class="pick" id="pick"></div>
+  <div class="corn" id="corn"></div>
+
+  <section class="plants" id="plants" aria-labelledby="plants-title">
+    <h3 id="plants-title">พืชที่รับโบนัสอ่างเต็ม 280%</h3>
+    <p class="sub">Fertility sensitivity 100% และปลูกใน hydroponics ได้ — โตเร็วสุดบนเรือ</p>
+    <div class="plist">
+      <div class="pi"><b>Rice</b><span>food · คุ้มช่องที่สุด</span></div>
+      <div class="pi"><b>Strawberry</b><span>food · กินดิบได้</span></div>
+      <div class="pi"><b>Cotton</b><span>textile</span></div>
+      <div class="pi"><b>Smokeleaf</b><span>drug</span></div>
+      <div class="pi"><b>Healroot</b><span>medicine</span></div>
+      <div class="pi"><b>Tinctoria</b><span>dye</span></div>
+    </div>
+    <p class="dim">ไม่เต็ม: hops ~70% · psychoid / มันฝรั่ง ~40% · nutrifungus ~15% · toxipotato 0% · ข้าวโพด · hay และ devilstrand ปลูกอ่างไม่ได้</p>
+  </section>
+
+  <div class="dxbox">
+    <h3>อุณหภูมิห้องปลูก</h3>
+    <div class="thermo">
+      <div class="tfield">
+        <label for="heatIn">Heater °C</label>
+        <input id="heatIn" type="number" inputmode="numeric" min="-20" max="80" step="1" value="7">
+      </div>
+      <span class="tsep">→</span>
+      <div class="tfield">
+        <label for="coolIn">Cooler °C</label>
+        <input id="coolIn" type="number" inputmode="numeric" min="-20" max="80" step="1" value="41">
+      </div>
+      <div class="tfactor" id="tempFactorOut">100%<small>โต</small></div>
+    </div>
+    <p class="refnote" id="tempNote"></p>
+  </div>
+
+  <p class="foot">ข้าวในอ่าง 1×4 · โคมอาทิตย์คุมได้ 24 อ่าง · ห้องคิดแบบสองแถวมีทางเดินกลาง · วัยรุ่นนับผู้ใหญ่ · ทารกกิน baby food แยก · ตัวเลขวิกิ 1.6 / Odyssey</p>
+  </div>
+
+  <div class="view" id="view-power">
+    <h1>ผ่านกลางคืนต้องมีแบตกี่ก้อน</h1>
+    <p class="lead">พิมพ์กำลังไฟของกริดตอนนั้น — ค่าเริ่มต้น 15 ชม. คือช่วงที่โซลาร์ไม่เต็มที่เส้นศูนย์สูตร (มืด 8 + รุ่ง/สนธยา 7)</p>
+    <div class="pwr-ctrl">
+      <div class="wattbox">
+        <input id="wattsIn" type="text" inputmode="numeric" value="1000" aria-label="วัตต์">
+        <span>W</span>
+      </div>
+      <div class="g">
+        <span>ชั่วโมง</span>
+        <input id="hours" type="range" min="1" max="18" value="15" style="width:140px;accent-color:var(--accent)">
+        <b id="hoursOut">15</b>
+      </div>
+    </div>
+    <div class="chips" id="hourPresets">
+      <button type="button" class="chip on" data-h="15">โซลาร์ไม่เต็ม ~15 ชม.</button>
+      <button type="button" class="chip" data-h="8">มืดสนิท 8 ชม.</button>
+      <button type="button" class="chip" data-h="6">พักเครื่อง 6 ชม.</button>
+      <button type="button" class="chip" data-h="13">โคมติดทั้งวัน 13 ชม.</button>
+    </div>
+    <div class="hero">
+      <div class="n" id="batN">1</div>
+      <div>
+        <strong>ก้อนแบต</strong>
+        <div class="need" id="batStory">1,000 W ตลอด 15 ชม.</div>
+      </div>
+    </div>
+    <div class="cells" id="batCells"></div>
+    <div class="stats">
+      <div class="stat"><em>ต้องเก็บ</em><b id="needWd">458 Wd</b></div>
+      <div class="stat"><em>ความจุ</em><b id="storeWd">600 Wd</b></div>
+      <div class="stat"><em>เหลือเผื่อ</em><b id="spareWd">142 Wd</b></div>
+      <div class="stat"><em>ก้อนละ</em><b>600 Wd</b></div>
+    </div>
+    <p class="flare">Solar flare แบตช่วยไม่ได้ — เกมตัดทั้งกริด รวมแบต</p>
+  </div>
+
+  <div class="view" id="view-grow">
+    <h1 id="growTitle">แผนหว่าน ต้นนานไว้ก่อน</h1>
+    <p class="lead">ยังไม่รู้วันโจมตีก็วางแผนหว่านได้ — Cotton ในเกม 8d บนดินจริง 14.8d เพราะพืชพัก 19:00–05:00</p>
+    <div class="chips" id="leaveMode">
+      <button type="button" class="chip on" data-leave="open">ยังไม่รู้วันโจมตี</button>
+      <button type="button" class="chip" data-leave="set">มีวันออก</button>
+    </div>
+    <div class="pwr-ctrl" id="leaveCtrl" hidden>
+      <div class="g">
+        <span>ออกวันที่</span>
+        <input id="leaveDays" type="range" min="2" max="30" value="14" style="width:140px;accent-color:var(--accent)">
+        <b id="leaveOut">14</b>
+      </div>
+      <div class="g">
+        <span>เผื่อเก็บ+ขน</span>
+        <input id="packDays" type="range" min="0" max="5" value="3" style="width:120px;accent-color:var(--accent)">
+        <b id="packOut">3</b>
+      </div>
+    </div>
+    <div class="chips" id="soilChips">
+      <button type="button" class="chip" data-soil="hydro">Hydro 280%</button>
+      <button type="button" class="chip" data-soil="rich">Rich soil</button>
+      <button type="button" class="chip on" data-soil="soil">Soil</button>
+      <button type="button" class="chip" data-soil="gravel">Stony soil</button>
+    </div>
+    <div class="pwr-ctrl">
+      <div class="g">
+        <span>ฤดูโตได้/ปี</span>
+        <input id="seasonIn" type="range" min="1" max="60" value="60" style="width:140px;accent-color:var(--accent)">
+        <b id="seasonOut">60/60 วัน</b>
+      </div>
+    </div>
+    <div class="chips" id="sortChips">
+      <button type="button" class="chip on" data-sort="days">หว่านยาวก่อน</button>
+      <button type="button" class="chip" data-sort="az">A–Z</button>
+    </div>
+    <div class="showbox" id="showBox"></div>
+    <div class="rail" id="rail" aria-hidden="true"></div>
+    <div class="win">
+      <div class="n" id="winN">11</div>
+      <div>
+        <strong>วันให้พืชสุก</strong>
+        <div class="need" id="winStory">ต้องสุกภายในวันที่ 11 แล้วใช้ 3 วันเก็บ-ขน บินวันที่ 14</div>
+      </div>
+    </div>
+    <div class="crops" id="cropList"></div>
+    <p class="need" style="margin-top:10px">ตัวเลข "ปลูก X ต้น" = เลี้ยงลูกเรือทั้งปีที่ฤดูที่ตั้งไว้ (คิดเฉลี่ยรายวันแล้ว ต้องมียุ้งข้ามฤดู) · ยอดผลผลิตวิกิ 1.6: ข้าว 6 · มันฝรั่ง 11 · ข้าวโพด 22 · สตรอว์เบอร์รี 8 · ปี = 60 วัน</p>
+    <div class="dxbox">
+      <h3>อยู่มาแล้วยังไม่สุก?</h3>
+      <div class="dxrow">
+        <div>
+          <label for="diagCrop">พืช</label>
+          <select id="diagCrop"></select>
+        </div>
+        <div>
+          <label for="diagDays">อยู่มา (วัน)</label>
+          <input id="diagDays" type="number" inputmode="numeric" min="0" max="60" value="14">
+        </div>
+        <div>
+          <label for="diagPct">โตอยู่ %</label>
+          <input id="diagPct" type="number" inputmode="decimal" min="0" max="100" step="1" value="76">
+        </div>
+        <div>
+          <label for="diagHeat">Heater °C</label>
+          <input id="diagHeat" type="number" inputmode="numeric" min="-20" max="80" step="1" value="7">
+        </div>
+        <div>
+          <label for="diagCool">Cooler °C</label>
+          <input id="diagCool" type="number" inputmode="numeric" min="-20" max="80" step="1" value="41">
+        </div>
+      </div>
+      <p class="refnote" id="tempNoteGrow" style="margin:8px 0 0"></p>
+      <div class="dxout" id="diagOut"></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-drug">
+    <h1>จัดยาไม่ให้ overdose</h1>
+    <p class="lead">เน้นยากลุ่มช่วยงาน/ลดง่วงมากกว่าสันทนาการ — ตัวเลขประมาณจากวิกิ 1.5/1.6 ใช้เป็นไกด์ ไม่ใช่สูตรเป๊ะของเกม เช็คทูลทิปในเกมอีกทีถ้าจะเอาชัวร์</p>
+
+    <p class="need">ตัวละครมียีน/trait อะไร — เลือกแล้วบอกยาที่แนะนำให้เลย ไม่ต้องเลือกเอง</p>
+    <div class="chips" id="traitPick"></div>
+
+    <p class="need" id="drugPickLabel">ยาที่เข้ากับ trait นี้ (เรียงจาก overdose ยากสุด → ง่ายสุด — ตัวแรกคือที่แนะนำ)</p>
+    <div class="showbox" id="drugPick"></div>
+
+    <div class="dxbox" id="drugBox">
+      <h3>จะให้ถี่แค่ไหน — เส้นเดียวเหมือน Frequency ในเกม</h3>
+      <div class="g" style="max-width:420px">
+        <span>ความถี่</span>
+        <input id="freqSlider" type="range" min="0" max="18" value="5" step="1" style="width:200px;accent-color:var(--accent)">
+        <b id="freqOut">วันละครั้ง</b>
+      </div>
+      <div class="dxout" id="drugOut"></div>
+    </div>
+
+    <div class="dxbox" id="stackBoxWrap">
+      <h3>ผสมยาได้ไหม (ใช้พร้อมกันไม่ overdose)</h3>
+      <div id="stackRows"></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-leather">
+  <div class="nav subnav" id="leatherSub" role="tablist">
+    <button type="button" class="on" data-sub="hide">หนัง</button>
+    <button type="button" data-sub="weapon">อาวุธประชิด</button>
+    <button type="button" data-sub="gun">ปืน</button>
+    <button type="button" data-sub="armor">เกราะ</button>
+  </div>
+  <div id="sub-hide">
+  <h1>หนังไหนอย่าเอามาทำ patchleather</h1>
+  <p class="lead">ไม่มีหนังสักชนิดที่ถูกกว่าหรือแย่กว่า patchleather — มันแพงน้อยสุดและสถิติต่ำสุดในตารางหมด สูตรรวม 50 → 50 ตัวต่อตัว เงินที่หายไปคือส่วนต่างราคา ยิ่งหนังแพงยิ่งขาดทุนหนัก</p>
+
+  <div class="dxbox">
+    <h3>กติกาเร็ว</h3>
+    <p class="mnow">หนัง thrumbo ทั้งสองแบบ ห้ามโดนเด็ดขาด · ราคา 3 ขึ้นไปเก็บทำเสื้อหรือขาย · ต่ำกว่า 2 (หนังนก หนังบาง หนังหมู หนังหมา) เท่านั้นที่เหมาะเอามารวมเป็น patch</p>
+    <p class="refnote">สูตร: hand / electric tailor bench รับหนังได้ทุกชนิดยกเว้น human leather (dread leather ใส่ได้) · ถ้าจะขายอยู่ดี ขายหนังเดิมตรง ๆ ได้เงินมากกว่าเสมอ แม้หนังถูกสุด — patch มีไว้ใช้เองตอนเศษหนังเล็ก ๆ หลายกองรวมกันไม่พอเสื้อ หรือจงใจลดมูลค่าฐาน</p>
+  </div>
+
+  <div class="dxbox">
+    <h3>ตารางเรียงจากแพงสุด → ถูกสุด</h3>
+    <p class="refnote">ตัวคูณคือสถิติวัสดุ ไม่ใช่ % ตรง ๆ — เช่น duster ฐาน 0.3 ใช้ plainleather ×0.81 ได้เกราะแหลม 24.3% · เกราะไฟของหนังทุกชนิด = ×1.5 (patch ×0.9) · คลิกหัวคอลัมน์เพื่อเรียงใหม่ได้</p>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>หนัง</th><th>มูลค่า</th><th>แพงกว่า patch · แปลง 50 ชิ้นขาดทุน</th><th>เกราะ แหลม / ทุบ</th><th>กันหนาว / ร้อน</th><th>คำตัดสิน</th></tr>
+        </thead>
+        <tbody id="leatherBody">
+          <tr><td>Thrumbomane<i class="tagd">OD</i></td><td>20.0</td><td>13.3× · −93%</td><td>×2.12 / ×0.40</td><td>+36 / +24</td><td><span class="chip bad">ห้ามโดนเด็ดขาด</span></td></tr>
+          <tr><td>Thrumbofur</td><td>14.0</td><td>9.3× · −89%</td><td>×2.08 / ×0.36</td><td>+34 / +22</td><td><span class="chip bad">ห้ามโดนเด็ดขาด</span></td></tr>
+          <tr><td>Chinchilla fur</td><td>6.5</td><td>4.3× · −77%</td><td>×0.67 / ×0.14</td><td>+30 / +16</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
+          <tr><td>Mink fur<i class="tagd">OD</i></td><td>5.2</td><td>3.5× · −71%</td><td>×0.67 / ×0.14</td><td>+32 / +12</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
+          <tr><td>Guinea pig fur</td><td>5.0</td><td>3.3× · −70%</td><td>×0.67 / ×0.14</td><td>+38 / +18</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
+          <tr><td>Human leather</td><td>4.2</td><td>2.8× · แปลงไม่ได้</td><td>×0.64 / ×0.24</td><td>+12 / +12</td><td><span class="chip warn">สูตรไม่รับ — ห้ามใส่</span></td></tr>
+          <tr><td>Rhinoceros leather</td><td>4.2</td><td>2.8× · −64%</td><td>×1.29 / ×0.24</td><td>+14 / +14</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
+          <tr><td>Sealskin<i class="tagd">OD</i></td><td>4.0</td><td>2.7× · −63%</td><td>×0.81 / ×0.24</td><td>+36 / +20</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
+          <tr><td>Hippo leather<i class="tagd">OD</i></td><td>3.7</td><td>2.5× · −59%</td><td>×1.12 / ×0.24</td><td>+14 / +16</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Foxfur</td><td>3.5</td><td>2.3× · −57%</td><td>×0.81 / ×0.21</td><td>+20 / +16</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Dread leather<i class="tagd">AN</i></td><td>3.5</td><td>2.3× · −57%</td><td>×1.27 / ×0.24</td><td>+20 / +12</td><td><span class="chip warn">รับได้แต่อย่า — เกราะดีสุดตอนเล่น Anomaly</span></td></tr>
+          <tr><td>Bearskin</td><td>3.4</td><td>2.3× · −56%</td><td>×1.12 / ×0.24</td><td>+20 / +20</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Heavy fur</td><td>3.3</td><td>2.2× · −55%</td><td>×1.24 / ×0.24</td><td>+30 / +14</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Armadillo leather<i class="tagd">OD</i></td><td>3.2</td><td>2.1× · −53%</td><td>×1.24 / ×0.24</td><td>+16 / +18</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Elephant leather</td><td>3.0</td><td>2.0× · −50%</td><td>×1.12 / ×0.24</td><td>+14 / +12</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Panthera fur</td><td>3.0</td><td>2.0× · −50%</td><td>×0.93 / ×0.24</td><td>+16 / +24</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Wolfskin</td><td>3.0</td><td>2.0× · −50%</td><td>×1.02 / ×0.24</td><td>+24 / +16</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Mastodon leather<i class="tagd">OD</i></td><td>3.0</td><td>2.0× · −50%</td><td>×1.12 / ×0.24</td><td>+30 / +12</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
+          <tr><td>Bluefur</td><td>2.3</td><td>1.5× · −35%</td><td>×0.81 / ×0.24</td><td>+20 / +16</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
+          <tr><td>Camelhide</td><td>2.3</td><td>1.5× · −35%</td><td>×0.81 / ×0.24</td><td>+16 / +24</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
+          <tr><td>Lizardskin</td><td>2.1</td><td>1.4× · −29%</td><td>×0.81 / ×0.27</td><td>+12 / +12</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
+          <tr><td>Plainleather</td><td>2.1</td><td>1.4× · −29%</td><td>×0.81 / ×0.24</td><td>+16 / +16</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
+          <tr><td>Dog leather</td><td>2.0</td><td>1.3× · −25%</td><td>×0.81 / ×0.24</td><td>+14 / +16</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
+          <tr><td>Pigskin</td><td>1.9</td><td>1.3× · −21%</td><td>×0.64 / ×0.24</td><td>+12 / +12</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
+          <tr><td>Lightleather</td><td>1.9</td><td>1.3× · −21%</td><td>×0.54 / ×0.14</td><td>+12 / +12</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
+          <tr><td>Birdskin</td><td>1.8</td><td>1.2× · −17%</td><td>×0.67 / ×0.14</td><td>+10 / +10</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
+          <tr class="now"><td>Patchleather</td><td>1.5</td><td>1.0× · —</td><td>×0.45 / ×0.19</td><td>+9 / +9</td><td><span class="chip ok">ตัวมันเอง — ต่ำสุดทุกช่อง</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="foot">ตัวเลขวิกิ 1.6 · OD = Odyssey · AN = Anomaly · หนังแพง ๆ มี beauty สูงด้วย (thrumbomane ×8, chinchilla ×3.6) เอาไว้ปูเฟอร์นิเจอร์ได้</p>
+  </div>
+
+  <div id="sub-weapon" hidden>
+  <h1>อาวุธประชิดตัดสินแล้ว อาวุธละวัสดุเดียว</h1>
+  <p class="lead">ไม่ต้องเปรียบเทียบเอง — แหลมจบที่ plasteel ทุบจบที่ uranium ตัวเลขคือผลลัพธ์จริงเมื่อใช้วัสดุที่ตัดสิน (คุณภาพ normal) คลิกหัวคอลัมน์เพื่อเรียงใหม่ได้</p>
+
+  <div class="dxbox">
+    <h3>เหมาะกับสู้อะไร</h3>
+    <p class="refnote">สู้ mech/เกราะหนา: ใช้ทุบ — เกราะ sharp ของ mech สูงกว่า blunt ชัดเจน และการแหลมที่โดนเกราะพอดี ๆ จะถูกหั่นครึ่งแล้วแปลงเป็นทุบด้วยแรงเหลือครึ่งเดียว · สู้คน/สัตว์เกราะบาง: ใช้แหลม ดาเมจต้นสูงกว่าและทำแผลตกเลือด · เงิน/ทอง ตีอาวุธได้แต่ไม่คุ้ม — ฝั่งทุบได้ค่าเท่าเหล็กเป๊ะ จ่ายแพงกว่าโดยไม่ได้อะไรเลย</p>
+    <p class="refnote">อาวุธไฟ (plasmasword / zeelutter) กับ persona (monosword ฯลฯ) ไม่ผูกวัสดุ สูตรตายตัว · วัสดุ improvised: obsidian (OD) แหลม ×1.4 แรงกว่า plasteel แต่ HP ครึ่ง, bioferrite (AN) แหลม ×1.3 · หินทำได้แค่กระบอง</p>
+  </div>
+
+  <div class="dxbox">
+    <h3>คำตัดสินรายอาวุธ</h3>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>อาวุธ</th><th>ชนิด</th><th>วัสดุที่ตัดสิน</th><th>ดาเมจ/ฮิต</th><th>DPS</th><th>AP</th><th>เหตุผล</th></tr>
+        </thead>
+        <tbody id="verdictBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dxbox">
+    <h3>เกราะ mech — ทำไมทุบชนะ</h3>
+    <p class="refnote">mech ทุกตัวเกราะไฟ 200% = โดนไฟ/heat เฉย ๆ plasmasword เลยห้ามเอาไปสู้ mech · ทุบต่ำกว่าแหลมทุกตัวและ mech ไม่มีเลือดให้ตก อาวุธแหลมเสียเปรียบหมด — สูตรคือ EMP มืดก่อน แล้วเข้าทุบด้วย mace ยูเรเนียม · เรียงจากอ่อนทุบสุดไว้บน</p>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>mech</th><th>แหลม</th><th>ทุบ</th><th>ไฟ</th><th>อาวุธหลัก</th></tr>
+        </thead>
+        <tbody id="mechBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="foot">ฐานเหล็ก คุณภาพ normal จากหน้า Melee weapons ของวิกิ 1.6 · ตัวคูณวัสดุจากหน้าเดียวกัน · Roy = Royalty DLC · OD = Odyssey · AN = Anomaly</p>
+  </div>
+
+  <div id="sub-gun" hidden>
+  <h1>ปืนตัดสินแล้ว เก่งเรื่องอะไรบ้าง</h1>
+  <p class="lead">ปืนไม่ผูกวัสดุ — ตัวชี้ขาดคือคุณภาพงานฝีมือกับสกิลนักยิงแทน ตารางนี้เลยเป็นการตัดสินว่าจะ craft กระบอกไหน เก่งเรื่องอะไร คลิกหัวคอลัมน์เรียงใหม่ได้</p>
+
+  <div class="dxbox">
+    <h3>เหมาะกับสู้อะไร</h3>
+    <p class="refnote">ไล่ฝูง: LMG / chain shotgun (DPS 18+) · ยิงไกลคุมพื้นที่: sniper 45 ช่อง · ปราบ mech: EMP ก่อน แล้ว charge lance AP 45% หรือเข้าตีด้วย mace ยูเรเนียม · จบ spacer: charge rifle · minigun 41.7 DPS สูงสุดของเกมแต่ได้จาก loot เท่านั้น craft ไม่ได้</p>
+    <p class="refnote">เส้นทางอุตสาหกรรมคุ้มสุด: bolt-action → heavy SMG → assault rifle แล้วขึ้น spacer เอา charge rifle เลย · ปืน DLC: hellcat rifle (AN) ระดับ assault rifle, flamebow (Biotech) ธนูไฟเผาพื้น</p>
+  </div>
+
+  <div class="dxbox">
+    <h3>ปืน</h3>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>ปืน</th><th>เทค</th><th>ดาเมจ/นัด</th><th>นัด/รอบ</th><th>ระยะ</th><th>AP</th><th>DPS</th><th>เหมาะกับ</th></tr>
+        </thead>
+        <tbody id="gunsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dxbox">
+    <h3>ระเบิด จรวด ของยิงพิเศษ</h3>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>ชื่อ</th><th>เทค</th><th>ดาเมจ/ลูก</th><th>ลูก/รอบ</th><th>ระยะ</th><th>AP</th><th>DPS</th><th>เหมาะกับ</th></tr>
+        </thead>
+        <tbody id="boomBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="foot">ตัวเลขคุณภาพ normal จากหน้า Weapons ของวิกิ 1.6 · DPS เป็นค่าเฉลี่ยช่วงระยะกำลังดี · Neo = ยุคหิน · Ind = อุตสาหกรรม · Spacer = อวกาศ · AN = Anomaly</p>
+  </div>
+
+  <div id="sub-armor" hidden>
+  <h1>เกราะตัดสินแล้ว ชุดไหนเหมาะงานไร</h1>
+  <p class="lead">power armor หุ้มทั้งตัวยกเว้นหัว ทำที่ fabrication bench — เลือกตามหน้าที่: ตีประชิดเอา cataphract ยิง-เดินเอา recon อวกาศเอา vacsuit งบน้อยเอา flak ซ้อนชั้น คลิกหัวคอลัมน์เรียงใหม่ได้</p>
+
+  <div class="dxbox">
+    <h3>สูตรผสมของดีสุด</h3>
+    <p class="refnote">กลางเกมงบน้อย: flak vest + duster ผ้า devilstrand + flak pants + flak helmet — เกราะลำตัวแหลม 100% ทั้งที่ยังไม่มี power armor เพราะ vest อยู่ชั้นในซ้อนใต้ duster ได้ · ปลายเกมโหดสุด: duster ขน thrumbofur/hyperweave คุณภาพ legend + flak vest แซง cataphract ที่ลำตัว (cataphract ยังชนะที่แขนขา) — เสื้อ devilstrand ธรรมดา ๆ ก็ได้ 28% แหลมทั้งที่เป็นผ้า</p>
+    <p class="refnote">งานโคจร (OD): ดูตารางเดินอวกาศด้านล่าง · หนาวสุดขั้ว: parka + tuque ไม่ต้องเกราะ</p>
+  </div>
+
+  <div class="dxbox">
+    <h3>เดินอวกาศ (OD) — ชุดไหนแทน vacsuit ได้</h3>
+    <p class="refnote">นอกเรือคือ vacuum 100% ที่ −75°C — ชุดในตารางมีกันหนาวมาให้พออยู่แล้ว · power armor ทุกตัวให้ +30% เท่ากันหมด ตัวชี้ขาดคือหมวก · ค่า vacuum ไม่ขึ้นกับคุณภาพ · ปิด gravship สนิทก็อยู่ได้โดยไม่ต้องชุด แต่อุกกาบาต/raid drop-pod เจาะหลังคาได้ เตรียมชุดสำรอง · Biotech: gene vacskin gland หรือ Breathless ช่วยต้าน vacuum โดยไม่ต้องใส่อะไร</p>
+    <p class="refnote">โบนัสซ่อนของหมวก: vacsuit helmet กัน toxic ด้วย — toxic environment resistance 80% + ภูมิ tox gas เต็ม ๆ เท่า gas mask แถมเกราะแหลมดีกว่า ใส่ทีเดียวได้ทั้งอวกาศ+พิษ · toxic 100% ไม่มีจากชุดชิ้นเดียว — เติมต่อด้วย detoxifier lung (Biotech) หรือยีน tox resistance อีก stat ที่คูณซ้อนกันได้ · face mask เองก็กัน toxic แต่แค่ 50% และไม่กัน tox gas</p>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>ชุด + หมวก</th><th>vacuum</th><th>อยู่นอกได้</th><th>โทษเดิน</th><th>เหมาะกับ</th></tr>
+        </thead>
+        <tbody id="spaceBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dxbox">
+    <h3>ชุดเกราะเจาะจง — ตัวเลขตรง %</h3>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>ชื่อ</th><th>แหลม</th><th>ทุบ</th><th>ไฟ</th><th>กันหนาว</th><th>โทษเดิน</th><th>วิจัย</th><th>เหมาะกับ</th></tr>
+        </thead>
+        <tbody id="gearBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dxbox">
+    <h3>ของ stuff ได้ — เกราะตามวัสดุ ×</h3>
+    <p class="refnote">ตัวเลขคือตัวคูณฐาน คูณกับสถิติวัสดุ (โลหะ plasteel ดีสุด) และคุณภาพ 0.6–1.8 เช่น plate เหล็ก = 0.9 × 1.08</p>
+    <div class="reftable-wrap">
+      <table class="reftable sortable">
+        <thead>
+          <tr><th>ชื่อ</th><th>เกราะ ×</th><th>กันหนาว / ร้อน</th><th>โทษเดิน</th><th>เหมาะกับ</th></tr>
+        </thead>
+        <tbody id="gearStuffBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="foot">คุณภาพ normal จากหน้า Apparel และ Vacsuit ของวิกิ 1.6 · Roy = Royalty · OD = Odyssey · power armor ต้องผ่านวิจัยถึงจะ craft ที่ fabrication bench</p>
+  </div>
+  </div>
+
+  <div class="view" id="view-settings">
+    <h1>Rimworld settings อ้างอิง</h1>
+    <p class="lead">คัดลอกมาจาก Notion ตรง ๆ — เป็นตารางอ้างอิงเฉย ๆ ไม่ได้คำนวณอะไรให้ ไปเปิด Notion ถ้าจะแก้ไข</p>
+
+    <div class="dxbox">
+      <h3>กำหนดวัน Custom Game / CS / PB / RD</h3>
+      <p class="mnow" id="milestoneNow"></p>
+      <p class="refnote">คอลัมน์ &quot;ทำงาน&quot; กับ &quot;เล่น&quot; คือ milestone เดียวกันแค่คนละจังหวะเล่น ส่วน &quot;×4/3&quot; คือ No. คูณ 4/3 (ปัดเศษ)</p>
+      <div class="reftable-wrap">
+        <table class="reftable">
+          <thead>
+            <tr><th>No.</th><th>ทำงาน</th><th>เล่น</th><th>×4/3</th><th>หมายเหตุ</th></tr>
+          </thead>
+          <tbody id="milestoneBody">
+            <tr data-no="2"><td>2</td><td></td><td>Custom Game</td><td>3</td><td class="dim">← จำนวนทรัพยากรเสก</td></tr>
+            <tr data-no="3"><td>3</td><td></td><td>Load Save</td><td>4</td><td></td></tr>
+            <tr data-no="5"><td>5</td><td></td><td>Commitment Mode</td><td>7</td><td></td></tr>
+            <tr data-no="7"><td>7</td><td></td><td>CS 1</td><td>10</td><td></td></tr>
+            <tr data-no="11"><td>11</td><td></td><td>PB 1</td><td>15</td><td></td></tr>
+            <tr data-no="13"><td>13</td><td>Custom Game</td><td>RD 1</td><td>18</td><td></td></tr>
+            <tr data-no="17"><td>17</td><td>Load Save</td><td>CS 2</td><td>23</td><td></td></tr>
+            <tr data-no="19"><td>19</td><td>Commitment Mode</td><td>PB 2</td><td>25</td><td class="dim">← จำนวนทรัพยากรสร้าง</td></tr>
+            <tr data-no="23"><td>23</td><td>CS 1</td><td>RD 2</td><td>30</td><td></td></tr>
+            <tr data-no="29"><td>29</td><td>PB 1</td><td>CS 3</td><td>38</td><td></td></tr>
+            <tr data-no="31"><td>31</td><td>RD 1</td><td>PB 3</td><td>41</td><td></td></tr>
+            <tr data-no="37"><td>37</td><td>CS 2</td><td>RD 3</td><td>49</td><td></td></tr>
+            <tr data-no="41"><td>41</td><td>PB 2</td><td>CS 4</td><td>54</td><td></td></tr>
+            <tr data-no="43"><td>43</td><td>RD 2</td><td>PB 4</td><td>57</td><td></td></tr>
+            <tr data-no="47"><td>47</td><td>CS 3</td><td>RD 4</td><td>62</td><td></td></tr>
+            <tr data-no="53"><td>53</td><td>PB 3</td><td>CS 5</td><td>70</td><td></td></tr>
+            <tr data-no="59"><td>59</td><td>RD 3</td><td>PB 5</td><td>78</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="dxbox">
+      <h3>Punishment Settings</h3>
+      <p class="refnote">เลื่อน level ขึ้นเมื่อเกิด Rebel หรือ Prison Break แล้วไม่เข้าร่วม</p>
+
+      <p class="reftable-title">Slave — ใช้กับพวก Unwavering Royalty หรือ หลุดจากข้อ 3</p>
+      <div class="reftable-wrap">
+        <table class="reftable">
+          <thead><tr><th>Level</th><th>Penal</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>ชุดอิสระ</td></tr>
+            <tr><td>2</td><td>ชุด Slave</td></tr>
+            <tr><td>3</td><td>พิการขา</td></tr>
+            <tr><td>4</td><td>พิการแขน</td></tr>
+            <tr><td>5</td><td>Hemoglobin Farm</td></tr>
+            <tr><td>6</td><td>กลายเป็น Ghoul</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="reftable-title">Prisoner — อดเป็น Colonist</p>
+      <div class="reftable-wrap">
+        <table class="reftable">
+          <thead><tr><th>Level</th><th>Penal</th><th>หมายเหตุ</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>ชุดอิสระ</td><td></td></tr>
+            <tr><td>2</td><td>Extract Hemoglobin + Stripe</td><td></td></tr>
+            <tr><td>3</td><td>Bloodfeed</td><td class="dim">ไปเป็น Slave Lv1</td></tr>
+            <tr><td>4</td><td>Hemoglobin Farm / นอนกับ entity</td><td class="dim">มาจาก Slave</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="./calc.js"></script>
+<script src="./power.js"></script>
+<script src="./grow.js"></script>
+<script src="./drugs.js"></script>
+<script>
+(function () {
+  var LS = window.LifeSupport;
+  var PWR = window.PowerCalc;
+  var GT = window.GrowTime;
+  var DC = window.DrugCalc;
+  var KEY = 'gravship-ls-v2';
+  var KEY_OLD = 'gravship-ls-v1';
+
+  function localRaw() {
+    var o = {};
+    try {
+      var raw = localStorage.getItem(KEY) || localStorage.getItem(KEY_OLD);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') o = parsed;
+      }
+    } catch (e) {}
+    return o;
+  }
+
+  // Only the params actually present in the address bar. Kept separate so they
+  // can be re-applied on top of a state loaded from the server later.
+  function urlOverrides() {
+    var o = {};
+    try {
+      var q = new URLSearchParams(location.search);
+      ['tab', 'soil', 'kind', 'leave', 'pack', 'hours', 'watts', 'pick',
+        'diagCrop', 'diagDays', 'diagPercent', 'heat', 'cool', 'sort', 'shown',
+        'trait', 'drug', 'intervalDays', 'season'].forEach(function (k) {
+        if (q.has(k)) o[k] = q.get(k);
+      });
+      if (q.has('a') || q.has('adults')) o.adults = q.get('adults') || q.get('a');
+      if (q.has('k') || q.has('kids')) o.kids = q.get('kids') || q.get('k');
+      if (q.has('b') || q.has('babies')) o.babies = q.get('babies') || q.get('b');
+      if (q.has('buf') && q.get('buf') !== '') o.buffer = Number(q.get('buf')) / 100;
+      if (q.has('leaveSet')) o.leaveSet = q.get('leaveSet') === '1' || q.get('leaveSet') === 'true';
+    } catch (e) {}
+    return o;
+  }
+
+  function readStore() {
+    var o = localRaw();
+    var over = urlOverrides();
+    Object.keys(over).forEach(function (k) { o[k] = over[k]; });
+    return o;
+  }
+
+  // Snapshot of the query string as the page was opened. save() rewrites the
+  // URL with every parameter, so this must be read once, up front.
+  var INITIAL_QUERY = urlOverrides();
+
+  var crewQuery = false;
+  try {
+    var q0 = new URLSearchParams(location.search);
+    crewQuery = q0.has('a') || q0.has('k') || q0.has('b') ||
+      q0.has('adults') || q0.has('kids') || q0.has('babies');
+  } catch (e) {}
+
+  var rawStore, stored, crew, buffer, pick, tab, season, watts, hours, grow, drugState;
+
+  // Re-runnable so the server state can replace the first-paint state.
+  function applyRawState(raw) {
+    rawStore = raw;
+    stored = PWR.parseAppState(rawStore);
+    crew = crewQuery ? LS.parseQuery(location.search) : LS.parseCrew(stored);
+    if (crew.adults + crew.kids + crew.babies === 0 && !crewQuery) {
+      var dCrew = PWR.defaultAppState();
+      crew = { adults: dCrew.adults, kids: dCrew.kids, babies: dCrew.babies };
+    }
+    buffer = stored.buffer;
+    pick = stored.pick;
+    tab = stored.tab;
+    var n = parseInt(String(rawStore.season), 10);
+    season = Number.isFinite(n) ? Math.max(1, Math.min(60, n)) : 60;
+    watts = stored.watts;
+    hours = stored.hours;
+    grow = GT.parseGrowState(rawStore);
+    grow.kind = 'all';
+    drugState = DC.parseDrugState(rawStore);
+  }
+
+  applyRawState(readStore());
+
+  // --- server-side save (D1 via /api/save) -------------------------------
+  // localStorage + the URL stay the resilient offline path; the server is an
+  // additive layer so the same login sees its state on any machine. Every
+  // failure here is swallowed on purpose — a network hiccup must never break
+  // the calculator.
+  var SAVE_URL = '/api/save';
+  var saveTimer = null;
+  var pendingPayload = null;
+  // Nothing may be pushed to the server until the initial GET has settled.
+  // The first render calls save(); without this gate that default state would
+  // race the GET and overwrite the real save when opening on a new machine.
+  var remoteReady = false;
+
+  function flushRemoteSave() {
+    saveTimer = null;
+    if (!remoteReady || !pendingPayload) return;
+    var body = JSON.stringify(pendingPayload);
+    pendingPayload = null;
+    try {
+      fetch(SAVE_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: body
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
+  function queueRemoteSave(payload) {
+    pendingPayload = payload;
+    if (!remoteReady) return;
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(flushRemoteSave, 500);
+  }
+
+  // Don't lose the last edit if the tab is closed inside the debounce window.
+  window.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && saveTimer) {
+      clearTimeout(saveTimer);
+      flushRemoteSave();
+    }
+  });
+
+  function hydrateFromServer() {
+    var done = function (pushLocal) {
+      remoteReady = true;
+      // Migrate an existing localStorage-only state up to the server, but only
+      // when the server had nothing — never overwrite a real remote save.
+      if (pushLocal && pendingPayload) flushRemoteSave();
+      else pendingPayload = null;
+    };
+    try {
+      fetch(SAVE_URL, { credentials: 'same-origin' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (remote) {
+          if (!remote || typeof remote !== 'object' || Object.keys(remote).length === 0) {
+            done(true);
+            return;
+          }
+          // Params that were in the address bar *on arrival* still win, so a
+          // shared link shows what it says. INITIAL_QUERY is captured before
+          // save() rewrites the URL with the full parameter set — reading the
+          // live URL here would make every param look explicitly present and
+          // the server state could never apply.
+          var merged = {};
+          Object.keys(remote).forEach(function (k) { merged[k] = remote[k]; });
+          Object.keys(INITIAL_QUERY).forEach(function (k) { merged[k] = INITIAL_QUERY[k]; });
+          applyRawState(merged);
+          render();
+          renderPower();
+          renderGrow();
+          renderDrug();
+          showTab(tab);
+          done(false);
+        })
+        .catch(function () { done(false); });
+    } catch (e) { done(false); }
+  }
+
+  function save() {
+    var payload = {
+      schema: PWR.STATE_SCHEMA,
+      tab: tab,
+      adults: crew.adults,
+      kids: crew.kids,
+      babies: crew.babies,
+      buffer: buffer,
+      pick: pick,
+      watts: watts,
+      hours: hours,
+      leave: grow.leave,
+      leaveSet: grow.leave != null,
+      pack: grow.pack,
+      soil: grow.soil,
+      kind: grow.kind,
+      sort: grow.sort,
+      shown: grow.shown,
+      diagCrop: grow.diagCrop,
+      diagDays: grow.diagDays,
+      diagPercent: grow.diagPercent,
+      heat: grow.heat,
+      cool: grow.cool,
+      trait: drugState.trait,
+      drug: drugState.drug,
+      intervalDays: drugState.intervalDays,
+      season: season
+    };
+    try {
+      localStorage.setItem(KEY, JSON.stringify(payload));
+    } catch (e) {}
+    queueRemoteSave(payload);
+    try {
+      var p = new URLSearchParams();
+      p.set('tab', tab);
+      p.set('a', String(crew.adults));
+      p.set('k', String(crew.kids));
+      p.set('b', String(crew.babies));
+      p.set('buf', String(Math.round(buffer * 100)));
+      p.set('pick', pick);
+      p.set('watts', String(watts));
+      p.set('hours', String(hours));
+      p.set('soil', grow.soil);
+      p.set('kind', grow.kind);
+      p.set('sort', grow.sort);
+      if (grow.shown.length === 0) p.set('shown', '');
+      else if (grow.shown.length !== GT.CROPS.length) p.set('shown', grow.shown.join(','));
+      p.set('leave', grow.leave == null ? 'open' : String(grow.leave));
+      p.set('pack', String(grow.pack));
+      p.set('diagCrop', grow.diagCrop);
+      p.set('diagDays', String(grow.diagDays));
+      p.set('diagPercent', String(grow.diagPercent));
+      p.set('heat', String(grow.heat));
+      p.set('cool', String(grow.cool));
+      p.set('trait', drugState.trait);
+      p.set('drug', drugState.drug);
+      p.set('intervalDays', String(drugState.intervalDays));
+      p.set('season', String(season));
+      var next = location.pathname + '?' + p.toString();
+      if (location.search !== '?' + p.toString()) {
+        history.replaceState(null, '', next);
+      }
+    } catch (e) {}
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function roomLabel(m) {
+    if (m.roomWidth && m.roomDepth) return m.roomWidth + '×' + m.roomDepth + ' = ' + m.roomTiles;
+    return String(m.roomTiles);
+  }
+  function tempNoteText(gf, tail) {
+    var s = 'พืชโตเต็มที่ 6–42°C · default 7/41 = ขอบ ideal ±1';
+    if (gf < 0.999) s += ' · ห้องนี้โต ~' + Math.round(gf * 100) + '%' + tail;
+    return s;
+  }
+
+  function render() {
+    var gf = GT.tempFactor(grow.heat, grow.cool);
+    var cmp = LS.compareMeals({
+      adults: crew.adults, kids: crew.kids, babies: crew.babies,
+      crop: 'rice', buffer: buffer, growthFactor: gf
+    });
+    document.getElementById('nA').textContent = String(crew.adults);
+    document.getElementById('nK').textContent = String(crew.kids);
+    document.getElementById('nB').textContent = String(crew.babies);
+    document.getElementById('buffer').value = String(Math.round(buffer * 100));
+    document.getElementById('bufOut').textContent = Math.round(buffer * 100) + '%';
+    var heatIn = document.getElementById('heatIn');
+    if (document.activeElement !== heatIn) heatIn.value = String(grow.heat);
+    var coolIn = document.getElementById('coolIn');
+    if (document.activeElement !== coolIn) coolIn.value = String(grow.cool);
+    var fEl = document.getElementById('tempFactorOut');
+    fEl.innerHTML = Math.round(gf * 100) + '%<small>โต</small>';
+    fEl.className = 'tfactor' + (gf < 0.5 ? ' bad' : gf < 0.999 ? ' warn' : '');
+    document.getElementById('tempNote').textContent =
+      tempNoteText(gf, ' → ช่องปลูกบวกเพิ่มให้แล้ว');
+    document.getElementById('need').textContent =
+      cmp.nutrition.toFixed(2) + ' โภชนาการต่อวัน · คุ้มสุดถ้าปลูกอย่างเดียว: Simple meal';
+
+    var ranks = document.getElementById('ranks');
+    ranks.textContent = '';
+    var copy = {
+      simple: { title: 'Simple meal', who: 'คุ้มสุดบนเรือ', why: 'ผักอย่างเดียวครบ ไม่ต้องล่า' },
+      pemmican: { title: 'Pemmican', who: 'อ่างน้อยกว่า ถ้ามีเนื้อ', why: '70 วันไม่ตู้เย็น · กินทีละคำ' },
+      survival: { title: 'Survival pack', who: 'คลังเดินทาง', why: 'ไม่เน่า แต่กินวัตถุดิบมากกว่า pemmican' }
+    };
+    cmp.meals.forEach(function (m) {
+      var meta = copy[m.id];
+      var b = el('button', 'rk' + (m.id === pick ? ' on' : ''));
+      b.type = 'button';
+      b.setAttribute('data-id', m.id);
+      b.appendChild(el('div', 'who', meta.who));
+      b.appendChild(el('h2', '', meta.title));
+      var amt = el('div', 'amt', String(m.basins) + ' ');
+      amt.appendChild(el('small', '', 'อ่าง'));
+      b.appendChild(amt);
+      var ul = el('ul');
+      ul.appendChild(el('li', '', 'ช่องปลูก ' + m.growTiles));
+      ul.appendChild(el('li', '', 'ห้องใน ' + roomLabel(m) + ' ช่อง'));
+      ul.appendChild(el('li', '', meta.why));
+      b.appendChild(ul);
+      b.appendChild(el('div', m.completeFromHydro ? 'okflag' : 'flag',
+        m.completeFromHydro ? 'ปลูกบนเรืออย่างเดียวพอ' : 'ต้องมีเนื้อเพิ่ม'));
+      ranks.appendChild(b);
+    });
+
+    var selected = cmp.meals.find(function (m) { return m.id === pick; }) || cmp.meals[0];
+    var pickBox = document.getElementById('pick');
+    pickBox.textContent = '';
+    pickBox.appendChild(el('h3', '', copy[selected.id].title + ' — ใช้ในห้องปลูก'));
+    var stats = el('div', 'stats');
+    [
+      ['อ่าง', selected.basins],
+      ['ช่องปลูก', selected.growTiles],
+      ['ห้องใน', selected.roomTiles],
+      ['โคม / ไฟ', selected.lamps + ' · ' + selected.wattsDay.toLocaleString('en-US') + ' W']
+    ].forEach(function (row) {
+      var s = el('div', 'stat');
+      s.appendChild(el('em', '', row[0]));
+      s.appendChild(el('b', '', String(row[1])));
+      stats.appendChild(s);
+    });
+    pickBox.appendChild(stats);
+
+    var corn = document.getElementById('corn');
+    corn.textContent = '';
+    var left = el('div');
+    left.appendChild(el('strong', '', 'ข้าวโพดปลูกในอ่างบนเรือไม่ได้'));
+    left.appendChild(el('p', '', 'เกมห้ามลง corn ใน hydroponics — ใช้ตอนลงจอดปลูกดินเท่านั้น คุ้มแรงงาน ไม่คุ้มพื้นที่เรือ'));
+    var right = el('div');
+    right.appendChild(el('div', 'n', cmp.corn.soilTiles + ' ช่องดิน'));
+    right.appendChild(el('p', '', 'ถ้าปลูกข้าวโพดบนดินธรรมดาด้วยสูตร simple มื้อเดียวกัน'));
+    corn.appendChild(left);
+    corn.appendChild(right);
+    renderSettings();
+    save();
+  }
+
+  function renderPower() {
+    var r = PWR.batteriesNeeded(watts, hours);
+    var inp = document.getElementById('wattsIn');
+    if (document.activeElement !== inp) inp.value = String(r.watts);
+    document.getElementById('hours').value = String(r.hours);
+    document.getElementById('hoursOut').textContent = String(r.hours);
+    document.getElementById('batN').textContent = String(r.batteries);
+    document.getElementById('batStory').textContent =
+      r.watts.toLocaleString('en-US') + ' W ตลอด ' + r.hours + ' ชม.';
+    document.getElementById('needWd').textContent = Math.round(r.needWd) + ' Wd';
+    document.getElementById('storeWd').textContent = r.storedWd.toLocaleString('en-US') + ' Wd';
+    document.getElementById('spareWd').textContent = Math.round(r.spareWd) + ' Wd';
+    document.querySelectorAll('#hourPresets .chip').forEach(function (c) {
+      c.classList.toggle('on', +c.getAttribute('data-h') === r.hours);
+    });
+    var box = document.getElementById('batCells');
+    box.textContent = '';
+    var show = Math.min(r.batteries, 20);
+    for (var i = 0; i < show; i++) {
+      box.appendChild(el('div', 'bcell'));
+    }
+    save();
+  }
+
+  function fillDiagCrops() {
+    var sel = document.getElementById('diagCrop');
+    if (sel.options.length) return;
+    GT.CROPS.slice().sort(function (a, b) {
+      return a.name.localeCompare(b.name);
+    }).forEach(function (c) {
+      var o = document.createElement('option');
+      o.value = c.id;
+      o.textContent = c.name;
+      sel.appendChild(o);
+    });
+  }
+
+  function renderGrow() {
+    fillDiagCrops();
+    var seasonIn = document.getElementById('seasonIn');
+    if (seasonIn && document.activeElement !== seasonIn) seasonIn.value = String(season);
+    var seasonOut = document.getElementById('seasonOut');
+    if (seasonOut) seasonOut.textContent = season + '/60 วัน';
+    var plan = GT.planCrops(grow);
+    document.getElementById('growTitle').textContent = plan.open
+      ? 'แผนหว่าน ต้นนานไว้ก่อน'
+      : 'ออกวันสุดท้าย ต้องหว่านอะไร';
+    document.getElementById('leaveCtrl').hidden = !!plan.open;
+    document.querySelectorAll('#leaveMode .chip').forEach(function (c) {
+      var mode = c.getAttribute('data-leave');
+      c.classList.toggle('on', plan.open ? mode === 'open' : mode === 'set');
+    });
+    if (!plan.open) {
+      document.getElementById('leaveDays').value = String(plan.leave);
+      document.getElementById('leaveOut').textContent = String(plan.leave);
+    }
+    document.getElementById('packDays').value = String(plan.pack);
+    document.getElementById('packOut').textContent = String(plan.pack);
+    document.getElementById('winN').textContent = plan.open ? '—' : String(plan.deadline);
+    document.getElementById('winStory').textContent = plan.open
+      ? 'ยังไม่รู้วันโจมตี — หว่านต้นที่วันจริงนานไว้ก่อน ต้นสั้นตามหลัง'
+      : (plan.deadline <= 0
+        ? 'เผื่อเก็บครบเท่าวันออก — ไม่เหลือเวลาให้พืชสุก'
+        : ('ต้องสุกภายในวันที่ ' + plan.deadline + ' แล้วใช้ ' + plan.pack + ' วันเก็บ-ขน บินวันที่ ' + plan.leave));
+    document.querySelectorAll('#soilChips .chip').forEach(function (c) {
+      c.classList.toggle('on', c.getAttribute('data-soil') === plan.soil);
+    });
+    document.querySelectorAll('#sortChips .chip').forEach(function (c) {
+      c.classList.toggle('on', c.getAttribute('data-sort') === plan.sort);
+    });
+    var pick = document.getElementById('showBox');
+    pick.textContent = '';
+    var on = {};
+    (grow.shown || []).forEach(function (id) { on[id] = true; });
+    GT.KINDS.forEach(function (kind) {
+      var crops = GT.CROPS.filter(function (c) { return c.kind === kind; });
+      var row = el('div', 'krow');
+      row.appendChild(el('span', 'khead', GT.KIND_LABEL[kind]));
+      var allOn = crops.every(function (c) { return on[c.id]; });
+      var tog = el('button', '', allOn ? 'ล้างกลุ่ม' : 'ทั้งกลุ่ม');
+      tog.type = 'button';
+      tog.setAttribute('data-kind-all', kind);
+      row.appendChild(tog);
+      pick.appendChild(row);
+      var chips = el('div', 'chips');
+      crops.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (c) {
+        var ch = el('button', 'chip' + (on[c.id] ? ' on' : ''), c.name);
+        ch.type = 'button';
+        ch.setAttribute('data-show', c.id);
+        chips.appendChild(ch);
+      });
+      pick.appendChild(chips);
+    });
+    var rail = document.getElementById('rail');
+    rail.textContent = '';
+    rail.style.gridTemplateColumns = '52px ' + Math.max(plan.deadline, 0.01) + 'fr ' + Math.max(plan.pack, 0.01) + 'fr 52px';
+    function seg(cls, text) {
+      rail.appendChild(el('span', cls, text));
+    }
+    if (plan.open) {
+      rail.style.gridTemplateColumns = '1.2fr 1fr';
+      seg('packseg', 'หว่านต้นนานก่อน');
+      seg('growseg', 'ต้นสั้นตามหลัง');
+    } else {
+      seg('sow', 'sow');
+      seg('growseg', plan.deadline ? ('grow ' + plan.deadline + 'd') : '—');
+      seg('packseg', plan.pack ? ('haul ' + plan.pack + 'd') : 'launch day');
+      seg('fly', 'launch');
+    }
+    var box = document.getElementById('cropList');
+    box.textContent = '';
+    if (!plan.rows.length) {
+      box.appendChild(el('div', 'showempty', 'เลือกพืชด้านบนเพื่อแสดงวันจริง — รายการแยก Food / Textile / Drug ตามที่ติ๊ก'));
+    }
+    var eat = crew.adults * 1.6 + crew.kids * 1.28;
+    var vegNeed = (eat / 0.9 * 0.5 + crew.babies * 0.1) * (1 + buffer);
+    var seasonFactor = season / 60;
+    var lastKind = '';
+    plan.rows.forEach(function (row) {
+      if (row.kind !== lastKind) {
+        lastKind = row.kind;
+        box.appendChild(el('div', 'khead', GT.KIND_LABEL[row.kind] || row.kind));
+      }
+      var cr = el('div', 'cr');
+      cr.appendChild(el('b', '', row.name));
+      var listed = Number.isInteger(row.listed) ? String(row.listed) : String(row.listed);
+      var realTxt = row.real == null ? 'no hydro' : (row.real.toFixed(1) + 'd real');
+      var metaEl = el('span', 'meta', listed + 'd in-game → ' + realTxt);
+      var feedCrop = CROP_FEED[row.id];
+      if (feedCrop && row.real != null && Math.floor(season / row.real + 1e-9) >= 1) {
+        var plants = Math.ceil(vegNeed / (feedCrop.yield / row.real * seasonFactor) - 1e-9);
+        metaEl.appendChild(document.createTextNode(' · ปลูก '));
+        metaEl.appendChild(el('b', '', plants + ' ต้น'));
+      }
+      cr.appendChild(metaEl);
+      cr.appendChild(el('span', 'tag ' + row.tag, row.tag === 'plan' ? 'หว่าน' : (row.ok ? 'sow' : 'skip')));
+      box.appendChild(cr);
+    });
+
+    var d = GT.diagnose({
+      crop: grow.diagCrop,
+      soil: grow.soil,
+      days: grow.diagDays,
+      percent: grow.diagPercent,
+      heat: grow.heat,
+      cool: grow.cool
+    });
+    var cropSel = document.getElementById('diagCrop');
+    if (document.activeElement !== cropSel) cropSel.value = d.crop;
+    var daysEl = document.getElementById('diagDays');
+    if (document.activeElement !== daysEl) daysEl.value = String(d.days);
+    var pctEl = document.getElementById('diagPct');
+    if (document.activeElement !== pctEl) pctEl.value = String(d.percent);
+    var heatEl = document.getElementById('diagHeat');
+    if (document.activeElement !== heatEl) heatEl.value = String(d.heat);
+    var coolEl = document.getElementById('diagCool');
+    if (document.activeElement !== coolEl) coolEl.value = String(d.cool);
+    document.getElementById('tempNoteGrow').textContent =
+      tempNoteText(GT.tempFactor(grow.heat, grow.cool), ' → expected ลดตามสูตร wiki');
+    var out = document.getElementById('diagOut');
+    if (d.real == null) {
+      out.textContent = d.name + ' ปลูก Hydro ไม่ได้ — เปลี่ยนดินก่อนวินิจฉัย';
+    } else if (d.days <= 0) {
+      out.textContent = 'ใส่ว่าอยู่มาแล้วกี่วัน';
+    } else {
+      var exp = d.expected >= 100 ? 'ควรเก็บได้แล้ว' : ('ควรอยู่ที่ ~' + Math.round(d.expected) + '%');
+      var rate = Math.round(d.impliedGrf * 100);
+      var tPct = Math.round(d.tempGrf * 100);
+      var soilPct = d.soilGrf == null ? 100 : Math.round(d.soilGrf * 100);
+      var ceil = Math.round(d.tempGrf * (d.soilGrf == null ? 1 : d.soilGrf) * 100);
+      out.innerHTML = '';
+      var lead = document.createElement('strong');
+      lead.textContent = d.name;
+      out.appendChild(lead);
+      out.appendChild(document.createTextNode(' ' + exp + ' · คุณอยู่ที่ ' + Math.round(d.percent) + '%'));
+      var row1 = document.createElement('div');
+      row1.className = 'drow';
+      row1.textContent = 'ห้อง ' + d.heat + '–' + d.cool + '°C → โต ~' + tPct +
+        '% × ดิน ~' + soilPct + '% = เพดาน ~' + ceil + '%';
+      out.appendChild(row1);
+      var row2 = document.createElement('div');
+      row2.className = 'drow';
+      row2.textContent = 'โตจริง ~' + rate + '%' + (rate <= ceil + 2
+        ? ' — กรอบอุณหภูมิ+ดินอธิบายได้แล้ว'
+        : ' — เกินเพดาน ต้องหาสาเหตุอื่น (แสง/เพาะล่าช้า)');
+      out.appendChild(row2);
+      if (rate > ceil + 2 && ceil >= 98) {
+        var row3 = document.createElement('div');
+        row3.className = 'drow';
+        row3.textContent = 'กรอบอุณหภูมิปกติดี → สงสัยแสงไม่เต็ม เช่นโคมธรรมดาให้แค่ 50% พืชอาหารส่วนใหญ่ไม่โต';
+        out.appendChild(row3);
+      }
+    }
+    save();
+  }
+
+  function renderDrug() {
+    var traitBox = document.getElementById('traitPick');
+    traitBox.textContent = '';
+    DC.TRAITS.forEach(function (t) {
+      var ch = el('button', 'chip' + (t.id === drugState.trait ? ' on' : ''), t.name);
+      ch.type = 'button';
+      ch.setAttribute('data-trait', t.id);
+      traitBox.appendChild(ch);
+    });
+
+    var ranked = DC.rankedDrugsForTrait(drugState.trait);
+    var pickLabel = document.getElementById('drugPickLabel');
+    pickLabel.hidden = false;
+    pickLabel.textContent = ranked.length > 1
+      ? 'ยาที่เข้ากับ trait นี้ (เรียงจาก overdose ยากสุด → ง่ายสุด — ตัวแรกคือที่แนะนำ)'
+      : 'ยาประจำตัวจากยีน — ล็อคให้ตัวเดียว เพราะยีนของ xenotype นี้คุ้มครองยาตัวนี้ฝ่ายเดียว';
+    var pick = document.getElementById('drugPick');
+    pick.textContent = '';
+    var chips = el('div', 'chips');
+    ranked.forEach(function (d, i) {
+      var label = d.name + (i === 0 ? (ranked.length > 1 ? ' · แนะนำ' : ' · ผูกยีน') : '');
+      var ch = el('button', 'chip' + (d.id === drugState.drug ? ' on' : ''), label);
+      ch.type = 'button';
+      ch.setAttribute('data-drug', d.id);
+      chips.appendChild(ch);
+    });
+    pick.appendChild(chips);
+
+    var freqSlider = document.getElementById('freqSlider');
+    var freqIdx = DC.nearestFreqIndex(drugState.intervalDays);
+    if (document.activeElement !== freqSlider) freqSlider.value = String(freqIdx);
+    document.getElementById('freqOut').textContent = DC.formatFrequency(drugState.intervalDays);
+
+    var r = DC.evaluate({
+      trait: drugState.trait,
+      drug: drugState.drug,
+      intervalDays: drugState.intervalDays
+    });
+    var out = document.getElementById('drugOut');
+    out.innerHTML = '';
+    var head = document.createElement('div');
+    var strong = document.createElement('strong');
+    strong.textContent = r.drug.name;
+    head.appendChild(strong);
+    var badge = el('span', 'badge ' + r.verdict.level, r.verdict.label);
+    head.appendChild(badge);
+    out.appendChild(head);
+    out.appendChild(el('div', 'drow', r.drug.effect));
+
+    if (r.dependency) {
+      out.appendChild(el('div', 'drow',
+        'ตั้งไว้เฉลี่ยทุก ' + r.intervalDays.toFixed(1) + ' วัน — ให้ทุกไม่เกิน ~' + r.recommendedMaxIntervalDays +
+        ' วันเพื่อกันพลาด (' + r.graceDays + ' วันแรกไม่มีผล mood, เข้าโคม่าวันที่ ~' + r.comaDays +
+        ', เสียชีวิตวันที่ ~' + r.deathDays + ' ถ้าขาดต่อเนื่อง)'));
+    } else if (r.drug.odChance > 0) {
+      out.appendChild(el('div', 'drow',
+        Math.round(r.odPct * 1000) / 10 + '% โอกาส overdose สะสมต่อสัปดาห์ (เว้นทุก ' +
+        r.intervalDays.toFixed(2) + ' วัน/โดส ≈ ' + r.dosesPerWeek + ' โดส/สัปดาห์)'));
+    } else if (r.safeIntervalDays != null) {
+      out.appendChild(el('div', 'drow',
+        'ไม่มี overdose — เว้นให้ ~' + r.safeIntervalDays.toFixed(1) + ' วัน/โดสเพื่อให้ tolerance คืนตัวทัน (ตอนนี้เว้นทุก ' +
+        r.intervalDays.toFixed(2) + ' วัน/โดส)'));
+    }
+    if (r.overStackWarning) out.appendChild(el('div', 'drow', r.overStackWarning));
+    out.appendChild(el('div', 'drow',
+      'ตั้งในเกม: Drug Policy → Frequency = ' + r.policyFrequencyDays + ' วัน'));
+    r.notes.forEach(function (n) {
+      out.appendChild(el('div', 'drow', n));
+    });
+
+    var stackRows = document.getElementById('stackRows');
+    stackRows.textContent = '';
+    DC.stackForTrait(drugState.trait).forEach(function (row) {
+      var line = document.createElement('div');
+      line.className = 'drow';
+      var strongEl = document.createElement('strong');
+      strongEl.textContent = row.drug.name;
+      line.appendChild(strongEl);
+      var badgeCls = row.coverage === 'normal' ? 'warn' : 'ok';
+      line.appendChild(el('span', 'badge ' + badgeCls, DC.STACK_COVERAGE_LABELS[row.coverage]));
+      line.appendChild(document.createTextNode(' · ' + row.cadence + ' — ' + row.note));
+      stackRows.appendChild(line);
+    });
+
+    save();
+  }
+
+  function renderSettings() {
+    var total = crew.adults;
+    var label = 'ลูกเรือ ' + total + ' คน' +
+      (crew.kids + crew.babies > 0 ? ' (นับผู้ใหญ่ ไม่รวมเด็ก)' : '');
+    var rows = document.querySelectorAll('#milestoneBody tr');
+    var best = null;
+    rows.forEach(function (tr) {
+      var hit = Number(tr.getAttribute('data-no')) <= total &&
+        (best == null || Number(tr.getAttribute('data-no')) > best);
+      tr.classList.toggle('now', hit);
+      if (hit) best = Number(tr.getAttribute('data-no'));
+    });
+    var out = document.getElementById('milestoneNow');
+    if (best == null) {
+      out.innerHTML = '';
+      out.appendChild(document.createTextNode(label + ' — ยังไม่ถึง milestone แรก (No. 2)'));
+      return;
+    }
+    var tr = document.querySelector('#milestoneBody tr[data-no="' + best + '"]');
+    var work = tr.cells[1].textContent.trim();
+    var play = tr.cells[2].textContent.trim();
+    out.innerHTML = '';
+    out.appendChild(document.createTextNode(label + ' → No. ' + best));
+    var b = el('b', '', ' · ทำงาน ' + (work || '—') + ' / เล่น ' + play);
+    out.appendChild(b);
+  }
+
+  function showTab(next) {
+    tab = next === 'power' || next === 'grow' || next === 'drug' ||
+      next === 'leather' || next === 'settings' ? next : 'food';
+    document.getElementById('view-food').classList.toggle('on', tab === 'food');
+    document.getElementById('view-power').classList.toggle('on', tab === 'power');
+    document.getElementById('view-grow').classList.toggle('on', tab === 'grow');
+    document.getElementById('view-drug').classList.toggle('on', tab === 'drug');
+    document.getElementById('view-leather').classList.toggle('on', tab === 'leather');
+    document.getElementById('view-settings').classList.toggle('on', tab === 'settings');
+    document.getElementById('tabFood').classList.toggle('on', tab === 'food');
+    document.getElementById('tabPower').classList.toggle('on', tab === 'power');
+    document.getElementById('tabGrow').classList.toggle('on', tab === 'grow');
+    document.getElementById('tabDrug').classList.toggle('on', tab === 'drug');
+    document.getElementById('tabLeather').classList.toggle('on', tab === 'leather');
+    document.getElementById('tabSettings').classList.toggle('on', tab === 'settings');
+    save();
+  }
+
+  function resetPrefs() {
+    var d = PWR.defaultAppState();
+    crew = { adults: d.adults, kids: d.kids, babies: d.babies };
+    buffer = d.buffer;
+    season = 60;
+    pick = d.pick;
+    watts = d.watts;
+    hours = d.hours;
+    grow = GT.defaultGrowState();
+    grow.kind = 'all';
+    drugState = DC.defaultDrugState();
+    try {
+      localStorage.removeItem(KEY);
+      localStorage.removeItem(KEY_OLD);
+    } catch (e) {}
+    render();
+    renderPower();
+    renderGrow();
+    renderDrug();
+    showTab(tab);
+  }
+
+  document.getElementById('crew').addEventListener('click', function (e) {
+    var t = e.target.closest('button[data-k]');
+    if (!t) return;
+    var next = {
+      adults: crew.adults, kids: crew.kids, babies: crew.babies
+    };
+    next[t.getAttribute('data-k')] += Number(t.getAttribute('data-d'));
+    crew = LS.parseCrew(next);
+    render();
+    renderGrow();
+  });
+  document.getElementById('buffer').addEventListener('input', function () {
+    buffer = Number(this.value) / 100;
+    render();
+    renderGrow();
+  });
+  document.getElementById('seasonIn').addEventListener('input', function () {
+    season = Math.max(1, Math.min(60, Math.round(Number(this.value) || 60)));
+    renderGrow();
+    save();
+  });
+  document.getElementById('ranks').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-id]');
+    if (!t) return;
+    pick = t.getAttribute('data-id');
+    render();
+  });
+  document.getElementById('tabFood').addEventListener('click', function () { showTab('food'); });
+  document.getElementById('tabPower').addEventListener('click', function () { showTab('power'); });
+  document.getElementById('tabGrow').addEventListener('click', function () { showTab('grow'); });
+  document.getElementById('tabDrug').addEventListener('click', function () { showTab('drug'); });
+  document.getElementById('tabLeather').addEventListener('click', function () { showTab('leather'); });
+
+  var WEAPON_BASE = {
+    'Knife': { dps: 7.02, cd: 1.63, tech: 'Neo' },
+    'Ikwa': { dps: 6.70, cd: 2, tech: 'Neo' },
+    'Spear': { dps: 7.88, cd: 2.6, tech: 'Neo' },
+    'Gladius': { dps: 7.06, cd: 2, tech: 'Med' },
+    'Axe': { dps: 6.68, cd: 2, tech: 'Med·Roy' },
+    'Longsword': { dps: 7.90, cd: 2.45, tech: 'Med' },
+    'Breach axe': { dps: 6.22, cd: 1.25, tech: 'Neo' },
+    'Club': { dps: 6.31, cd: 2, tech: 'Neo' },
+    'Mace': { dps: 6.95, cd: 2, tech: 'Med' },
+    'Warhammer': { dps: 6.91, cd: 2.6, tech: 'Med·Roy' }
+  };
+  var WEAPON_MATS = {
+    Wood: { sharp: 0.4, blunt: 0.9, cd: 1 },
+    Steel: { sharp: 1, blunt: 1, cd: 1 },
+    Silver: { sharp: 0.85, blunt: 1, cd: 1 },
+    Gold: { sharp: 0.75, blunt: 1, cd: 1 },
+    Jade: { sharp: 1, blunt: 1.5, cd: 1.3 },
+    Uranium: { sharp: 1.1, blunt: 1.5, cd: 1.1 },
+    Plasteel: { sharp: 1.1, blunt: 0.9, cd: 0.8 }
+  };
+  var WEAPON_VERDICTS = [
+    { w: 'Longsword', mat: 'Plasteel', type: 'sharp',
+      why: 'DPS สุดในบรรดาอาวุธปลอมวัสดุ — ปลายทางของสายแหลม' },
+    { w: 'Spear', mat: 'Plasteel', type: 'sharp',
+      why: 'AP แหลมสูงสุด 33.8% — เจาะคนใส่เกราะได้ดีสุด ทำง่ายตั้งแต่ยุคหิน' },
+    { w: 'Mace', mat: 'Uranium', type: 'blunt',
+      why: 'DPS ทุบสูงสุด — อาวุธมาตรฐานสู้ mech ตัวจริง' },
+    { w: 'Warhammer', mat: 'Uranium', type: 'blunt',
+      why: 'ตีหนักสุดต่อฮิต + AP 40% สูงสุด — เก็บเป้าเกราะหนา แต่แกว่งช้า' },
+    { w: 'Gladius', mat: 'Plasteel', type: 'sharp',
+      why: 'คุณภาพต่อต้นทุนดี ใช้กลางเกมก่อนจะได้ longsword' },
+    { w: 'Knife', mat: 'Plasteel', type: 'sharp',
+      why: 'แกว่งไวสุด 1.30 วิ — ของสำรองข้างตัวคนถือปืน' },
+    { w: 'Ikwa', mat: 'Plasteel', type: 'sharp',
+      why: 'ยุคหินทำได้ ตัวเลขใกล้ gladius' },
+    { w: 'Axe', mat: 'Plasteel', type: 'sharp',
+      why: 'แทบเท่า ikwa/gladius — มี Royalty ค่อยเลือกใช้' },
+    { w: 'Breach axe', mat: 'Steel', type: 'blunt',
+      why: 'มีไว้เจาะกำแพงเป็นหลัก ไม่ใช่อาวุธหลัก — ไม่ต้องลงทุนวัสดุแพง' },
+    { w: 'Club', mat: null, type: 'blunt',
+      why: 'อาวุธชั่วคราว — ใช้ของที่มีไปก่อน พอมีทุนข้ามไปทำ mace เลย' }
+  ];
+
+  function renderWeapons() {
+    var body = document.getElementById('verdictBody');
+    if (!body) return;
+    WEAPON_VERDICTS.forEach(function (v) {
+      var base = WEAPON_BASE[v.w];
+      var tr = document.createElement('tr');
+      var nameTd = el('td', '', v.w);
+      nameTd.appendChild(el('i', 'tagd', base.tech));
+      tr.appendChild(nameTd);
+      var typeTd = el('td');
+      typeTd.appendChild(el('span', 'chip ' + (v.type === 'sharp' ? 'ok' : 'warn'),
+        v.type === 'sharp' ? 'แหลม' : 'ทุบ'));
+      tr.appendChild(typeTd);
+      tr.appendChild(el('td', '', v.mat || 'อะไรก็ได้'));
+      if (v.mat) {
+        var m = WEAPON_MATS[v.mat];
+        var dmg = base.dps * base.cd * m[v.type];
+        tr.appendChild(el('td', '', dmg.toFixed(1)));
+        tr.appendChild(el('td', '', (base.dps * m[v.type] / m.cd).toFixed(2)));
+        tr.appendChild(el('td', '', (1.5 * dmg).toFixed(1) + '%'));
+      } else {
+        tr.appendChild(el('td', '', '—'));
+        tr.appendChild(el('td', '', '—'));
+        tr.appendChild(el('td', '', '—'));
+      }
+      tr.appendChild(el('td', 'dim', v.why));
+      body.appendChild(tr);
+    });
+  }
+
+  function sortVal(td) {
+    var txt = (td.textContent || '').trim();
+    var m = txt.replace(/,/g, '').match(/-?\d+(?:\.\d+)?/);
+    return { num: m ? parseFloat(m[0]) : null, txt: txt };
+  }
+
+  function applySort(t, ths, i, asc) {
+    ths.forEach(function (x) { x.classList.remove('asc'); x.classList.remove('desc'); });
+    ths[i].classList.add(asc ? 'asc' : 'desc');
+    var tb = t.tBodies[0];
+    var rows = Array.prototype.slice.call(tb.rows);
+    rows.sort(function (a, b) {
+      var va = sortVal(a.cells[i]);
+      var vb = sortVal(b.cells[i]);
+      if (va.num == null && vb.num == null) {
+        var t2 = va.txt.localeCompare(vb.txt, 'th');
+        return asc ? t2 : -t2;
+      }
+      if (va.num == null) return 1;
+      if (vb.num == null) return -1;
+      var r = va.num !== vb.num ? va.num - vb.num : va.txt.localeCompare(vb.txt, 'th');
+      return asc ? r : -r;
+    });
+    rows.forEach(function (row) { tb.appendChild(row); });
+  }
+
+  function initSortable() {
+    document.querySelectorAll('table.sortable').forEach(function (t) {
+      var ths = Array.prototype.slice.call(t.querySelectorAll('thead th'));
+      ths.forEach(function (th, i) {
+        th.addEventListener('click', function () {
+          applySort(t, ths, i, !th.classList.contains('asc'));
+        });
+      });
+    });
+  }
+
+  function sortDefault(tbodyId, colIndex, asc) {
+    var tb = document.getElementById(tbodyId);
+    var t = tb ? tb.closest('table') : null;
+    if (!t) return;
+    var ths = Array.prototype.slice.call(t.querySelectorAll('thead th'));
+    applySort(t, ths, colIndex, asc === true);
+  }
+
+  var GUNS = [
+    { n: 'Short bow', tech: 'Neo', dmg: 11, burst: 1, range: 22.9, ap: 16, dps: 3.67,
+      why: 'ธนูตั้งต้น — มีดีกว่าไม่มี' },
+    { n: 'Recurve bow', tech: 'Neo', dmg: 14, burst: 1, range: 25.9, ap: 21, dps: 4.52,
+      why: 'ดีกว่า short bow ทุกด้าน — ใช้ช่วงก่อนมีปืน' },
+    { n: 'Greatbow', tech: 'Neo', dmg: 17, burst: 1, range: 29.9, ap: 15, dps: 4.86,
+      why: 'ธนูจบในตัว ดาเมจ 17 สูงกว่า revolver' },
+    { n: 'Pila', tech: 'Neo', dmg: 25, burst: 1, range: 18.9, ap: 10, dps: 3.85,
+      why: 'ทิ่มแรงสุดฝั่งยุคหิน แต่โยนช้า ระยะสั้น' },
+    { n: 'Revolver', tech: 'Ind', dmg: 12, burst: 1, range: 25.9, ap: 18, dps: 6.32,
+      why: 'ปืนกระบอกแรกของยุคอุตสาหกรรม' },
+    { n: 'Autopistol', tech: 'Ind', dmg: 10, burst: 1, range: 25.9, ap: 15, dps: 7.69,
+      why: 'ยิงไว ตัวเบา — ปืนประจำตัวคนไม่ได้ออกรบ' },
+    { n: 'Machine pistol', tech: 'Ind', dmg: 6, burst: 3, range: 19.9, ap: 9, dps: 11.02,
+      why: 'พ่นใกล้ 3 นัดติด — เบาแต่ไว' },
+    { n: 'Bolt-action rifle', tech: 'Ind', dmg: 18, burst: 1, range: 36.9, ap: 27, dps: 5.63,
+      why: 'ม้างาน — ดาเมจ ระยะ AP คุ้มที่สุดของวิจัย' },
+    { n: 'Heavy SMG', tech: 'Ind', dmg: 12, burst: 3, range: 22.9, ap: 18, dps: 12.34,
+      why: 'สมดุลใกล้-กลาง — ตัวจริงช่วงกลางเกม' },
+    { n: 'Pump shotgun', tech: 'Ind', dmg: 18, burst: 1, range: 15.9, ap: 14, dps: 8.37,
+      why: 'ชิดจี้ 18 ดาเมจ แต่เข้าถึงแค่ 16 ช่อง' },
+    { n: 'Chain shotgun', tech: 'Ind', dmg: 18, burst: 3, range: 12.9, ap: 14, dps: 18.73,
+      why: 'DPS สูงสุดที่ craft ได้ — แลกด้วยการต้องเข้าให้ถึง 13 ช่อง' },
+    { n: 'LMG', tech: 'Ind', dmg: 12, burst: 6, range: 25.9, ap: 16, dps: 18.08,
+      why: 'สาดรอบละ 6 นัด — ไล่ฝูงโดยยังยืนห่างได้' },
+    { n: 'Assault rifle', tech: 'Ind', dmg: 11, burst: 3, range: 30.9, ap: 16, dps: 10.88,
+      why: 'all-rounder ระยะ 31 — ปืนประจำทัพมาตรฐาน' },
+    { n: 'Sniper rifle', tech: 'Ind', dmg: 25, burst: 1, range: 44.9, ap: 38, dps: 5.00,
+      why: 'ไกลสุด 45 ช่อง + AP 38% — ค่อย ๆ ตัดศัตรูก่อนถึงตัว' },
+    { n: 'Charge rifle', tech: 'Spacer', dmg: 16, burst: 3, range: 27.9, ap: 35, dps: 14.12,
+      why: 'เทพสุดที่ craft ได้ — จบเลยตอนถึง spacer' },
+    { n: 'Charge lance', tech: 'Spacer', dmg: 30, burst: 1, range: 32.9, ap: 45, dps: 6.82,
+      why: 'AP 45% สูงสุด — งานปราบ mech โดยเฉพาะ' }
+  ];
+  var BOOMS = [
+    { n: 'Frag grenades', tech: 'Neo', dmg: 50, burst: 1, range: 12.9, ap: 10, dps: 12.00,
+      why: 'AoE พื้นฐาน ทำง่าย — โยนทับกองศัตรู' },
+    { n: 'EMP grenades', tech: 'Neo', dmg: 50, burst: 1, range: 12.9, ap: null, dps: 12.00,
+      why: 'สตัน mech — ถูกและคุ้มสุด คู่กับคนเข้าตี' },
+    { n: 'Molotov cocktails', tech: 'Neo', dmg: 10, burst: 1, range: 12.9, ap: null, dps: 2.40,
+      why: 'ปิดทางเดิน เผาศพ กันฝูงเดินเข้า' },
+    { n: 'EMP launcher', tech: 'Ind', dmg: 50, burst: 1, range: 23.9, ap: null, dps: 7.14,
+      why: 'มืด mech จากระยะไกล แล้วให้คนตีตาม' },
+    { n: 'Incendiary launcher', tech: 'Ind', dmg: 10, burst: 1, range: 23.9, ap: 0, dps: 1.43,
+      why: 'เผาพื้นกวาดพื้นที่ — ไล่ศัตรูออกจากที่กำบัง' },
+    { n: 'Smoke launcher', tech: 'Ind', dmg: 0, burst: 1, range: 23.9, ap: null, dps: null,
+      why: 'ควันบังเป้า — ตัดเล็งของ sniper / turret' },
+    { n: 'Triple rocket launcher', tech: 'Ind', dmg: 50, burst: 3, range: 36, ap: 10, dps: 15.52,
+      why: 'จรวด AoE 3 ลูก — เปิดกองทห้าหนา' },
+    { n: 'Doomsday rocket launcher', tech: 'Ind', dmg: 50, burst: 1, range: 36, ap: 10, dps: 5.56,
+      why: 'จรวดใหญ่จบกอง — ชาร์จนาน ใช้ตอนจำเป็น' }
+  ];
+
+  function renderGuns() {
+    [['gunsBody', GUNS], ['boomBody', BOOMS]].forEach(function (pair) {
+      var body = document.getElementById(pair[0]);
+      if (!body) return;
+      pair[1].forEach(function (g) {
+        var tr = document.createElement('tr');
+        var nameTd = el('td', '', g.n);
+        nameTd.appendChild(el('i', 'tagd', g.tech));
+        tr.appendChild(nameTd);
+        tr.appendChild(el('td', '', String(g.dmg)));
+        tr.appendChild(el('td', '', String(g.burst)));
+        tr.appendChild(el('td', '', String(g.range)));
+        tr.appendChild(el('td', '', g.ap == null ? '—' : g.ap + '%'));
+        tr.appendChild(el('td', '', g.dps == null ? '—' : g.dps.toFixed(2)));
+        tr.appendChild(el('td', 'dim', g.why));
+        body.appendChild(tr);
+      });
+    });
+  }
+
+  var GEAR = [
+    { n: 'Cataphract armor', sharp: 120, blunt: 50, heat: 60, cold: -70, move: -0.5, tech: 'Cataphract (Roy)',
+      why: 'ตัวตีประชิด — แกร่งสุดในเกม แต่ช้าที่สุด ใช้กับคนยืนโดน' },
+    { n: 'Marine armor', sharp: 106, blunt: 45, heat: 54, cold: -68, move: -0.25, tech: 'Marine',
+      why: 'คุมทัพทั่วไป — สมดุลที่สุดของ power armor' },
+    { n: 'Recon armor', sharp: 92, blunt: 40, heat: 46, cold: -64, move: 0, tech: 'Recon',
+      why: 'พลยิง-เดิน — ไม่ลดความเร็วเลย ครบชุดกับหมวกอวกาศ 95% ด้วย' },
+    { n: 'Vacsuit', sharp: 52, blunt: 25, heat: 66, cold: -90, move: -1.25, tech: 'Orbital (OD)',
+      why: 'งานนอกเรือ — หมวกครบชุด = อวกาศ 100% แต่หนักมาก เหมาะคลุมตัวซ่อมเรือ' },
+    { n: 'Flak vest', sharp: 100, blunt: 36, heat: 27, cold: -1, move: -0.12, tech: 'Flak',
+      why: 'ลำตัว 100% ราคาถูก ซ้อนใต้ duster ได้ — คุ้มที่สุดก่อนมี power armor' },
+    { n: 'Flak jacket', sharp: 55, blunt: 8, heat: 10, cold: -14.4, move: -0.12, tech: 'Flak',
+      why: 'ครอบเพิ่มไหล่แขน — ถ้าเลือกชิ้นเดียวเอา vest ก่อน' },
+    { n: 'Flak pants', sharp: 55, blunt: 8, heat: 10, cold: -3.5, move: -0.12, tech: 'Flak',
+      why: 'ปิดขา — เติมช่องโหว่ระหว่างรอเงินทำ power armor' }
+  ];
+  var GEAR_STUFF = [
+    { n: 'Plate armor', x: 0.9, ins: 'ทนหนาวพอตัว', move: '-0.8',
+      why: 'ยุคกลาง — แกร่งกว่า flak ทั้งชุดรวมกัน แต่ช้าและไม่คุมหัว' },
+    { n: 'Flak helmet', x: 0.7, ins: 'หนาวนิด', move: '0',
+      why: 'หมวก flak — ใช้ plasteel ตีให้ดีสุด เกราะหัวสำคัญมาก' },
+    { n: 'Simple helmet', x: 0.5, ins: 'หนาวนิด', move: '0',
+      why: 'หมวกถูกสุด — ดีกว่าโล่งเปล่าเสมอ' },
+    { n: 'Duster', x: 0.3, ins: 'หนาว 60 / ร้อน 85', move: '0',
+      why: 'ชั้นนอกผ้า — devilstrand/hyperweave คือซับเกราะที่ดีที่สุด' },
+    { n: 'Parka', x: 0.2, ins: 'หนาว 200 (สุดในเกม)', move: '0',
+      why: 'ขั้วโลก — ทนหนาวเหลือเฟือ' },
+    { n: 'Button-down shirt', x: 0.2, ins: 'หนาว 26 / ร้อน 10', move: '0',
+      why: 'ชั้นใน — ซ้อนใต้ทุกอย่างเสมอ ใส่ไว้ไม่เสียหาย' },
+    { n: 'Pants', x: 0.2, ins: 'หนาว 20 / ร้อน 8', move: '0',
+      why: 'ชั้นในขา — เหมือนเสื้อ ใส่ทุกคน' }
+  ];
+
+  function renderGear() {
+    var body = document.getElementById('gearBody');
+    if (body) {
+      GEAR.forEach(function (g) {
+        var tr = document.createElement('tr');
+        tr.appendChild(el('td', '', g.n));
+        tr.appendChild(el('td', '', g.sharp + '%'));
+        tr.appendChild(el('td', '', g.blunt + '%'));
+        tr.appendChild(el('td', '', g.heat + '%'));
+        tr.appendChild(el('td', '', g.cold + '°C'));
+        tr.appendChild(el('td', '', String(g.move)));
+        tr.appendChild(el('td', '', g.tech));
+        tr.appendChild(el('td', 'dim', g.why));
+        body.appendChild(tr);
+      });
+    }
+    var sBody = document.getElementById('gearStuffBody');
+    if (sBody) {
+      GEAR_STUFF.forEach(function (g) {
+        var tr = document.createElement('tr');
+        tr.appendChild(el('td', '', g.n));
+        tr.appendChild(el('td', '', '×' + g.x));
+        tr.appendChild(el('td', '', g.ins));
+        tr.appendChild(el('td', '', g.move));
+        tr.appendChild(el('td', 'dim', g.why));
+        sBody.appendChild(tr);
+      });
+    }
+  }
+
+  var SPACE = [
+    { n: 'Vacsuit + หมวก vacsuit', vac: 100, dur: 'ไม่จำกัด', move: '-1.25',
+      why: 'ของจริง — 100% ถาวร ถูกที่สุด วิจัย Orbital ทำที่ machining แต่ตัวหนักสุด' },
+    { n: 'Recon + หมวก vacsuit', vac: 99, dur: '~5 วัน', move: '0',
+      why: 'ผสมของดีสุด — รบเต็มรูปแบบ วิ่งปกติไม่โทษ อยู่นอกยาว ๆ ได้' },
+    { n: 'Marine / Cataphract + หมวก vacsuit', vac: 99, dur: 'นาน', move: '-0.25 ~ -0.5',
+      why: 'เกราะแน่นกว่า recon แต่ vacuum เท่ากันและช้ากว่า — เผื่อสู้บนเรือทอด' },
+    { n: 'Recon + หมวก recon', vac: 95, dur: '~1 วัน', move: '0',
+      why: 'แวะออกไปซ่อมเรื่อย ๆ แล้วกลับห้องออกซิเจน ไม่ต้องเปลี่ยนตัว' },
+    { n: 'ไม่ใส่อะไร', vac: 0, dur: 'ตายในไม่กี่วิ', move: '0',
+      why: 'อย่า — ปล่อยเรือสนิทแทน หรือฝัง gene ต้าน vacuum' }
+  ];
+
+  function renderSpace() {
+    var body = document.getElementById('spaceBody');
+    if (!body) return;
+    SPACE.forEach(function (s) {
+      var tr = document.createElement('tr');
+      tr.appendChild(el('td', '', s.n));
+      tr.appendChild(el('td', '', s.vac + '%'));
+      tr.appendChild(el('td', '', s.dur));
+      tr.appendChild(el('td', '', s.move));
+      tr.appendChild(el('td', 'dim', s.why));
+      body.appendChild(tr);
+    });
+  }
+
+  var CROP_FEED = {
+    rice: { yield: 6 },
+    potato: { yield: 11 },
+    corn: { yield: 22 },
+    strawberry: { yield: 8 }
+  };
+
+  var subBtns = document.querySelectorAll('#leatherSub button');
+  var subSecs = { hide: 'sub-hide', weapon: 'sub-weapon', gun: 'sub-gun', armor: 'sub-armor' };
+  subBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var sub = b.getAttribute('data-sub');
+      subBtns.forEach(function (x) { x.classList.toggle('on', x === b); });
+      Object.keys(subSecs).forEach(function (k) {
+        document.getElementById(subSecs[k]).hidden = k !== sub;
+      });
+    });
+  });
+  var MECHS = [
+    { n: 'Militor', sharp: 20, blunt: 10, why: 'ปืนลูกซองจิ๋ว — ตัวระดม' },
+    { n: 'War urchin', sharp: 20, blunt: 10, why: 'หนามพิษ มีชีวิตไม่กี่ชั่วโมง' },
+    { n: 'Scyther', sharp: 40, blunt: 20, why: 'ใบมีดเข้าประชิด — อันตรายสุดกับคน' },
+    { n: 'Lancer', sharp: 40, blunt: 20, why: 'charge lance ยิงไกล' },
+    { n: 'Pikeman', sharp: 40, blunt: 20, why: 'needle gun ยิงไกล' },
+    { n: 'Legionary', sharp: 40, blunt: 20, why: 'มีโล่ ยิง needle launcher' },
+    { n: 'Tesseron', sharp: 40, blunt: 20, why: 'beam graser (OD)' },
+    { n: 'Cyclops', sharp: 40, blunt: 20, why: 'beam repeater (OD)' },
+    { n: 'Centipede ทุกสายพันธุ์', sharp: 72, blunt: 22, why: 'ตัวอ้วน — ปืนใหญ่ / ลูกไฟ / มินิกัน' },
+    { n: 'Centurion', sharp: 75, blunt: 25, why: 'โล่ + ปืนบนหลัง' },
+    { n: 'Diabolus', sharp: 75, blunt: 25, why: 'hellsphere cannon — บอสเผาไหม้' },
+    { n: 'Warqueen', sharp: 75, blunt: 25, why: 'คลอก mech เรื่อย ๆ' },
+    { n: 'Tunneler', sharp: 80, blunt: 40, why: 'เกราะหนาสุด ขุดอุโมงค์' },
+    { n: 'Apocriton', sharp: 75, blunt: 40, why: 'หัวหน้ากลุ่ม ปืนพิษ' }
+  ];
+
+  function renderMechs() {
+    var body = document.getElementById('mechBody');
+    if (!body) return;
+    MECHS.forEach(function (m) {
+      var tr = document.createElement('tr');
+      tr.appendChild(el('td', '', m.n));
+      tr.appendChild(el('td', '', m.sharp + '%'));
+      tr.appendChild(el('td', '', m.blunt + '%'));
+      tr.appendChild(el('td', '', '200%'));
+      tr.appendChild(el('td', 'dim', m.why));
+      body.appendChild(tr);
+    });
+  }
+
+  renderWeapons();
+  renderGuns();
+  renderGear();
+  renderMechs();
+  renderSpace();
+  initSortable();
+  sortDefault('leatherBody', 1);
+  sortDefault('verdictBody', 4);
+  sortDefault('gunsBody', 6);
+  sortDefault('boomBody', 6);
+  sortDefault('gearBody', 1);
+  sortDefault('gearStuffBody', 1);
+  sortDefault('mechBody', 2, true);
+  sortDefault('spaceBody', 1);
+  document.getElementById('tabSettings').addEventListener('click', function () { showTab('settings'); });
+  document.getElementById('resetPrefs').addEventListener('click', resetPrefs);
+  document.getElementById('leaveMode').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-leave]');
+    if (!t) return;
+    grow.leave = t.getAttribute('data-leave') === 'open' ? null : (grow.leave || 14);
+    renderGrow();
+  });
+  document.getElementById('leaveDays').addEventListener('input', function () {
+    grow.leave = GT.parseLeave(this.value);
+    renderGrow();
+  });
+  document.getElementById('packDays').addEventListener('input', function () {
+    grow.pack = GT.parsePack(this.value);
+    renderGrow();
+  });
+  document.getElementById('soilChips').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-soil]');
+    if (!t) return;
+    grow.soil = t.getAttribute('data-soil');
+    renderGrow();
+  });
+  document.getElementById('sortChips').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-sort]');
+    if (!t) return;
+    grow.sort = t.getAttribute('data-sort');
+    renderGrow();
+  });
+  document.getElementById('showBox').addEventListener('click', function (e) {
+    var one = e.target.closest('[data-show]');
+    var grp = e.target.closest('[data-kind-all]');
+    if (one) {
+      var id = one.getAttribute('data-show');
+      var next = grow.shown.filter(function (x) { return x !== id; });
+      if (next.length === grow.shown.length) next.push(id);
+      grow.shown = GT.parseShown(next);
+      renderGrow();
+      return;
+    }
+    if (!grp) return;
+    var kind = grp.getAttribute('data-kind-all');
+    var ids = GT.CROPS.filter(function (c) { return c.kind === kind; }).map(function (c) { return c.id; });
+    var have = {};
+    grow.shown.forEach(function (x) { have[x] = true; });
+    var allOn = ids.every(function (x) { return have[x]; });
+    var keep = grow.shown.filter(function (x) { return ids.indexOf(x) < 0; });
+    grow.shown = GT.parseShown(allOn ? keep : keep.concat(ids));
+    renderGrow();
+  });
+  document.getElementById('diagCrop').addEventListener('change', function () {
+    grow.diagCrop = GT.cropById(this.value).id;
+    renderGrow();
+  });
+  document.getElementById('diagDays').addEventListener('input', function () {
+    grow.diagDays = GT.parseDays(this.value);
+    renderGrow();
+  });
+  document.getElementById('diagPct').addEventListener('input', function () {
+    grow.diagPercent = GT.parsePercent(this.value);
+    renderGrow();
+  });
+  document.getElementById('heatIn').addEventListener('input', function () {
+    grow.heat = GT.parseTemp(this.value, GT.DEFAULT_HEAT);
+    render();
+    renderGrow();
+  });
+  document.getElementById('coolIn').addEventListener('input', function () {
+    grow.cool = GT.parseTemp(this.value, GT.DEFAULT_COOL);
+    render();
+    renderGrow();
+  });
+  document.getElementById('diagHeat').addEventListener('input', function () {
+    grow.heat = GT.parseTemp(this.value, GT.DEFAULT_HEAT);
+    render();
+    renderGrow();
+  });
+  document.getElementById('diagCool').addEventListener('input', function () {
+    grow.cool = GT.parseTemp(this.value, GT.DEFAULT_COOL);
+    render();
+    renderGrow();
+  });
+  document.getElementById('wattsIn').addEventListener('input', function () {
+    watts = PWR.parseWatts(this.value);
+    renderPower();
+  });
+  document.getElementById('hours').addEventListener('input', function () {
+    hours = PWR.parseHours(this.value);
+    renderPower();
+  });
+  document.getElementById('hourPresets').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-h]');
+    if (!t) return;
+    hours = PWR.parseHours(t.getAttribute('data-h'));
+    renderPower();
+  });
+  document.getElementById('traitPick').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-trait]');
+    if (!t) return;
+    drugState.trait = DC.parseTrait(t.getAttribute('data-trait'));
+    drugState.drug = DC.bestDrugForTrait(drugState.trait);
+    drugState.intervalDays = DC.recommendedIntervalDays(drugState.drug, drugState.trait);
+    renderDrug();
+  });
+  document.getElementById('drugPick').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-drug]');
+    if (!t) return;
+    drugState.drug = DC.parseDrug(t.getAttribute('data-drug'), drugState.trait);
+    drugState.intervalDays = DC.recommendedIntervalDays(drugState.drug, drugState.trait);
+    renderDrug();
+  });
+  document.getElementById('freqSlider').addEventListener('input', function () {
+    drugState.intervalDays = DC.freqIndexToDays(this.value);
+    renderDrug();
+  });
+  render();
+  renderPower();
+  renderGrow();
+  renderDrug();
+  showTab(tab);
+  hydrateFromServer();
+})();
+</script>
+</body>
+</html>

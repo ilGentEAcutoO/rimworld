@@ -1,0 +1,3 @@
+# Unit tests live next to the modules they cover so `node --test public/*.test.js`
+# keeps working, but they are not part of the deployed site.
+*.test.js

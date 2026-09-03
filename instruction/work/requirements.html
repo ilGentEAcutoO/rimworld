@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="th" data-theme="mono">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Requirements — เอา hydroponics calc ขึ้นออนไลน์</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+:root{
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  --ok:#14C7A1; --ok-rgb:20,199,161; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-rgb:255,107,107; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --info:#4FB8E5; --info-soft:#DCF1FB;
+  --pop:#FF80B5;
+  --r:14px; --r-s:10px; --r-xs:7px;
+  --shadow-sm:0 1px 2px rgba(21,23,43,.05),0 3px 10px -3px rgba(21,23,43,.08);
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(var(--accent-rgb),.18);
+  --shadow-lg:0 4px 8px rgba(21,23,43,.08),0 20px 50px -12px rgba(var(--accent-rgb),.25);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(110,90,230,.18), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(20,199,161,.14), transparent 60%),
+    radial-gradient(420px 280px at 55% 40%, rgba(255,128,181,.08), transparent 70%);
+  --dark:#15172B; --dark-2:#1F2240; --dark-ink:#E8EAF5; --dark-dim:#7F84A8;
+  --code-k:#C58FFF; --code-s:#7EE6BD; --code-n:#FFB47A;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',
+    'Sukhumvit Set','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+[data-theme="mono"]{
+  --bg:#FFFEF5; --card:#FFFFFF; --card-2:#F5F4ED;
+  --chrome:#F0EFE6; --line:#1A1A1A; --line-2:#1A1A1A;
+  --ink:#0A0A0A; --ink-2:#404040; --ink-3:#737373; --ink-4:#A3A3A3;
+  --accent:#171717; --accent-rgb:23,23,23;
+  --accent-soft:#E8FF6B; --accent-line:#1A1A1A; --accent-deep:#000000;
+  --ok:#16A34A; --ok-rgb:22,163,74; --ok-soft:#DCFCE7; --ok-line:#1A1A1A; --ok-deep:#15803D;
+  --bad:#DC2626; --bad-rgb:220,38,38; --bad-soft:#FEE2E2; --bad-line:#1A1A1A; --bad-deep:#B91C1C;
+  --warn:#CA8A04; --warn-soft:#FEF9C3; --warn-deep:#854D0E;
+  --sans:'JetBrains Mono','SF Mono',ui-monospace,Menlo,'Sukhumvit Set',monospace;
+  --r:2px; --r-s:2px; --r-xs:2px;
+  --shadow-sm:3px 3px 0 #1A1A1A;
+  --shadow:4px 4px 0 #1A1A1A;
+  --shadow-lg:6px 6px 0 #1A1A1A;
+  --hero-mesh:
+    radial-gradient(700px 380px at 90% -10%, rgba(232,255,107,.3), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(23,23,23,.04), transparent 60%);
+}
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+h2{font-size:22px} h3{font-size:18px}
+.lead{font-size:16.5px;color:var(--ink-2);line-height:1.65}
+.mono{font-family:var(--mono)}
+a{color:var(--accent);text-decoration:none;font-weight:500}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);
+  padding:2px 7px;border-radius:5px;color:var(--accent-deep);font-weight:500}
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden;max-width:760px;margin:36px auto}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:26px 28px}
+blockquote{border-left:3px solid var(--accent);background:var(--card-2);
+  padding:16px 18px;margin:14px 0;font-size:15px;color:var(--ink);border-radius:0 var(--r-s) var(--r-s) 0;
+  white-space:pre-wrap}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.notes-list{font-size:14px;line-height:1.65;color:var(--ink-2);padding:0;list-style:none;margin-top:6px}
+.notes-list li{padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:11px}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent-deep);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;line-height:1;
+  background:var(--accent-soft)}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="title">requirements.html</div></div>
+  <div class="body">
+    <div class="kicker">คำขอต้นฉบับ · 2026-09-03</div>
+    <h2 style="margin-top:8px">เอา RimWorld hydroponics calc ขึ้นออนไลน์</h2>
+    <blockquote>เอาอันนี้ขึ้น online หน่อย ใส่ repo ของ ilgenteacto นะ rimworld ตรง ๆ เลยก็ได้ ส่วนชื่อ subdomain ขอเป็น rim.jairukchan.com ตัว save data ย้ายไปใช้ d1 แล้วก็มี username password กันไว้หน่อย บอก user pass มาด้วยนะ</blockquote>
+    <div class="small muted">พร้อมลิงก์ไฟล์เดิม: <span class="tag">file:///C:/Users/suanw/projects/game/hydroponics/index.html</span> (เปิดจากเครื่อง มีค่า state ต่อท้าย URL เต็มไปหมด — a=4, watts=7000, pick=pemmican ฯลฯ)</div>
+    <div class="divider"></div>
+    <h3>สรุปเป้าหมาย</h3>
+    <ul class="notes-list">
+      <li><span class="mk">01</span>เอาเครื่องคำนวณ hydroponics/life-support (RimWorld) ที่ตอนนี้เป็นไฟล์บนเครื่อง ขึ้นเป็นเว็บจริงที่ใครก็เปิดได้</li>
+      <li><span class="mk">02</span>เก็บโค้ดใน GitHub repo ชื่อ <code>rimworld</code> ของบัญชี ilgenteacto</li>
+      <li><span class="mk">03</span>โดเมนที่ใช้เปิด: <code>rim.jairukchan.com</code></li>
+      <li><span class="mk">04</span>ข้อมูล "save" ของเครื่องคำนวณ (ที่ตอนนี้เก็บใน localStorage + URL) ย้ายไปเก็บใน Cloudflare D1 แทน</li>
+      <li><span class="mk">05</span>ล็อกเว็บด้วย username/password — และแจ้งรหัสที่ตั้งให้กลับมาทาง chat</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

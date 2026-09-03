@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Workflow · งานที่ทำอยู่</title>
-<style>/* =============================================================
+<meta name="color-scheme" content="light only">
+<title>ผลทดสอบหน้าเข้าสู่ระบบ · TASK-007</title>
+<style>
+/* =============================================================
    DESIGN SYSTEM — primitives + swappable themes
    Style is NOT locked. Themes are starters; artifacts can pick
    one with [data-theme="..."], override inline, or invent fresh.
@@ -371,202 +373,147 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
   .brief-tabs{display:none}
 }
 
-.page{max-width:1000px;margin:0 auto;padding:30px 22px 70px}
-.resume-banner{background:var(--accent-soft);border:1px solid var(--accent-line);
-  border-radius:var(--r);padding:16px 18px;margin-bottom:22px}
-.empty{text-align:center;padding:60px 20px;color:var(--ink-3)}
+
+body{padding:20px 22px 16px}
+.wrap{max-width:1150px;margin:0 auto}
+.stat-row{grid-template-columns:repeat(4,1fr)}
+.stat{padding:11px 14px}
+.stat .n{font-size:26px}
+.stat .l{margin-bottom:5px;font-size:10px}
+.stat.bad .n{color:var(--bad)}
+.loopbox{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:2px}
+.panel{border:2px solid var(--ink);border-radius:var(--r);padding:14px 15px 13px;background:var(--card);position:relative}
+.panel.bad{box-shadow:5px 5px 0 #E2574C}
+.panel.good{box-shadow:5px 5px 0 var(--ok)}
+.panel h3{margin:0 0 2px;font-size:15px;letter-spacing:-.01em}
+.panel .sub{font-size:11.5px;line-height:1.5;color:var(--ink-2);margin-bottom:10px}
+.hop{display:flex;align-items:center;gap:9px;padding:7px 10px;border:1.5px solid var(--ink);border-radius:8px;
+     background:#fff;font-size:12px;font-weight:700;margin-bottom:7px}
+.hop .n{width:19px;height:19px;flex:0 0 19px;border-radius:50%;display:grid;place-items:center;
+        font-size:10.5px;background:var(--ink);color:var(--card)}
+.hop.err{border-color:#E2574C;background:#FDF0EE}
+.hop.win{border-color:var(--ok);background:var(--ok-soft)}
+.hop .t{font-weight:500;color:#5d5d52;font-size:11px}
+.loopmark{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;color:#B33A2E;
+          padding:6px 10px;border:1.5px dashed #E2574C;border-radius:8px;background:#FDF0EE}
+.spin{display:inline-block;font-size:14px}
+.verdict{display:flex;align-items:center;gap:8px;margin-top:9px;font-size:11.5px;font-weight:800}
+.sc{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px}
+.sc-row{display:flex;align-items:flex-start;gap:9px;padding:7px 2px;border-bottom:1px solid rgba(0,0,0,.09)}
+.sc-row .ok{flex:0 0 auto;width:17px;height:17px;border-radius:50%;background:var(--ok);color:#fff;
+            font-size:10px;display:grid;place-items:center;margin-top:1px;font-weight:800}
+.sc-row b{display:block;font-size:12.5px;line-height:1.35}
+.sc-row span{display:block;font-size:11px;color:#5d5d52;line-height:1.45;margin-top:1px}
+details.fold{margin-top:11px}
+details.fold summary{cursor:pointer;font-size:11.5px;font-weight:800}
+details.fold .code{margin-top:8px;font-size:11px;line-height:1.6}
+.stat-row{margin:13px 0 15px}
 </style>
 </head>
-<body>
-<div class="page">
+<body data-theme="mono">
+<div class="wrap">
 
-  <!-- ===== STATE ISLAND : agents edit ONLY this JSON ===== -->
-  <script type="application/json" id="workflow-state">
-{
-  "schemaVersion": 2,
-  "session": "empty",
-  "updated": "2026-09-03 16:14",
-  "updatedBy": "claude",
-  "modelPolicy": {
-    "registryVersion": 1,
-    "standard": {
-      "claude": {
-        "model": "opus",
-        "fallbacks": [
-          "fable",
-          "sonnet"
-        ]
-      },
-      "codex": {
-        "model": "gpt-5.6-sol",
-        "reasoning": "max",
-        "strict": true
-      },
-      "kimi": {
-        "model": "k3",
-        "reasoning": "max",
-        "strict": true
-      },
-      "grok": {
-        "model": "grok-4.5",
-        "strict": true
-      }
-    },
-    "security": {
-      "claude": {
-        "model": "opus",
-        "strict": true
-      },
-      "codex": {
-        "model": "gpt-5.6-sol",
-        "reasoning": "max",
-        "strict": true
-      },
-      "kimi": {
-        "model": "k3",
-        "reasoning": "max",
-        "strict": true
-      },
-      "grok": {
-        "model": "grok-4.5",
-        "strict": true
-      }
-    }
-  },
-  "tasks": [],
-  "fileLocks": [],
-  "resume": null
-}
-  </script>
+  <p class="kicker">QA · TASK-007 · เบราว์เซอร์จริง แบบเห็นหน้าจอ</p>
+  <h1 style="margin:4px 0 5px;font-size:27px;letter-spacing:-.02em">เจอบั๊กที่ทำให้เข้าเว็บไม่ได้เลย — แก้แล้ว</h1>
+  <p class="lead" style="margin-bottom:0">ฟีเจอร์ทั้งหมดทำงานถูกตามที่ออกแบบไว้ แต่มีบั๊กหนึ่งตัวที่เทสอัตโนมัติมองไม่เห็น และทำให้ <b>ไม่มีใครเปิดเว็บได้เลยสักคน</b> — เจอทันทีที่เปิดด้วยเบราว์เซอร์จริง</p>
 
-  <div id="app"></div>
+  <div class="stat-row">
+    <div class="stat good"><div class="l">สถานการณ์ที่เทส</div><div class="n">9/9</div></div>
+    <div class="stat bad"><div class="l">บั๊กหยุดทั้งเว็บ — แก้แล้ว</div><div class="n">1</div></div>
+    <div class="stat good"><div class="l">error / warning</div><div class="n">0 / 0</div></div>
+    <div class="stat good"><div class="l">เทสอัตโนมัติผ่าน</div><div class="n">106</div></div>
+  </div>
+
+  <nav class="brief-tabs">
+    <button class="btab on" data-t="bug">บั๊กที่เจอ</button>
+    <button class="btab" data-t="res">ผลทดสอบ 9 ข้อ</button>
+  </nav>
+
+  <section class="brief on" data-tab="bug">
+    <div class="loopbox">
+
+      <div class="panel bad">
+        <h3>ก่อนแก้ — เปิดเว็บไม่ได้เลย</h3>
+        <p class="sub">ผู้ใช้ที่ยังไม่ล็อกอินเปิดเว็บ แล้วเจอหน้าขาวพร้อมข้อความว่าเปลี่ยนหน้าวนเกินไป ไม่เคยเห็นช่องกรอกรหัสผ่านเลยสักครั้ง</p>
+        <div class="hop"><span class="n">1</span><span>เปิดเว็บ<span class="t"> — ยังไม่ได้ล็อกอิน</span></span></div>
+        <div class="hop"><span class="n">2</span><span>ระบบบอกให้ไปหน้าเข้าสู่ระบบ</span></div>
+        <div class="hop err"><span class="n">3</span><span>หน้าเข้าสู่ระบบตอบกลับว่า “ไปหน้าเข้าสู่ระบบ”<span class="t"> — ชี้กลับมาที่ตัวเอง</span></span></div>
+        <div class="loopmark"><span class="spin">↻</span> วนข้อ 3 ซ้ำไปเรื่อย ๆ จนเบราว์เซอร์ยอมแพ้</div>
+        <div class="verdict" style="color:#B33A2E">✕ ไม่มีทางเข้าถึงหน้าล็อกอินได้เลย</div>
+      </div>
+
+      <div class="panel good">
+        <h3>หลังแก้ — เข้าได้ปกติ</h3>
+        <p class="sub">เส้นทางเดิมทุกอย่าง ต่างแค่ระบบหยิบหน้าเข้าสู่ระบบมาแสดงจริง แทนที่จะส่งผู้ใช้ต่อไปเรื่อย ๆ</p>
+        <div class="hop"><span class="n">1</span><span>เปิดเว็บ<span class="t"> — ยังไม่ได้ล็อกอิน</span></span></div>
+        <div class="hop"><span class="n">2</span><span>ระบบบอกให้ไปหน้าเข้าสู่ระบบ<span class="t"> — จำหน้าที่ตั้งใจจะไปไว้ด้วย</span></span></div>
+        <div class="hop win"><span class="n">3</span><span>แสดงหน้าเข้าสู่ระบบ<span class="t"> — เห็นช่องกรอกจริง</span></span></div>
+        <div class="hop win"><span class="n">4</span><span>ล็อกอินผ่าน → พากลับไปหน้าที่ตั้งใจจะไปตั้งแต่แรก</span></div>
+        <div class="verdict" style="color:var(--ok-deep)">✓ ทดสอบซ้ำในเบราว์เซอร์จริงแล้ว ผ่าน</div>
+      </div>
+
+    </div>
+
+    <div class="note warn" style="margin-top:11px">
+      <span class="ic">!</span>
+      <div><b>ทำไมเทสอัตโนมัติ 105 ตัวถึงจับไม่ได้</b> — ตัวจำลองที่ใช้ตอนรันเทสหยิบไฟล์หน้าเว็บมาให้ตรง ๆ
+      แต่ระบบจริงบนเซิร์ฟเวอร์ “จัดระเบียบชื่อลิงก์” ก่อน แล้วส่งกลับมาเป็นคำสั่งเปลี่ยนหน้าแทน
+      สองแบบนี้ต่างกัน บั๊กจึงโผล่เฉพาะของจริง — เพิ่มเทสกันซ้ำไว้แล้ว และยืนยันว่ามันฟ้องจริงถ้าเอาโค้ดเก่ากลับมา</div>
+    </div>
+
+    <details class="fold">
+      <summary>รายละเอียดทางเทคนิคของการแก้</summary>
+      <div class="code">src/worker.js · handleLoginPage()<br>
+      − env.ASSETS.fetch(new Request(new URL('/login.html', request.url), request));<br>
+      + env.ASSETS.fetch(new Request(new URL('/login', request.url), request));<br><br>
+      asset layer ตอบ /login.html ด้วย 307 → /login (html_handling canonicalisation)<br>
+      Worker ส่ง redirect นั้นต่อให้ browser → ERR_TOO_MANY_REDIRECTS<br>
+      ขอ path ที่ไม่มีนามสกุลจึงได้ตัวหน้า 200 กลับมา · ASSETS.fetch ไม่วนกลับเข้า Worker<br><br>
+      regression test: src/worker.test.js — spy ที่ env.ASSETS.fetch ยืนยันว่า pathname ที่ขอคือ /login<br>
+      (verify แล้วว่า fail จริงถ้า revert โค้ดกลับเป็น /login.html)</div>
+    </details>
+  </section>
+
+  <section class="brief" data-tab="res">
+    <div class="sc">
+      <div class="sc-row"><span class="ok">✓</span><div><b>ไม่มีป๊อปอัปของเบราว์เซอร์อีกแล้ว</b><span>เป็นหน้าเว็บจริง สีเขียวชุดเดียวกับตัวแอป · ตลอดการเทสไม่มี dialog ของระบบโผล่เลยสักครั้ง</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>กรอกรหัสผิด</b><span>ขึ้นแถบเตือนในหน้าเดิม “ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง” ไม่เด้งไปหน้าเปล่า</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>ผิดครบ 5 ครั้ง = ล็อก</b><span>ล็อกที่ครั้งที่ 5 พอดี ขึ้นเวลาให้รอ 15 นาที ปุ่มเป็นสีเทากดไม่ได้</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>ล็อกแล้วรหัสถูกก็เข้าไม่ได้</b><span>จุดสำคัญด้านความปลอดภัย — ฝั่งเซิร์ฟเวอร์ปฏิเสธเอง ไม่ใช่แค่ปุ่มถูกปิด และไม่มีการออกสิทธิ์เข้าใช้ให้</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>พอปลดล็อกก็เข้าได้ตามปกติ</b><span>ล็อกอินสำเร็จ พากลับไปหน้าเครื่องคิดเลข โหลดครบ ไม่มี error</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>ค่าที่ตั้งไว้ถูกบันทึกจริง</b><span>ปรับจำนวนลูกเรือแล้วบันทึกขึ้นเซิร์ฟเวอร์สำเร็จ ผ่านระบบล็อกอินแบบใหม่</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>ล็อกอินอยู่แล้วกดเข้าหน้าล็อกอิน</b><span>เด้งกลับเข้าแอปให้เลย ไม่แสดงฟอร์มซ้ำ</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>ออกจากระบบ</b><span>กดปุ่มแล้วกลับมาหน้าล็อกอิน · ลองเปิดแอปซ้ำก็ยังถูกกันไว้ สิทธิ์ถูกล้างจริง</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>จอมือถือ 375px</b><span>ไม่มีเลื่อนซ้ายขวา ปุ่มยังกดถนัด แถบเตือนอ่านออกครบ</span></div></div>
+      <div class="sc-row"><span class="ok">✓</span><div><b>เปิดลิงก์ตรงไปหน้าใดหน้าหนึ่ง</b><span>ล็อกอินเสร็จพากลับไปหน้านั้น พร้อมค่าที่เคยตั้งไว้</span></div></div>
+    </div>
+
+    <div class="note ok" style="margin-top:11px">
+      <span class="ic">✓</span>
+      <div><b>console สะอาด 0 error 0 warning</b> ทุกหน้าและทุกขั้นตอน — ขึ้นครั้งเดียวตอนผู้ทดสอบยิงคำขอเองเพื่อพิสูจน์ว่าระบบปฏิเสธถูกต้อง ไม่ได้มาจากตัวเว็บ</div>
+    </div>
+  </section>
+
+  <div class="cta-strip">
+    <span><span class="arrow">→</span> ตอบในแชท:
+      <strong>"ปิดงานได้"</strong>
+      <strong>"ขอดูภาพหน้าจอ"</strong>
+      <strong>"เทสเพิ่มอีก"</strong></span>
+    <span class="muted">เทสด้วยเบราว์เซอร์จริงแบบเปิดหน้าต่างให้เห็น ไม่ใช่โหมดซ่อน</span>
+  </div>
+
 </div>
 
 <script>
-/* todos.html renderer — rebuilds the board from the JSON island.
-   Agents must NEVER hand-edit the markup below; edit the JSON above. */
-(function(){
-  var S;
-  try { S = JSON.parse(document.getElementById('workflow-state').textContent); }
-  catch(e){ document.getElementById('app').innerHTML =
-    '<div class="note danger"><span class="ic">!</span><div>State JSON is invalid: '
-    +esc(e.message)+'</div></div>'; return; }
-
-  var COLS = [
-    {key:'todo',   label:'ยังไม่เริ่ม',     has:function(s){return s==='pending';}},
-    {key:'doing',  label:'กำลังทำ',       has:function(s){return s==='progress'||s==='impl'||s==='blocked';}},
-    {key:'done',   label:'เสร็จแล้ว',       has:function(s){return s==='done';}}
-  ];
-  var PILL = {pending:['todo','pending'],progress:['doing','in&nbsp;progress'],
-    impl:['impl','implemented'],done:['done','tested'],blocked:['block','blocked']};
-  var BADGE = {high:['hi','high'],medium:['mid','med'],low:['lo','low']};
-
-  function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
-
-  function card(t){
-    var p = PILL[t.status]||PILL.pending;
-    var b = t.priority?BADGE[t.priority]:null;
-    var h = '<div class="tk"'+(t.status==='blocked'
-        ?' style="border-color:var(--bad-line);box-shadow:0 0 0 3px var(--bad-soft)"'
-        :t.status==='progress'
-        ?' style="border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)"':'')+'>';
-    h += '<div class="row"><span class="pill '+p[0]+'">'+p[1]+'</span>';
-    if(b) h += '<span class="badge '+b[0]+'">'+b[1]+'</span>';
-    h += '<span class="mono small muted" style="margin-left:auto">'+esc(t.id)+'</span></div>';
-    h += '<div class="tkn">'+esc(t.name)+'</div>';
-    var meta = [];
-    (t.files||[]).forEach(function(f){meta.push('<span class="tag">'+esc(f)+'</span>');});
-    (t.skills||[]).forEach(function(s){meta.push('<span class="tag" style="color:var(--info)">'+esc(s)+'</span>');});
-    if(t.assigned && t.assigned!=='unassigned')
-      meta.push('<span class="tag" style="color:var(--accent)">'+esc(t.assigned)+'</span>');
-    if(t.executedBy){
-      var ran = esc(t.executedBy.agent)+': '+esc(t.executedBy.model);
-      if(t.executedBy.reasoning) ran += ' · '+esc(t.executedBy.reasoning);
-      meta.push('<span class="tag" style="color:var(--accent-deep)">'+ran+'</span>');
-    } else if(t.model) {
-      meta.push('<span class="tag" style="color:var(--accent-deep)">'+esc(t.model)+'</span>');
-    }
-    if(meta.length) h += '<div class="meta">'+meta.join('')+'</div>';
-    if(typeof t.progress==='number' && t.status!=='done')
-      h += '<div class="bar-track" style="margin-top:9px"><div class="bar-fill" style="width:'
-        +Math.max(0,Math.min(100,t.progress))+'%"></div></div>';
-    if(t.note) h += '<div class="small muted" style="margin-top:8px">'+esc(t.note)+'</div>';
-    return h+'</div>';
-  }
-
-  var tasks = S.tasks||[];
-  var doneN = tasks.filter(function(t){return t.status==='done';}).length;
-  var pct = tasks.length? Math.round(doneN/tasks.length*100):0;
-  var C = 2*Math.PI*19, off = C*(1-pct/100);
-
-  var html = '';
-
-  if(S.resume){
-    var r = S.resume;
-    html += '<div class="resume-banner"><div class="kicker" style="color:var(--accent);'
-      +'margin-bottom:6px">Session paused — resume context</div>'
-      +'<strong>'+esc(r.reason||'saved')+'</strong>'
-      +'<span class="small muted"> · '+esc(r.exitTime||'')+'</span>';
-    if(r.goal){
-      html += '<div class="small" style="margin-top:8px"><span class="tag" '
-        +'style="color:var(--accent-deep)">GOAL ค้างอยู่</span> '+esc(r.goal)
-        +' <span class="muted">— ตั้งต่อผ่านคำสั่ง goal ของ active host เมื่อรองรับ</span></div>';
-    }
-    if(r.agents&&r.agents.length){
-      html += '<div style="margin-top:10px;display:grid;gap:6px">';
-      r.agents.forEach(function(a){
-        html += '<div class="small"><strong>'+esc(a.name)+'</strong> — '+esc(a.task||'')
-          +' · ทำต่อ: '+esc(a.nextStep||'')+'</div>';
-      });
-      html += '</div>';
-    }
-    html += '</div>';
-  }
-
-  html += '<div class="between" style="margin-bottom:18px">'
-    +'<div><div class="kicker">Session</div>'
-    +'<h2 style="font-size:21px">'+esc(S.session)+'</h2></div>'
-    +'<div class="row" style="gap:16px">'
-    +'<div style="text-align:right"><div class="kicker">Updated</div>'
-    +'<strong class="mono small">'+esc(S.updated)+'</strong>'
-    +'<div class="small muted">by '+esc(S.updatedBy||'unknown')+'</div></div>'
-    +'<svg width="46" height="46" viewBox="0 0 46 46">'
-    +'<circle cx="23" cy="23" r="19" fill="none" stroke="#E3DACC" stroke-width="6"/>'
-    +'<circle cx="23" cy="23" r="19" fill="none" stroke="#6F864F" stroke-width="6" '
-    +'stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" '
-    +'stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 23 23)"/>'
-    +'<text x="23" y="27" text-anchor="middle" font-family="var(--mono)" '
-    +'font-size="11" font-weight="700" fill="#1B1A17">'+pct+'</text></svg></div></div>';
-
-  if(!tasks.length){
-    html += '<div class="window"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>'
-      +'<span class="title">todos.html</span></div>'
-      +'<div class="empty">ยังไม่มี task &mdash; <code>workflow-plan</code> จะเพิ่มเข้ามาเอง</div></div>';
-  } else {
-    html += '<div class="board">';
-    COLS.forEach(function(col){
-      var items = tasks.filter(function(t){return col.has(t.status);});
-      html += '<div><div class="col-h"><span>'+col.label+'</span><span>'+items.length+'</span></div>';
-      html += items.map(card).join('') ||
-        '<div class="small muted" style="padding:8px 2px">—</div>';
-      html += '</div>';
+document.querySelectorAll('.btab').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.btab').forEach(function (x) { x.classList.remove('on'); });
+    b.classList.add('on');
+    document.querySelectorAll('.brief').forEach(function (s) {
+      s.classList.toggle('on', s.dataset.tab === b.dataset.t);
     });
-    html += '</div>';
-  }
-
-  if((S.fileLocks||[]).length){
-    html += '<details class="fold"><summary>File locks ('+S.fileLocks.length+')</summary>'
-      +'<div class="inner"><table><thead><tr><th>ไฟล์</th><th>โดย</th><th>ตั้งแต่</th></tr></thead><tbody>';
-    S.fileLocks.forEach(function(l){
-      html += '<tr><td><code>'+esc(l.file)+'</code></td><td>'+esc(l.by)+'</td>'
-        +'<td class="mono">'+esc(l.since)+'</td></tr>';
-    });
-    html += '</tbody></table></div></details>';
-  }
-
-  document.getElementById('app').innerHTML = html;
-})();
+  });
+});
 </script>
 </body>
 </html>

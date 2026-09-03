@@ -1,0 +1,496 @@
+<!doctype html>
+<title>Plan · login page + rate limit</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<style>
+/* =============================================================
+   DESIGN SYSTEM — primitives + swappable themes (inlined verbatim)
+   ============================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+
+:root{
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  --ok:#14C7A1; --ok-rgb:20,199,161; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-rgb:255,107,107; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --info:#4FB8E5; --info-soft:#DCF1FB;
+  --pop:#FF80B5;
+  --r:14px; --r-s:10px; --r-xs:7px;
+  --shadow-sm:0 1px 2px rgba(21,23,43,.05),0 3px 10px -3px rgba(21,23,43,.08);
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(var(--accent-rgb),.18);
+  --shadow-lg:0 4px 8px rgba(21,23,43,.08),0 20px 50px -12px rgba(var(--accent-rgb),.25);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(110,90,230,.18), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(20,199,161,.14), transparent 60%),
+    radial-gradient(420px 280px at 55% 40%, rgba(255,128,181,.08), transparent 70%);
+  --dark:#15172B; --dark-2:#1F2240; --dark-ink:#E8EAF5; --dark-dim:#7F84A8;
+  --code-k:#C58FFF; --code-s:#7EE6BD; --code-n:#FFB47A;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',
+    'Sukhumvit Set','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+
+[data-theme="mist"]{
+  --bg:#F2F4F1; --card:#FFFFFF; --card-2:#F8FAF7;
+  --chrome:#E8ECE6; --line:#DBE0D8; --line-2:#C2CABC;
+  --ink:#1A2620; --ink-2:#475C50; --ink-3:#7A8D80; --ink-4:#A8B5AC;
+  --accent:#4A6B5C; --accent-rgb:74,107,92;
+  --accent-soft:#E5EBE6; --accent-line:#A8BFB1; --accent-deep:#324A41;
+  --ok:#7A9D6C; --ok-rgb:122,157,108; --ok-soft:#E4EEDF; --ok-line:#B5CDA8; --ok-deep:#557448;
+  --bad:#B85650; --bad-rgb:184,86,80; --bad-soft:#F0DFDD; --bad-line:#DBA8A4; --bad-deep:#893E39;
+  --warn:#A8862F; --warn-soft:#EDE4C6; --warn-deep:#705915;
+  --r:10px; --r-s:7px;
+  --shadow:0 1px 2px rgba(26,38,32,.05),0 10px 24px -10px rgba(74,107,92,.16);
+  --shadow-lg:0 2px 4px rgba(26,38,32,.06),0 18px 42px -14px rgba(74,107,92,.2);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(74,107,92,.14), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(168,134,47,.09), transparent 60%);
+}
+
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+h2{font-size:22px} h3{font-size:18px}
+.lead{font-size:16.5px;color:var(--ink-2);line-height:1.65}
+.mono{font-family:var(--mono)}
+a{color:var(--accent);text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);
+  padding:2px 7px;border-radius:5px;color:var(--accent-deep);font-weight:500}
+
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 24px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 22px;box-shadow:var(--shadow-sm)}
+
+.badge{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;padding:3px 8px;border-radius:5px}
+.badge.hi{background:var(--bad-soft);color:var(--bad-deep)}
+.badge.mid{background:var(--warn-soft);color:var(--warn-deep)}
+.badge.lo{background:var(--card-2);color:var(--ink-3);border:1px solid var(--line)}
+.badge.sec{background:var(--bad-soft);color:var(--bad-deep);border:1px solid var(--bad-line)}
+.badge.std{background:var(--accent-soft);color:var(--accent-deep);border:1px solid var(--accent-line)}
+
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;
+  padding:10px 20px;border-radius:var(--r-s);border:1px solid transparent;transition:all .15s}
+.btn.primary{background:var(--accent);color:#fff;
+  box-shadow:0 1px 2px rgba(21,23,43,.1),0 6px 18px -4px rgba(var(--accent-rgb),.45)}
+.btn.primary:hover{background:var(--accent-deep);transform:translateY(-1px)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line-2)}
+.btn:active{transform:translateY(1px)}
+
+.note{border-radius:var(--r-s);padding:13px 16px;font-size:14px;border:1px solid;
+  display:flex;gap:11px;line-height:1.55}
+.note .ic{font-weight:800;flex:none}
+.note.info{background:var(--info-soft);border-color:var(--info);color:var(--ink-2)}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok-deep)}
+.note.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad-deep)}
+
+.code{background:var(--dark);border-radius:var(--r-s);overflow:hidden;
+  font-family:var(--mono);font-size:12.5px;line-height:1.7}
+.code .top{background:var(--dark-2);padding:8px 14px;display:flex;justify-content:space-between;
+  color:var(--dark-dim);font-size:11.5px;font-weight:500}
+.code pre{padding:14px 16px;color:var(--dark-ink);overflow-x:auto}
+.code .c{color:var(--dark-dim)} .code .k{color:var(--code-k);font-weight:600}
+.code .s{color:var(--code-s)} .code .n{color:var(--code-n)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2);font-weight:700}
+td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.row{display:flex;gap:10px;align-items:center}
+.between{display:flex;justify-content:space-between;align-items:center}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.brief-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.btab{font-family:var(--sans);font-size:13px;cursor:pointer;font-weight:700;
+  padding:9px 16px;border-radius:var(--r-s);border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .18s}
+.btab:hover{border-color:var(--accent-line);color:var(--accent-deep);
+  background:var(--accent-soft);transform:translateY(-1px)}
+.btab.on{background:var(--ink);color:var(--card);border-color:var(--ink);
+  box-shadow:0 2px 4px rgba(0,0,0,.08),0 8px 20px -4px rgba(0,0,0,.25)}
+.btab.sec-t.on{background:var(--bad-deep);border-color:var(--bad-deep)}
+
+.brief{display:none}
+.brief.on{display:block;animation:b-fade .3s ease}
+
+.cta-strip{margin-top:14px;padding:13px 16px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--ok-soft) 100%);
+  border:1px solid var(--accent-line);border-radius:var(--r-s);
+  font-size:13px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{color:var(--accent);font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{color:var(--accent-deep);font-weight:600;background:var(--card);
+  padding:4px 10px;border-radius:6px;border:1px solid var(--accent-line);
+  font-family:var(--mono);font-size:12px}
+
+.b-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.b-grid-55{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
+
+.notes-list{font-size:13.5px;line-height:1.6;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:8px 0;border-bottom:1px solid var(--line);
+  display:flex;gap:11px;align-items:flex-start}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;line-height:1;
+  background:var(--accent-soft)}
+
+details.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+details.fold>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"+ "}
+details.fold[open]>summary::before{content:"− "}
+details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
+
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+@keyframes b-grad{0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(4%,-3%) scale(1.08)}}
+.hero-deco{position:absolute;inset:-30px;pointer-events:none;z-index:0;
+  background:var(--hero-mesh);animation:b-grad 26s ease-in-out infinite}
+
+@media(max-width:900px){
+  .b-grid-2,.b-grid-55,.grid-3,.grid-2{grid-template-columns:1fr}
+}
+
+/* =============================================================
+   PLAN-SPECIFIC: page shell + the login mock (real app palette)
+   ============================================================= */
+body{padding:26px 22px 34px}
+.shell{max-width:1080px;margin:0 auto;position:relative}
+header{position:relative;padding:2px 2px 18px}
+header h1{font-size:25px;margin:6px 0 4px}
+
+/* the mock deliberately uses the REAL app's own tokens, not the brief theme,
+   so it reads as "the actual product" rather than a generic wireframe */
+.rw-mock{
+  --bg:#E7F0E4; --card:#FFFEFA; --ink:#132016; --ink2:#3C5341; --ink3:#6D8571;
+  --line:#C3D6C0; --soft:#D8EDD6; --accent:#1B7A3C; --accent2:#14582B;
+  --warn:#8A6A12; --warn-bg:#FFF4D4; --warn-line:#E3C56A;
+  background:
+    radial-gradient(420px 240px at 88% -10%, rgba(27,122,60,.14), transparent 58%),
+    radial-gradient(340px 200px at 6% 112%, rgba(196,154,42,.12), transparent 58%),
+    var(--bg);
+  border-radius:16px;padding:26px 16px;display:flex;align-items:center;justify-content:center;
+  min-height:320px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+}
+.rw-card{
+  width:100%;max-width:290px;background:var(--card);border-radius:18px;padding:22px 20px 18px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+  color:var(--ink);
+}
+.rw-card .k{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.rw-card h2{font-size:19px;letter-spacing:-.03em;margin:5px 0 3px;font-weight:800;color:var(--ink)}
+.rw-card .sub{font-size:12.5px;color:var(--ink3);margin-bottom:14px}
+.rw-field{margin-bottom:10px}
+.rw-field label{display:block;font-size:11px;font-weight:700;color:var(--ink2);margin-bottom:4px}
+.rw-field .box{background:var(--soft);border-radius:10px;padding:9px 11px;font-size:14px;color:var(--ink3)}
+.rw-btn{width:100%;margin-top:6px;border:0;border-radius:12px;padding:11px;background:var(--accent);
+  color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:transform .15s,background .15s}
+.rw-btn:hover{background:var(--accent2)}
+.rw-btn:active{transform:scale(.98)}
+.rw-banner{display:none;margin-top:12px;border-radius:10px;padding:9px 11px;font-size:12.5px;
+  background:var(--warn-bg);color:var(--warn);box-shadow:inset 0 0 0 1px var(--warn-line)}
+.rw-mock[data-state="wrong"] .rw-banner.wrong{display:block}
+.rw-mock[data-state="locked"] .rw-banner.locked{display:block}
+.rw-mock[data-state="locked"] .rw-btn{background:var(--ink3);cursor:not-allowed}
+.rw-foot{margin-top:12px;font-size:11px;color:var(--ink3);text-align:center}
+.mock-toggle{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.mock-toggle button{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 10px;
+  border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink-3);cursor:pointer}
+.mock-toggle button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+svg text{font-family:var(--sans)}
+.flow-box{fill:var(--card);stroke:var(--line-2);stroke-width:1.5}
+.flow-box.sec{fill:var(--bad-soft);stroke:var(--bad-line)}
+.flow-box.ok{fill:var(--ok-soft);stroke:var(--ok-line)}
+.flow-lbl{fill:var(--ink);font-size:12px;font-weight:700}
+.flow-sub{fill:var(--ink-3);font-size:10.5px}
+.flow-arrow{stroke:var(--ink-4);stroke-width:1.6;fill:none;marker-end:url(#arrowhead)}
+</style>
+<body data-theme="mist">
+<div class="shell">
+
+  <header>
+    <div class="hero-deco"></div>
+    <p class="kicker">Plan · gravship-worker-web</p>
+    <h1>เปลี่ยน login จาก browser popup เป็นหน้าจอในสไตล์แอป + กัน brute force</h1>
+    <p class="lead">ตอนนี้ทุกหน้าโดน HTTP Basic Auth คุม — popup มาตรฐานของเบราว์เซอร์ที่ผู้ใช้เห็นว่าเหมือน alert
+      แผนนี้เปลี่ยนเป็นหน้า login จริงที่หน้าตาเหมือนแอป พร้อมล็อกชั่วคราวเมื่อพิมพ์รหัสผิดซ้ำ ๆ</p>
+  </header>
+
+  <nav class="brief-tabs">
+    <button class="btab on" data-t="mock">หน้าจอ login</button>
+    <button class="btab" data-t="req">คำขอเดิม</button>
+    <button class="btab" data-t="arch">Architecture</button>
+    <button class="btab sec-t" data-t="sec">Security</button>
+    <button class="btab" data-t="test">Test plan</button>
+    <button class="btab" data-t="tasks">งานที่จะทำ (7)</button>
+  </nav>
+
+  <!-- ======================= TAB 1 : SCREEN MOCK (decision) ======================= -->
+  <section class="brief on" data-tab="mock">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">rim.jairukchan.com/login</span></div>
+      <div class="body">
+        <div class="b-grid-2">
+          <div>
+            <div class="rw-mock" id="rwMock" data-state="normal">
+              <div class="rw-card">
+                <div class="k">Gravship · basic life support</div>
+                <h2>เข้าสู่ระบบ</h2>
+                <div class="sub">ใช้ username/password เดิมที่ตั้งไว้</div>
+                <div class="rw-field">
+                  <label>ชื่อผู้ใช้</label>
+                  <div class="box">•••••••</div>
+                </div>
+                <div class="rw-field">
+                  <label>รหัสผ่าน</label>
+                  <div class="box">••••••••••</div>
+                </div>
+                <button class="rw-btn" type="button">เข้าสู่ระบบ</button>
+                <div class="rw-banner wrong">รหัสผ่านไม่ถูกต้อง — เหลืออีก 3 ครั้งก่อนถูกล็อกชั่วคราว</div>
+                <div class="rw-banner locked">พิมพ์ผิดเกินกำหนด — ลองใหม่ในอีก ~14 นาที</div>
+                <div class="rw-foot">ล็อกอินครั้งเดียว จำไว้ 30 วันบนเครื่องนี้</div>
+              </div>
+            </div>
+            <div class="mock-toggle">
+              <button type="button" class="on" data-s="normal">ปกติ</button>
+              <button type="button" data-s="wrong">พิมพ์รหัสผิด</button>
+              <button type="button" data-s="locked">โดนล็อกชั่วคราว</button>
+            </div>
+          </div>
+          <div>
+            <div class="kicker" style="margin-bottom:10px">สิ่งที่เปลี่ยนไปสำหรับผู้ใช้</div>
+            <ul class="notes-list">
+              <li><span class="mk">01</span><div>ไม่มี popup เบราว์เซอร์อีกต่อไป — เป็นหน้าเว็บจริงที่ใช้พาเลทสีเขียว/การ์ดโค้งมนแบบเดียวกับตัวเครื่องคำนวณ</div></li>
+              <li><span class="mk">02</span><div>พิมพ์รหัสผิด 5 ครั้งติดภายใน 15 นาที → เครื่อง (IP) นั้นถูกล็อกชั่วคราว 15 นาที เห็นข้อความนับเวลาให้ชัด</div></li>
+              <li><span class="mk">03</span><div>ล็อกอินสำเร็จแล้วอยู่ยาว 30 วันบนเครื่องเดิม ไม่ต้องพิมพ์ใหม่ทุกครั้งที่เปิด</div></li>
+              <li><span class="mk">04</span><div>มีปุ่ม "ออกจากระบบ" เพิ่มในตัวแอป (มุมบน) สำหรับตอนใช้เครื่องคนอื่น</div></li>
+            </ul>
+            <div class="divider"></div>
+            <div class="note ok" style="font-size:13px">
+              <span class="ic">✓</span>
+              <div>username/password ที่ตั้งไว้ใน Cloudflare (AUTH_USER/AUTH_PASS) <strong>ใช้ตัวเดิม ไม่ต้องเปลี่ยน</strong> — เปลี่ยนแค่หน้าตาการล็อกอินกับการกันสแปมรหัส</div>
+            </div>
+          </div>
+        </div>
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong> <strong>"ล็อกให้นานกว่านี้"</strong> <strong>"จำไว้สั้นกว่า 30 วัน"</strong></span>
+          <span class="muted">รายละเอียด security/test/งาน อยู่แท็บถัดไป</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TAB 2 : ORIGINAL REQUEST ======================= -->
+  <section class="brief" data-tab="req">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">requirement record</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:8px">คำขอเดิม (คำต่อคำ)</div>
+        <div class="card" style="border-left:4px solid var(--accent);white-space:pre-wrap;font-size:14.5px;margin-bottom:16px">username pass ควรเป้นหน้า login ดี ๆ ไม่ใช่ js alert แบบนี้ เอาให้เข้ากับ style app ด้วยนะ และทำ rate limit พื้นฐานด้วย อย่าให้ bruce forece ได้</div>
+        <div class="kicker" style="margin-bottom:8px">อ่านเป็น</div>
+        <table>
+          <tr><th>ประเด็น</th><th>ข้อตกลง</th></tr>
+          <tr><td>"js alert แบบนี้"</td><td>HTTP Basic Auth popup ของเบราว์เซอร์ (หน้าตาเหมือน alert/prompt แม้ไม่ใช่ <code>alert()</code> จริง)</td></tr>
+          <tr><td>"เข้ากับ style app"</td><td>ใช้ token สี/การ์ด/shadow ชุดเดียวกับ public/index.html ตรง ๆ</td></tr>
+          <tr><td>"rate limit พื้นฐาน"</td><td>นับผิดต่อ IP ใน D1 — ล็อกชั่วคราวหลังผิดซ้ำในช่วงเวลาสั้น ๆ ไม่ต้องมี service เพิ่ม</td></tr>
+          <tr><td>"อย่าให้ brute force ได้"</td><td>จำกัดจำนวนครั้ง/เวลาที่เดารหัสได้จริง ไม่ใช่แค่ดีเลย์เล็กน้อย</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TAB 3 : ARCHITECTURE (spec) ======================= -->
+  <section class="brief" data-tab="arch">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">data flow — request ผ่าน Worker</span></div>
+      <div class="body">
+        <svg viewBox="0 0 920 300" width="100%" height="300">
+          <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--ink-4)"/>
+            </marker>
+          </defs>
+
+          <rect class="flow-box" x="10" y="20" width="150" height="46" rx="10"/>
+          <text class="flow-lbl" x="85" y="43" text-anchor="middle">Browser</text>
+          <text class="flow-sub" x="85" y="58" text-anchor="middle">GET /, /api/save, ...</text>
+
+          <path class="flow-arrow" d="M160,43 H230"/>
+          <rect class="flow-box" x="230" y="20" width="190" height="46" rx="10"/>
+          <text class="flow-lbl" x="325" y="38" text-anchor="middle">Worker: cookie check</text>
+          <text class="flow-sub" x="325" y="55" text-anchor="middle">verify HMAC + expiry</text>
+
+          <path class="flow-arrow" d="M420,32 H480"/>
+          <text class="flow-sub" x="450" y="26" text-anchor="middle">valid</text>
+          <rect class="flow-box ok" x="480" y="8" width="220" height="46" rx="10"/>
+          <text class="flow-lbl" x="590" y="26" text-anchor="middle">ASSETS.fetch / D1 (/api/*)</text>
+          <text class="flow-sub" x="590" y="42" text-anchor="middle">ปกติของแอปเดิม ไม่เปลี่ยน</text>
+
+          <path class="flow-arrow" d="M420,55 H480"/>
+          <text class="flow-sub" x="450" y="72" text-anchor="middle">invalid/missing</text>
+          <rect class="flow-box" x="480" y="70" width="220" height="46" rx="10"/>
+          <text class="flow-lbl" x="590" y="88" text-anchor="middle">หน้าเว็บ → 303 /login?next=…</text>
+          <text class="flow-sub" x="590" y="103" text-anchor="middle">/api/* → 401 JSON (เหมือนเดิม)</text>
+
+          <path class="flow-arrow" d="M85,66 V150 H230"/>
+          <rect class="flow-box" x="10" y="150" width="150" height="46" rx="10"/>
+          <text class="flow-lbl" x="85" y="173" text-anchor="middle">Browser</text>
+          <text class="flow-sub" x="85" y="188" text-anchor="middle">POST /login (form)</text>
+
+          <rect class="flow-box sec" x="230" y="150" width="200" height="46" rx="10"/>
+          <text class="flow-lbl" x="330" y="168" text-anchor="middle">D1: login_attempts</text>
+          <text class="flow-sub" x="330" y="183" text-anchor="middle">locked_until ยังไม่หมด?</text>
+
+          <path class="flow-arrow" d="M430,163 H480"/>
+          <text class="flow-sub" x="455" y="157" text-anchor="middle">ล็อกอยู่</text>
+          <rect class="flow-box sec" x="480" y="140" width="220" height="46" rx="10"/>
+          <text class="flow-lbl" x="590" y="158" text-anchor="middle">429 — ไม่แม้แต่เช็ครหัส</text>
+          <text class="flow-sub" x="590" y="173" text-anchor="middle">/login?error=locked&amp;retry=…</text>
+
+          <path class="flow-arrow" d="M330,196 V230 H480"/>
+          <text class="flow-sub" x="405" y="224" text-anchor="middle">ไม่ล็อก → เช็ค safeEqual(user,pass)</text>
+          <rect class="flow-box ok" x="480" y="207" width="220" height="46" rx="10"/>
+          <text class="flow-lbl" x="590" y="225" text-anchor="middle">ถูก → reset counter, set-cookie</text>
+          <text class="flow-sub" x="590" y="240" text-anchor="middle">303 → next (sanitized) หรือ /</text>
+
+          <path class="flow-arrow" d="M700,230 V264 H480"/>
+          <rect class="flow-box" x="230" y="252" width="220" height="46" rx="10"/>
+          <text class="flow-lbl" x="340" y="270" text-anchor="middle">ผิด → +1 ที่ D1 (นับตาม IP)</text>
+          <text class="flow-sub" x="340" y="285" text-anchor="middle">ครบ 5 ใน 15 นาที → ตั้ง locked_until</text>
+        </svg>
+        <div class="note info" style="margin-top:4px">
+          <span class="ic">i</span>
+          <div>ไม่มี KV เพิ่ม — session เป็น signed cookie (HMAC ล้วน, ไม่ query D1 ทุก request) ส่วน rate-limit counter ใช้ D1 ตัวเดียวกับที่เก็บ save อยู่แล้ว</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TAB 4 : SECURITY (spec) ======================= -->
+  <section class="brief" data-tab="sec">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">attack vectors → mitigations</span></div>
+      <div class="body" style="display:grid;gap:9px">
+        <div class="note danger"><span class="ic">⚠</span><div>
+          <strong>Brute force / credential stuffing บน /login</strong> — เดารหัสไม่จำกัดครั้ง<br>
+          <span class="muted">แก้: นับผิดต่อ IP (<code>CF-Connecting-IP</code>, เชื่อได้เพราะ Cloudflare ตั้งที่ edge) ใน D1 — 5 ครั้งผิดใน 15 นาที → ล็อก IP นั้น 15 นาที เช็ค lockout ก่อนแม้แต่จะเทียบรหัส</span></div></div>
+        <div class="note danger"><span class="ic">⚠</span><div>
+          <strong>Session cookie ปลอม/แก้ไข</strong> — cookie เป็น stateless ไม่ query DB ทุก request<br>
+          <span class="muted">แก้: เซ็น payload ด้วย HMAC-SHA256 (<code>SESSION_SECRET</code> ใหม่), ตรวจด้วย timingSafeEqual (ใช้ <code>safeEqual()</code> ที่มีอยู่แล้ว) + เช็ควันหมดอายุ</span></div></div>
+        <div class="note danger"><span class="ic">⚠</span><div>
+          <strong>Cookie ถูกขโมยผ่าน XSS หรือดักบน HTTP</strong><br>
+          <span class="muted">แก้: <code>HttpOnly</code> (JS อ่านไม่ได้) + <code>Secure</code> (ผูกกับ flag <code>ALLOW_INSECURE_HTTP</code> เดิมที่ใช้กับ HSTS อยู่แล้ว)</span></div></div>
+        <div class="note danger"><span class="ic">⚠</span><div>
+          <strong>CSRF ที่ /api/save และ /login</strong><br>
+          <span class="muted">แก้: <code>SameSite=Strict</code> — cookie ไม่ติดไปกับ request ข้ามโดเมนเลย ครอบคลุมกรณีใช้งานจริงของแอปนี้ (single-origin)</span></div></div>
+        <div class="note warn"><span class="ic">i</span><div>
+          <strong>Open redirect ผ่าน <code>?next=</code></strong><br>
+          <span class="muted">แก้: รับเฉพาะ path ที่ขึ้นต้นด้วย <code>/</code> ตัวเดียว (ไม่ใช่ <code>//host</code>) ไม่งั้น fallback เป็น <code>/</code></span></div></div>
+        <div class="note warn"><span class="ic">i</span><div>
+          <strong>ตาราง login_attempts โตไม่จำกัด</strong><br>
+          <span class="muted">แก้: ลบแถวที่ <code>locked_until</code> หมดอายุแล้วแบบขี้เกียจ (lazy cleanup) ทุกครั้งที่มี POST /login</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TAB 5 : TEST PLAN (spec) ======================= -->
+  <section class="brief" data-tab="test">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">TDD — vitest (cloudflare:test) + frontend-test</span></div>
+      <div class="body">
+        <table>
+          <tr><th>ชั้น</th><th>เคส</th><th>เครื่องมือ</th></tr>
+          <tr><td rowspan="4">Unit / Worker</td><td>cookie ถูกต้อง → ผ่าน · แก้ signature/หมดอายุ → ถูกปฏิเสธ</td><td>vitest + cloudflare:test</td></tr>
+          <tr><td>ผิด 5 ครั้งใน 15 นาที → ครั้งที่ 6 ได้ 429 โดยไม่เทียบรหัสเลย</td><td>vitest + cloudflare:test</td></tr>
+          <tr><td>login สำเร็จ → reset counter; หมดเวลาล็อกแล้วลองใหม่ได้</td><td>vitest + cloudflare:test</td></tr>
+          <tr><td><code>next</code> เป็น URL เต็ม/<code>//host</code> → fallback <code>/</code>; <code>/api/*</code> ไม่ auth ยังตอบ 401 JSON เหมือนเดิม</td><td>vitest + cloudflare:test</td></tr>
+          <tr><td rowspan="3">UI / Visual (headed)</td><td>หน้า login เรนเดอร์ตรงพาเลท/การ์ดของแอป ไม่มี popup เบราว์เซอร์โผล่มาเลย</td><td>frontend-test (Playwright)</td></tr>
+          <tr><td>กรอกรหัสผิดเห็น banner ในหน้า (ไม่ใช่ dialog); ผิดครบ 5 เห็นข้อความล็อกพร้อมเวลา</td><td>frontend-test (Playwright)</td></tr>
+          <tr><td>login ผ่าน → เข้าเครื่องคำนวณ ข้อมูลเดิมยังอยู่; กด "ออกจากระบบ" → เด้งกลับ /login</td><td>frontend-test (Playwright)</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TAB 6 : TASKS (spec) ======================= -->
+  <section class="brief" data-tab="tasks">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">todos.html — 7 tasks</span></div>
+      <div class="body">
+        <table>
+          <tr><th>#</th><th>งาน</th><th>ไฟล์</th><th>skills</th><th>profile / model</th></tr>
+          <tr><td>001</td><td>D1 migration: ตาราง login_attempts</td><td>migrations/0002_*.sql</td><td>wrangler</td><td><span class="badge std">standard</span> opus</td></tr>
+          <tr><td>002</td><td>Session cookie: sign/verify, แทน authenticate() เดิม</td><td>src/worker.js</td><td>tdd</td><td><span class="badge sec">security</span> opus (strict)</td></tr>
+          <tr><td>003</td><td>/login /logout + rate-limit ตาม IP</td><td>src/worker.js</td><td>tdd</td><td><span class="badge sec">security</span> opus (strict)</td></tr>
+          <tr><td>004</td><td>หน้า login สไตล์แอป (ใช้ token สีเดียวกับ index.html)</td><td>public/login.html</td><td>frontend-design</td><td><span class="badge std">standard</span> opus</td></tr>
+          <tr><td>005</td><td>ปุ่มออกจากระบบในตัวแอป</td><td>public/index.html</td><td>—</td><td><span class="badge std">standard</span> opus</td></tr>
+          <tr><td>006</td><td>SESSION_SECRET: .dev.vars + ไฟล์ .example + โน้ตวิธีตั้ง secret จริง</td><td>.dev.vars, .env.example</td><td>env-sync</td><td><span class="badge std">standard</span> opus</td></tr>
+          <tr><td>007</td><td>QA จริงในเบราว์เซอร์: หน้าตา + ล็อกเอาต์ + rate limit</td><td>src/worker.test.js, public/login.html</td><td>frontend-test</td><td><span class="badge std">standard</span> opus</td></tr>
+        </table>
+        <div class="note info" style="margin-top:12px">
+          <span class="ic">i</span>
+          <div>งาน 002/003 คือตัว auth/rate-limit เอง — ตั้ง <code>executionProfile: security</code> ตามหลัก security-first เพื่อล็อกโมเดลไว้ที่ opus เสมอ (ไม่ fallback ต่ำกว่านี้)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-strip" style="margin-top:14px">
+    <span><span class="arrow">→</span> พร้อมแล้วตอบ: <strong>"ลุย"</strong> เพื่อเริ่ม workflow-work หรือบอกจุดที่อยากแก้ก่อน</span>
+    <span class="muted">แผนนี้ยังไม่ populate todos.html จนกว่าจะ approve</span>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.btab').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.btab').forEach(function(x){x.classList.remove('on');});
+    document.querySelectorAll('.brief').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    document.querySelector('.brief[data-tab="'+b.dataset.t+'"]').classList.add('on');
+  });
+});
+document.querySelectorAll('.mock-toggle button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.mock-toggle button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    document.getElementById('rwMock').dataset.state = b.dataset.s;
+  });
+});
+</script>

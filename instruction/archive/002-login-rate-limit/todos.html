@@ -385,8 +385,8 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
 {
   "schemaVersion": 2,
   "session": "empty",
-  "updated": "2026-09-03 16:14",
-  "updatedBy": "claude",
+  "updated": "2026-09-03 12:02",
+  "updatedBy": "claude/lead",
   "modelPolicy": {
     "registryVersion": 1,
     "standard": {
@@ -433,7 +433,164 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
       }
     }
   },
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "D1 migration: login_attempts table",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "migrations/0002_login_attempts.sql"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green",
+      "progress": 100
+    },
+    {
+      "id": "TASK-002",
+      "name": "Session cookie: sign/verify, replace Basic-auth authenticate()",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "security",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [
+        "superpowers:test-driven-development"
+      ],
+      "files": [
+        "src/worker.js",
+        "src/worker.test.js"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green",
+      "progress": 100
+    },
+    {
+      "id": "TASK-003",
+      "name": "/login, /logout routes + per-IP brute-force rate limiting",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "security",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [
+        "superpowers:test-driven-development"
+      ],
+      "files": [
+        "src/worker.js",
+        "src/worker.test.js"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green",
+      "progress": 100
+    },
+    {
+      "id": "TASK-004",
+      "name": "Styled login page matching app theme",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-frontend",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [
+        "frontend-design"
+      ],
+      "files": [
+        "public/login.html"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green",
+      "progress": 100
+    },
+    {
+      "id": "TASK-005",
+      "name": "Logout button in calculator UI",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "worker-frontend",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [],
+      "files": [
+        "public/index.html"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green",
+      "progress": 100
+    },
+    {
+      "id": "TASK-006",
+      "name": "SESSION_SECRET env plumbing + example files",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [
+        "env-sync"
+      ],
+      "files": [
+        ".dev.vars",
+        ".dev.vars.example",
+        ".env.example"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green",
+      "progress": 100
+    },
+    {
+      "id": "TASK-007",
+      "name": "Visual + rate-limit QA in a real browser",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "worker-qa",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "default"
+      },
+      "skills": [
+        "frontend-test"
+      ],
+      "files": [
+        "src/worker.test.js",
+        "public/login.html"
+      ],
+      "note": "lead review: verified against plan, tests re-run independently, green"
+    }
+  ],
   "fileLocks": [],
   "resume": null
 }

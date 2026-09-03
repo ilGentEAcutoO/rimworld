@@ -1,0 +1,34 @@
+<!doctype html>
+<title>Requirement · login page + rate limit</title>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light only">
+<style>
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F7F8FC;color:#15172B;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.7}
+.kicker{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6E5AE6}
+h1{font-size:22px;margin:6px 0 16px}
+blockquote{background:#FFFFFF;border:1px solid #E8EBF3;border-left:4px solid #6E5AE6;
+  border-radius:8px;padding:16px 18px;margin:0 0 20px;font-size:15px;color:#15172B;white-space:pre-wrap}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+th{text-align:left;padding:8px 10px;border-bottom:1px solid #D2D8E6;color:#8B91AB;
+  text-transform:uppercase;font-size:11px;letter-spacing:.06em}
+td{padding:9px 10px;border-bottom:1px solid #E8EBF3;color:#4A5072}
+.meta{font-size:12.5px;color:#8B91AB;margin-bottom:24px}
+</style>
+<p class="kicker">Requirement record</p>
+<h1>เปลี่ยน HTTP Basic Auth เป็นหน้า login + กัน brute force</h1>
+<p class="meta">บันทึกเมื่อ 2026-09-03 · โปรเจกต์ gravship-worker-web (rim.jairukchan.com)</p>
+
+<p class="kicker">คำขอเดิม (คำต่อคำ)</p>
+<blockquote>username pass ควรเป้นหน้า login ดี ๆ ไม่ใช่ js alert แบบนี้ เอาให้เข้ากับ style app ด้วยนะ และทำ rate limit พื้นฐานด้วย อย่าให้ bruce forece ได้</blockquote>
+
+<p class="kicker">สรุปเป้าหมายที่ตกลงกัน</p>
+<table>
+  <tr><th>ประเด็น</th><th>ข้อตกลง</th></tr>
+  <tr><td>แทนที่อะไร</td><td>Browser-native HTTP Basic Auth popup (<code>authenticate()</code> ใน src/worker.js) — ผู้ใช้เรียกว่า "js alert"</td></tr>
+  <tr><td>ด้วยอะไร</td><td>หน้า login แบบ HTML form จริง สไตล์ตรงกับ public/index.html (พาเลทเขียว, การ์ดโค้งมน, shadow เดียวกัน)</td></tr>
+  <tr><td>Session</td><td>Signed cookie (HMAC), ไม่ต้องมี KV/session store เพิ่ม — ใช้ D1 ที่มีอยู่แล้วเท่านั้น</td></tr>
+  <tr><td>Rate limit</td><td>นับความพยายาม login ผิดต่อ IP ใน D1 — ล็อกชั่วคราวหลังพิมพ์ผิดซ้ำในช่วงเวลาสั้น ๆ</td></tr>
+  <tr><td>Credential เดิม</td><td>ยังเป็น single-user (AUTH_USER/AUTH_PASS คู่เดียวจาก env) เหมือนเดิม — ไม่เพิ่ม multi-user</td></tr>
+</table>

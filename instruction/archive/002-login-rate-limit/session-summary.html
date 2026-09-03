@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Session summary · login + rate limit</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{
+  --bg:#E7F0E4; --card:#FFFEFA; --ink:#132016; --ink2:#3C5341; --ink3:#6D8571;
+  --line:#C3D6C0; --soft:#D8EDD6; --accent:#1B7A3C; --accent2:#14582B;
+  --warn:#8A6A12; --warn-bg:#FFF4D4; --warn-line:#E3C56A;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:var(--bg); color:var(--ink); padding:28px 20px 48px;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:880px;margin:0 auto}
+.verdict{
+  background:var(--card);border-radius:16px;padding:20px 22px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+  display:flex;align-items:center;gap:14px;margin-bottom:18px;
+}
+.verdict .dot{width:14px;height:14px;border-radius:50%;background:var(--accent);flex:none}
+.verdict h1{font-size:19px;letter-spacing:-.02em}
+.verdict p{color:var(--ink2);font-size:13px;margin-top:2px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border-radius:12px;padding:12px 14px;box-shadow:0 1px 2px rgba(19,32,22,.05)}
+.stat b{display:block;font-size:22px;letter-spacing:-.02em}
+.stat span{font-size:11.5px;color:var(--ink3)}
+h2{font-size:14px;margin:22px 0 8px;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(19,32,22,.05)}
+th,td{text-align:left;padding:8px 10px;font-size:12.5px;border-bottom:1px solid var(--line)}
+th{color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:10.5px}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.tag.ok{background:var(--soft);color:var(--accent2)}
+.tag.fixed{background:var(--warn-bg);color:var(--warn)}
+.note{border-radius:12px;padding:10px 12px;font-size:12.5px;margin:10px 0;box-shadow:inset 0 0 0 1px var(--line)}
+.note.ok{background:var(--soft);color:var(--accent2);box-shadow:inset 0 0 0 1px #b9dcb5}
+details.fold{background:var(--card);border-radius:12px;padding:10px 14px;margin-top:8px;box-shadow:0 1px 2px rgba(19,32,22,.05)}
+details.fold summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--ink2)}
+details.fold .body{margin-top:8px;font-size:12.5px;color:var(--ink2);line-height:1.6}
+code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:11.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="verdict">
+  <div class="dot"></div>
+  <div>
+    <h1>ปิดงาน: login + rate limit — เขียวหมด, deploy แล้ว</h1>
+    <p>rim.jairukchan.com · 2026-09-03</p>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>7/7</b><span>task ทำเสร็จ</span></div>
+  <div class="stat"><b>218/218</b><span>tests ผ่าน</span></div>
+  <div class="stat"><b>4</b><span>security bug พบ+แก้แล้ว</span></div>
+  <div class="stat"><b>0</b><span>npm audit vulnerabilities</span></div>
+</div>
+
+<div class="note ok">Security review เจอบั๊กจริง (race condition ใน rate limiter + crash bug) — แก้และ verify ซ้ำจนเขียวก่อน deploy ไม่ได้ deploy ทั้งที่มีช่องโหว่</div>
+
+<h2>Task ที่ทำ</h2>
+<table>
+<tr><th>Task</th><th>สถานะ</th></tr>
+<tr><td>D1 migration: login_attempts table</td><td><span class="tag ok">Tested</span></td></tr>
+<tr><td>Session cookie sign/verify แทน Basic-auth</td><td><span class="tag ok">Tested</span></td></tr>
+<tr><td>/login, /logout + per-IP brute-force rate limiting</td><td><span class="tag fixed">Tested → พบบั๊ก race condition → แก้แล้ว</span></td></tr>
+<tr><td>หน้า login สไตล์ตรงกับแอป</td><td><span class="tag ok">Tested</span></td></tr>
+<tr><td>ปุ่ม logout ในหน้าคำนวณ</td><td><span class="tag ok">Tested</span></td></tr>
+<tr><td>SESSION_SECRET env plumbing</td><td><span class="tag ok">Tested</span></td></tr>
+<tr><td>QA เบราว์เซอร์จริง (login/logout/lockout/session)</td><td><span class="tag ok">Pass 9/9 steps</span></td></tr>
+</table>
+
+<h2>Security findings — แก้แล้วก่อน ship</h2>
+<table>
+<tr><th>#</th><th>เรื่อง</th><th>ความรุนแรง</th><th>ผล</th></tr>
+<tr><td>V1</td><td>Rate limiter race condition — concurrent request ทำให้ lockout ถูก bypass/erase ได้</td><td>Medium</td><td><span class="tag ok">แก้แล้ว — atomic SQL UPSERT + re-check ก่อน mint session</span></td></tr>
+<tr><td>V2</td><td>Session cookie ไม่ผูกกับ password — rotate password อย่างเดียวไม่ evict session เก่า</td><td>Medium</td><td><span class="tag fixed">Advisory — บันทึกไว้ใน .env ให้ rotate SESSION_SECRET คู่กับ AUTH_PASS</span></td></tr>
+<tr><td>V3</td><td>next=/€ (non-ASCII) ทำให้ crash เป็น 500</td><td>Low</td><td><span class="tag ok">แก้แล้ว — sanitizeNext whitelist ASCII เท่านั้น</span></td></tr>
+<tr><td>V4</td><td>login_attempts table โตไม่มี TTL/cleanup</td><td>Low</td><td><span class="tag fixed">Accepted risk — แอปผู้ใช้เดียว ไม่ fix ตอนนี้</span></td></tr>
+</table>
+
+<h2>Deploy</h2>
+<table>
+<tr><th>ขั้น</th><th>ผล</th></tr>
+<tr><td>Production secrets</td><td>เพิ่ม <code>SESSION_SECRET</code> ที่ขาดไป (ไม่มีจะ login ไม่ได้เลย)</td></tr>
+<tr><td>D1 migration remote</td><td><code>0002_login_attempts</code> apply แล้ว</td></tr>
+<tr><td>npm audit</td><td>0 vulnerabilities</td></tr>
+<tr><td>wrangler deploy</td><td>ขึ้น production แล้ว</td></tr>
+<tr><td>git</td><td>commit + push ครบ, working tree clean, synced กับ origin</td></tr>
+</table>
+
+<details class="fold">
+<summary>รายละเอียด full test/verification log</summary>
+<div class="body">
+npm run test:app — 93 passed, 0 failed<br>
+npm run test:worker (vitest) — 125 passed, 0 failed<br>
+npm audit — 0 vulnerabilities (prod 1, dev 167, optional 86)<br>
+Security review: full-tree adversarial pass — secrets/git hygiene clean (never tracked, never in history), SQL injection clean (all parameterised), prototype pollution clean, XSS clean, open redirect clean apart from V3, session forgery/fixation clean, IDOR n/a, auth gating clean, payload limits clean, HTTPS/HSTS clean, migrations clean apart from V4's missing retention.<br>
+Frontend QA (headed Playwright against local wrangler dev): unauthenticated→login redirect, wrong-password banner, correct-login+cookie+render, session persists on reload, logout clears session server-side, 5× wrong→lockout with live countdown, correct password rejected while locked (verified via curl too), 0 console errors/warnings, calculator interactive post-login. Bypass probes on /index.html, /calc.js, //index.html, /./index.html, /login.html, /api/save — all correctly gated.
+</div>
+</details>
+
+</div>
+</body>
+</html>

@@ -3,6 +3,7 @@ node_modules/
 .dev.vars
 .env
 .env.*
+!.env.example
 agent-temp/
 
 # transient lock guard written by the workflow-state helper

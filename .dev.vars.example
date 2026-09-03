@@ -1,0 +1,30 @@
+# Local development variables for `wrangler dev` and `npm run test:worker`.
+# Copy to `.dev.vars` (gitignored) and fill in. These values never leave your
+# machine — production reads Cloudflare Worker secrets instead, one per key:
+#   npx wrangler secret put AUTH_USER
+#   npx wrangler secret put AUTH_PASS
+#   npx wrangler secret put SESSION_SECRET
+
+# ──────────────────────────────────────────
+# Login credentials
+# The single account that may open the calculator. With either one unset the
+# Worker denies every request rather than falling back to a default.
+# ──────────────────────────────────────────
+AUTH_USER=devuser
+AUTH_PASS=dev-local-only-not-real
+
+# ──────────────────────────────────────────
+# Local HTTPS escape hatch
+# `wrangler dev` serves the production hostname over plaintext, so leave this
+# at 1 locally or every request is redirected to the live site. Only the exact
+# string "1" disables the upgrade; production must not set this at all.
+# ──────────────────────────────────────────
+ALLOW_INSECURE_HTTP=1
+
+# ──────────────────────────────────────────
+# Session signing key
+# HMAC-SHA256 key for the `rim_session` cookie. Use a throwaway value here —
+# never the production one. Changing it invalidates every existing session.
+# generate: openssl rand -hex 32
+# ──────────────────────────────────────────
+SESSION_SECRET=

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<meta name="robots" content="noindex,nofollow">
+<title>เข้าสู่ระบบ · Gravship life support</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231B7A3C'/><path d='M16 26V14' stroke='%23E7F0E4' stroke-width='2.5' stroke-linecap='round'/><path d='M16 16c0-4.4 3.4-8 7.5-8 0 4.4-3.4 8-7.5 8z' fill='%23E7F0E4'/><path d='M16 20.5c0-3.7-2.9-6.7-6.5-6.7 0 3.7 2.9 6.7 6.5 6.7z' fill='%23A8D5A2'/></svg>">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{
+  --bg:#E7F0E4; --card:#FFFEFA; --ink:#132016; --ink2:#3C5341; --ink3:#6D8571;
+  --line:#C3D6C0; --soft:#D8EDD6; --accent:#1B7A3C; --accent2:#14582B;
+  --warn:#8A6A12; --warn-bg:#FFF4D4; --warn-line:#E3C56A;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:
+    radial-gradient(620px 340px at 92% -8%, rgba(27,122,60,.14), transparent 58%),
+    radial-gradient(480px 280px at 4% 108%, rgba(196,154,42,.12), transparent 58%),
+    var(--bg);
+  color:var(--ink); min-height:100vh; padding:28px 16px 40px;
+  display:flex; align-items:center; justify-content:center;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  font-variant-numeric:tabular-nums;
+}
+.card{
+  width:100%; max-width:344px;
+  background:var(--card); border-radius:18px; padding:22px 20px 18px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+}
+.mark{display:block;width:38px;height:38px;border-radius:9px;margin-bottom:12px}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+h1{font-size:24px;letter-spacing:-.035em;line-height:1.15;margin:6px 0 4px}
+.lead{color:var(--ink2);font-size:13.5px;text-wrap:pretty;margin-bottom:16px}
+
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11.5px;font-weight:700;color:var(--ink2);margin-bottom:5px}
+.field input{
+  width:100%;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;
+  font:inherit;font-weight:700;background:var(--card);color:var(--ink);min-height:42px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(27,122,60,.18);
+}
+
+.go{
+  width:100%;margin-top:8px;border:0;border-radius:12px;padding:12px;
+  background:var(--accent);color:#fff;font:inherit;font-weight:700;font-size:14.5px;
+  cursor:pointer;min-height:46px;
+  transition-property:transform,background-color;transition-duration:.15s;
+  transition-timing-function:cubic-bezier(.2,0,0,1);
+}
+.go:hover{background:var(--accent2)}
+.go:active{transform:scale(.98)}
+.go:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(27,122,60,.28)}
+.go[disabled]{background:var(--ink3);cursor:not-allowed;transform:none}
+
+.banner{
+  margin-bottom:14px;border-radius:12px;padding:10px 12px;font-size:13px;
+  line-height:1.5;text-wrap:pretty;
+  background:var(--warn-bg);color:var(--warn);
+  box-shadow:inset 0 0 0 1px var(--warn-line);
+}
+.banner strong{display:block;font-weight:800}
+.banner span{color:var(--ink2)}
+
+.foot{margin-top:14px;font-size:12px;color:var(--ink3);text-align:center;text-wrap:pretty}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:0s !important}
+  .go:active{transform:none}
+}
+</style>
+</head>
+<body>
+<main class="card">
+  <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+    <rect width="32" height="32" rx="7" fill="#1B7A3C"/>
+    <path d="M16 26V14" stroke="#E7F0E4" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M16 16c0-4.4 3.4-8 7.5-8 0 4.4-3.4 8-7.5 8z" fill="#E7F0E4"/>
+    <path d="M16 20.5c0-3.7-2.9-6.7-6.5-6.7 0 3.7 2.9 6.7 6.5 6.7z" fill="#A8D5A2"/>
+  </svg>
+  <p class="kicker">Gravship · basic life support</p>
+  <h1>เข้าสู่ระบบ</h1>
+  <p class="lead">ใช้ชื่อผู้ใช้และรหัสผ่านเดิมที่ตั้งไว้</p>
+
+  <div class="banner" id="banner" role="alert" aria-live="polite" hidden></div>
+
+  <form method="post" action="/login">
+    <!-- next ถูกเติมจาก ?next= ด้วยสคริปต์ท้ายไฟล์; ถ้าปิด JS ฟอร์มยังส่งได้ตามปกติ แค่กลับไปหน้าแรกแทนหน้าเดิม -->
+    <input type="hidden" name="next" id="next" value="">
+    <div class="field">
+      <label for="username">ชื่อผู้ใช้</label>
+      <input id="username" name="username" type="text" autocomplete="username"
+             autocapitalize="none" autocorrect="off" spellcheck="false" required autofocus>
+    </div>
+    <div class="field">
+      <label for="password">รหัสผ่าน</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+    </div>
+    <button class="go" type="submit" id="go">เข้าสู่ระบบ</button>
+  </form>
+
+  <p class="foot">เข้าสู่ระบบครั้งเดียว จำไว้ 30 วันบนอุปกรณ์นี้</p>
+</main>
+
+<script>
+(function () {
+  var q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+
+  // รับเฉพาะ path ภายในเว็บเดียวกัน — กัน ?next=https://... หรือ //host พาไปเว็บอื่น
+  var next = q.get('next') || '';
+  if (next.charAt(0) === '/' && next.charAt(1) !== '/' && next.charAt(1) !== '\\') {
+    document.getElementById('next').value = next;
+  }
+
+  var err = q.get('error');
+  if (!err) return;
+
+  var banner = document.getElementById('banner');
+  var head = document.createElement('strong');
+  var body = document.createElement('span');
+
+  if (err === 'locked') {
+    var secs = parseInt(q.get('retry'), 10);
+    var mins = Number.isFinite(secs) && secs > 0 ? Math.ceil(secs / 60) : 15;
+    head.textContent = 'พิมพ์ผิดหลายครั้งเกินไป';
+    body.textContent = 'ลองใหม่ในอีกประมาณ ' + mins + ' นาที แล้วโหลดหน้านี้ใหม่';
+    document.getElementById('go').disabled = true;
+  } else if (err === 'wrong') {
+    head.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+    body.textContent = 'ลองพิมพ์ใหม่อีกครั้ง';
+  } else {
+    return;
+  }
+
+  banner.appendChild(head);
+  banner.appendChild(body);
+  banner.hidden = false;
+})();
+</script>
+</body>
+</html>

@@ -131,6 +131,12 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   color:var(--ink3);border:1.5px solid var(--line);
 }
 .nav .reset:hover{background:var(--card);color:var(--ink2)}
+.nav .logout{display:contents}
+.nav .logout button{
+  background:transparent;box-shadow:none;
+  color:var(--ink3);border:1.5px solid var(--line);
+}
+.nav .logout button:hover{background:var(--card);color:var(--ink2)}
 .view{display:none}
 .view.on{display:block}
 
@@ -285,6 +291,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     <button type="button" data-tab="leather" id="tabLeather">ชุด</button>
     <button type="button" data-tab="settings" id="tabSettings">ตั้งค่า</button>
     <button type="button" class="reset" id="resetPrefs">ค่าเริ่มต้น</button>
+    <form class="logout" method="post" action="/logout"><button type="submit">ออกจากระบบ</button></form>
   </div>
 
   <div class="view on" id="view-food">

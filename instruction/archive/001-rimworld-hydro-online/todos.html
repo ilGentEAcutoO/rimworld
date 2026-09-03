@@ -384,8 +384,8 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
   <script type="application/json" id="workflow-state">
 {
   "schemaVersion": 2,
-  "session": "empty",
-  "updated": "2026-09-03 08:28",
+  "session": "feature / rimworld-hydro-online",
+  "updated": "2026-09-03 08:25",
   "updatedBy": "claude",
   "modelPolicy": {
     "registryVersion": 1,
@@ -433,7 +433,212 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
       }
     }
   },
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "ตั้งโครง repo rimworld + ย้ายไฟล์แอปเข้ามา",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler",
+        "cloudflare-naming",
+        "git-commit"
+      ],
+      "files": [
+        "index.html",
+        "calc.js",
+        "grow.js",
+        "drugs.js",
+        "power.js",
+        "package.json",
+        "wrangler.jsonc"
+      ],
+      "note": "scaffold clean, confirmed by reviewer-backend",
+      "progress": 100
+    },
+    {
+      "id": "TASK-002",
+      "name": "สร้าง D1 database + schema ตาราง save",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "migrations/0001_init.sql",
+        "wrangler.jsonc"
+      ],
+      "note": "D1 created + schema written + local migration verified; remote migration required step now tracked on TASK-008",
+      "progress": 100
+    },
+    {
+      "id": "TASK-003",
+      "name": "Basic Auth คุมทั้งเว็บใน Worker",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "security",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "src/worker.ts"
+      ],
+      "note": "Basic Auth verified live (401 on all paths incl. static assets), constant-time compare confirmed by reviewer-backend",
+      "progress": 100
+    },
+    {
+      "id": "TASK-004",
+      "name": "API บันทึก/โหลด save ผ่าน D1 + เชื่อมหน้าเว็บเดิม",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler"
+      ],
+      "files": [
+        "src/worker.ts",
+        "index.html"
+      ],
+      "note": "API done; prototype-pollution bypass found + fixed + verified by mutation testing",
+      "progress": 100
+    },
+    {
+      "id": "TASK-005",
+      "name": "unit test: auth middleware + save/load API",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler",
+        "superpowers:test-driven-development"
+      ],
+      "files": [
+        "src/worker.test.ts"
+      ],
+      "note": "128 tests green (93 app + 35 worker), reviewer verified 11 of 12 new tests fail without the fix",
+      "progress": 100
+    },
+    {
+      "id": "TASK-006",
+      "name": "E2E: login flow + save ข้ามเครื่อง/เบราว์เซอร์",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "reviewer-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "frontend-test"
+      ],
+      "files": [],
+      "note": "E2E 8/8 ผ่าน headed Playwright (Chrome จริง ไม่ใช่ headless). แก้ favicon 404 ที่ public/index.html เป็น inline SVG icon. console 0 error 0 warning; unit 128 เขียว. prod ที่ deploy ไว้ยังไม่มี fix นี้ ต้อง redeploy"
+    },
+    {
+      "id": "TASK-007",
+      "name": "push ขึ้น GitHub ilGentEAcutoO/rimworld",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "git-commit",
+        "git-push"
+      ],
+      "files": [],
+      "note": "pushed to github.com/ilGentEAcutoO/rimworld, public, main, verified no secrets landed",
+      "progress": 100
+    },
+    {
+      "id": "TASK-008",
+      "name": "deploy Worker + ผูก rim.jairukchan.com + ตั้งรหัสผ่านจริง",
+      "status": "done",
+      "priority": "high",
+      "assigned": "worker-backend",
+      "executionProfile": "standard",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "wrangler",
+        "cloudflare",
+        "deploy"
+      ],
+      "files": [
+        "wrangler.jsonc"
+      ],
+      "note": "live at rim.jairukchan.com, independently curl-verified 401/401/200; follow-up: commit favicon from TASK-006 + redeploy once E2E lands",
+      "progress": 100
+    },
+    {
+      "id": "TASK-009",
+      "name": "security review รอบสุดท้ายก่อนปิดงาน",
+      "status": "done",
+      "priority": "high",
+      "assigned": "security-reviewer",
+      "executionProfile": "security",
+      "model": "opus",
+      "executedBy": {
+        "agent": "claude",
+        "model": "opus",
+        "reasoning": "medium"
+      },
+      "skills": [
+        "security-review"
+      ],
+      "files": [],
+      "note": "GO. Independent security pass signed off at 05c9c63 (live version 47fa2803; deployed bundle matches committed source, debug probe gone, HEAD==origin/main). Verified live: 308 plaintext upgrade, no WWW-Authenticate over plaintext, path+query and PUT method preserved; HSTS max-age=31536000 on all HTTPS responses and correctly absent over plaintext; auth gate 401 on every path incl. static assets; CF-Visitor spoof neutralized by the same-URL loop guard (200, 0 redirects); ALLOW_INSECURE_HTTP fails safe, reads from env not headers, absent from prod secrets/vars; proto-pollution/413/405/304 all correct; constant-time compare re-measured N=200 on prod, all deltas inside noise; git history clean of secrets; npm audit 0 vulns; workers.dev dead; 147 tests green. Non-blocking follow-ups: user should rotate AUTH_PASS directly (creds passed through review commands), and optional XFO/XCTO/CSP headers (low, no XSS sink reachable from save data)."
+    }
+  ],
   "fileLocks": [],
   "resume": null
 }

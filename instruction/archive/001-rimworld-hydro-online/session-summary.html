@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="th" data-theme="mist">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Session Summary — rim.jairukchan.com</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+:root{
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  --ok:#14C7A1; --ok-rgb:20,199,161; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-rgb:255,107,107; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --r:14px; --r-s:10px;
+  --shadow-sm:0 1px 2px rgba(21,23,43,.05),0 3px 10px -3px rgba(21,23,43,.08);
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(var(--accent-rgb),.18);
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI','Sukhumvit Set','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+[data-theme="mist"]{
+  --bg:#F2F4F1; --card:#FFFFFF; --card-2:#F8FAF7;
+  --chrome:#E8ECE6; --line:#DBE0D8; --line-2:#C2CABC;
+  --ink:#1A2620; --ink-2:#475C50; --ink-3:#7A8D80; --ink-4:#A8B5AC;
+  --accent:#4A6B5C; --accent-rgb:74,107,92;
+  --accent-soft:#E5EBE6; --accent-line:#A8BFB1; --accent-deep:#324A41;
+  --ok:#7A9D6C; --ok-rgb:122,157,108; --ok-soft:#E4EEDF; --ok-line:#B5CDA8; --ok-deep:#557448;
+  --bad:#B85650; --bad-rgb:184,86,80; --bad-soft:#F0DFDD; --bad-line:#DBA8A4; --bad-deep:#893E39;
+  --warn:#A8862F; --warn-soft:#EDE4C6; --warn-deep:#705915;
+  --r:10px; --r-s:7px;
+  --shadow:0 1px 2px rgba(26,38,32,.05),0 10px 24px -10px rgba(74,107,92,.16);
+}
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.65;font-size:15px;font-weight:450;-webkit-font-smoothing:antialiased}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h2{font-size:22px;font-weight:800;letter-spacing:-.02em} h3{font-size:15.5px;font-weight:700;margin-bottom:8px}
+.lead{font-size:15px;color:var(--ink-2)}
+.mono{font-family:var(--mono)}
+a{color:var(--accent-deep);font-weight:600;text-decoration:none}
+code{font-family:var(--mono);font-size:.86em;background:var(--accent-soft);padding:2px 7px;border-radius:5px;color:var(--accent-deep);font-weight:500}
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;max-width:920px;margin:22px auto}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+.window>.body{padding:22px 26px}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.stat{background:var(--card-2);border:1px solid var(--line);border-radius:var(--r-s);padding:14px 16px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent-deep)}
+.stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+.note{border-radius:var(--r-s);padding:12px 15px;font-size:13.5px;border:1px solid;display:flex;gap:10px;line-height:1.55;margin-bottom:10px}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok-deep)}
+.note.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn-deep)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:7px 9px;border-bottom:1px solid var(--line-2)}
+td{padding:8px 9px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.pill{display:inline-flex;font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--ok-soft);color:var(--ok-deep);border:1px solid var(--ok-line)}
+details.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:10px}
+details.fold>summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);font-weight:700;list-style:none}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"+ "}
+details.fold[open]>summary::before{content:"− "}
+details.fold .inner{padding-top:10px;font-size:13px;color:var(--ink-2)}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.action{background:var(--warn-soft);border:1px solid var(--warn);border-radius:var(--r-s);padding:14px 16px;margin-top:14px}
+@media(max-width:700px){.stat-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="title">session-summary.html</div></div>
+  <div class="body">
+    <div class="kicker">ปิดงาน · 2026-09-03</div>
+    <h2 style="margin-top:6px">เสร็จสมบูรณ์ — เว็บขึ้นออนไลน์แล้วจริง</h2>
+    <p class="lead" style="margin-top:4px">🔗 <a href="https://rim.jairukchan.com">rim.jairukchan.com</a> · repo <a href="https://github.com/ilGentEAcutoO/rimworld">ilGentEAcutoO/rimworld</a> (public) · D1 <span class="mono">gravship-d1-main</span></p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="n">9/9</div><div class="l">tasks done</div></div>
+      <div class="stat"><div class="n">147</div><div class="l">tests green</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">issues found & fixed</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">npm audit vulns</div></div>
+    </div>
+
+    <div class="note ok"><span>✓</span><div><strong>Security</strong> — full review passed: no secret ever committed (checked including unreachable git objects), constant-time auth measured live on production, prototype-pollution bypass closed + regression-tested, HTTPS now enforced with HSTS, no XSS/CORS/CSRF surface found.</div></div>
+    <div class="note ok"><span>✓</span><div><strong>Tests</strong> — 93 app + 54 worker = 147 passing, re-verified independently, not just taken on report.</div></div>
+    <div class="note ok"><span>✓</span><div><strong>E2E</strong> — 8 scenarios, real headed browser, 0 console errors/warnings: login gate, cross-device D1 persistence, URL-vs-server precedence, no first-load clobber, full calculator product loop.</div></div>
+
+    <div class="action">
+      <strong>ต้องทำเองอย่างเดียว:</strong> หมุนรหัสผ่านใหม่ — รหัสที่ให้ไปตอนแรกผ่านการพิมพ์ทดสอบหลายรอบ (agent เห็นแล้วหลายที) ควรเปลี่ยนเป็นค่าใหม่ที่ไม่มีใคร/agent เคยเห็น รันเองในเทอร์มินัลของคุณ (ไม่ให้ agent ทำแทน เพราะ wrangler secret เป็น write-only ต้องมีใครเห็นค่าจริงสักครั้ง — ถ้าให้ agent พิมพ์ก็จะหลุดซ้ำอีกที):
+      <div class="mono" style="margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px 10px">cd C:\Users\suanw\projects\rimworld<br>npx wrangler secret put AUTH_PASS</div>
+      พิมพ์ค่าใหม่ตอน prompt ขึ้น (จะไม่โชว์ตัวอักษรตอนพิมพ์ ปกติ)
+    </div>
+
+    <div class="divider"></div>
+    <h3>9 tasks</h3>
+    <table>
+      <tr><th>Task</th><th>ผล</th></tr>
+      <tr><td>สร้างโครง repo + ย้ายไฟล์แอป</td><td><span class="pill">done</span></td></tr>
+      <tr><td>D1 database + schema</td><td><span class="pill">done</span></td></tr>
+      <tr><td>Basic Auth คุมทั้งเว็บ</td><td><span class="pill">done</span></td></tr>
+      <tr><td>API save/load ผ่าน D1</td><td><span class="pill">done</span></td></tr>
+      <tr><td>unit tests</td><td><span class="pill">done</span></td></tr>
+      <tr><td>E2E headed browser</td><td><span class="pill">done</span></td></tr>
+      <tr><td>push GitHub</td><td><span class="pill">done</span></td></tr>
+      <tr><td>deploy + custom domain + credentials</td><td><span class="pill">done</span></td></tr>
+      <tr><td>security review รอบสุดท้าย</td><td><span class="pill">done</span></td></tr>
+    </table>
+
+    <details class="fold">
+      <summary>6 issues found &amp; fixed mid-session</summary>
+      <div class="inner">
+        <ol>
+          <li><strong>Prototype-pollution validation bypass</strong> — bracket lookup on a plain object let <code>constructor</code>/<code>toString</code>/<code>__proto__</code> etc. skip unknown-key rejection. Fixed with <code>Object.hasOwn</code>, 12 regression tests.</li>
+          <li><strong>Save-before-load race + URL precedence bug</strong> — first render could PUT default state before the real save loaded (cross-device clobber risk); live URL was read at hydrate time instead of snapshotted, breaking "URL wins over server" precedence. Both fixed, covered by E2E.</li>
+          <li><strong>Missing favicon</strong> — 404 on every page load. Fixed with an inline SVG data-URI icon.</li>
+          <li><strong>Plaintext HTTP accepted</strong> — Basic Auth challenge was servable over unencrypted HTTP with no redirect. Fixed: 308 redirect (checks both Cloudflare scheme signals, OR'd) + HSTS, with a loop-guard and a dev-only escape hatch so local testing didn't break.</li>
+          <li><strong>Remote deploy migration command was broken</strong> — <code>wrangler d1 migrations --remote</code> ignores <code>account_id</code> from config on a multi-account machine; would have failed silently at deploy time. Pinned via <code>cross-env</code>.</li>
+          <li><strong>Duplicate package.json key</strong> — cosmetic, wrangler warning on every run. Removed.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>สิ่งที่ตรวจแล้วไม่ทำซ้ำ (ทำละเอียดไปแล้วระหว่างงาน)</summary>
+      <div class="inner">
+        npm audit (0 vulns, ยืนยันเองอีกรอบ), full-tree secret scan (ยืนยันเองอีกรอบ, ไม่มี secret หลุดใน git history ทั้ง reachable และ unreachable objects), frontend full product loop (8 scenario จบใน TASK-006 ครอบคลุมทุกแท็บ/ฟีเจอร์ของเครื่องคำนวณแล้ว — ไม่ได้เปิด Playwright ใหม่ซ้ำเพราะจะทดสอบซ้ำของเดิมเป๊ะ ๆ)
+      </div>
+    </details>
+  </div>
+</div>
+</body>
+</html>

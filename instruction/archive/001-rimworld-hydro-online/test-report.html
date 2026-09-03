@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Workflow · งานที่ทำอยู่</title>
+<meta name="color-scheme" content="light only">
+<title>E2E — Gravship life support</title>
 <style>/* =============================================================
    DESIGN SYSTEM — primitives + swappable themes
    Style is NOT locked. Themes are starters; artifacts can pick
@@ -370,203 +371,164 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
   .window{box-shadow:none;break-inside:avoid}
   .brief-tabs{display:none}
 }
-
-.page{max-width:1000px;margin:0 auto;padding:30px 22px 70px}
-.resume-banner{background:var(--accent-soft);border:1px solid var(--accent-line);
-  border-radius:var(--r);padding:16px 18px;margin-bottom:22px}
-.empty{text-align:center;padding:60px 20px;color:var(--ink-3)}
+</style>
+<style>
+  html,body{height:100%}
+  body{padding:26px 30px;overflow:hidden}
+  .wrap{max-width:1280px;margin:0 auto;height:calc(100vh - 52px);display:flex;flex-direction:column;gap:14px}
+  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .verdict{display:flex;align-items:baseline;gap:14px}
+  .verdict .big{font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .verdict .sub{font-size:13px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .body{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;flex:1;min-height:0}
+  .ledger{display:flex;flex-direction:column;gap:0;overflow:hidden}
+  .lrow{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;
+        padding:9px 2px;border-bottom:1px solid var(--line)}
+  .lrow:last-child{border-bottom:0}
+  .lnum{font-size:11px;opacity:.5;font-variant-numeric:tabular-nums}
+  .lname{font-size:13px;line-height:1.35}
+  .lname i{display:block;font-style:normal;font-size:11.5px;opacity:.62;margin-top:1px}
+  .ok-dot{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+          color:#1a6b3c;white-space:nowrap}
+  .ok-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:#1a9c52}
+  .side{display:flex;flex-direction:column;gap:14px;min-height:0}
+  .panel{padding:14px 16px;border-radius:var(--r);background:var(--card);
+         border:1px solid var(--line)}
+  .panel h4{font-size:12px;text-transform:uppercase;letter-spacing:.07em;opacity:.55;margin-bottom:9px}
+  .fixline{font-size:13px;line-height:1.5}
+  .fixline b{font-weight:700}
+  .arrowto{opacity:.4;margin:0 5px}
+  .callout{border-left:3px solid #c98a1e;background:#fdf7e8;padding:11px 13px;border-radius:6px;
+           font-size:12.5px;line-height:1.55}
+  .callout + .callout{margin-top:9px}
+  .callout.stop{border-left-color:#b8442e;background:#fbeeea}
+  .callout b{font-weight:700}
+  details.fold{font-size:12px}
+  details.fold summary{cursor:pointer;opacity:.6;font-size:11.5px}
+  details.fold .in{margin-top:8px;font-size:11.5px;line-height:1.7;opacity:.78;
+                   font-family:var(--mono,ui-monospace,monospace)}
+  .cta-strip{margin-top:2px}
 </style>
 </head>
-<body>
-<div class="page">
+<body data-theme="mist">
+<div class="wrap">
 
-  <!-- ===== STATE ISLAND : agents edit ONLY this JSON ===== -->
-  <script type="application/json" id="workflow-state">
-{
-  "schemaVersion": 2,
-  "session": "empty",
-  "updated": "2026-09-03 08:28",
-  "updatedBy": "claude",
-  "modelPolicy": {
-    "registryVersion": 1,
-    "standard": {
-      "claude": {
-        "model": "opus",
-        "fallbacks": [
-          "fable",
-          "sonnet"
-        ]
-      },
-      "codex": {
-        "model": "gpt-5.6-sol",
-        "reasoning": "max",
-        "strict": true
-      },
-      "kimi": {
-        "model": "k3",
-        "reasoning": "max",
-        "strict": true
-      },
-      "grok": {
-        "model": "grok-4.5",
-        "strict": true
-      }
-    },
-    "security": {
-      "claude": {
-        "model": "opus",
-        "strict": true
-      },
-      "codex": {
-        "model": "gpt-5.6-sol",
-        "reasoning": "max",
-        "strict": true
-      },
-      "kimi": {
-        "model": "k3",
-        "reasoning": "max",
-        "strict": true
-      },
-      "grok": {
-        "model": "grok-4.5",
-        "strict": true
-      }
-    }
-  },
-  "tasks": [],
-  "fileLocks": [],
-  "resume": null
-}
-  </script>
+  <div class="top">
+    <div>
+      <p class="kicker">TASK-006 · E2E ผ่าน headed browser จริง</p>
+      <div class="verdict">
+        <span class="big">8/8</span>
+        <span class="sub">สถานการณ์ผ่านหมด · เจอปัญหา 1 จุด แก้ที่ต้นเหตุแล้ว</span>
+      </div>
+    </div>
+    <div class="chips">
+      <span class="pill">console 0 error · 0 warning</span>
+      <span class="pill">unit 128 ผ่าน</span>
+      <span class="pill">headed Chrome · ไม่ใช่ headless</span>
+    </div>
+  </div>
 
-  <div id="app"></div>
+  <div class="body">
+
+    <div class="card ledger">
+      <div class="lrow"><span class="lnum">01</span>
+        <span class="lname">เปิดเว็บโดยไม่ใส่รหัส — เข้าไม่ได้
+          <i>401 · ไม่มีเนื้อหาโผล่เลย · หน้าจอว่างสนิท</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">02</span>
+        <span class="lname">ใส่รหัสผิด — ยังเข้าไม่ได้
+          <i>บล็อกเหมือนเดิม ไม่หลุดไปหน้าแอป</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">03</span>
+        <span class="lname">ใส่รหัสถูก — แอปขึ้นครบ กดใช้งานได้
+          <i>ลูกเรือ 4+2 ตรงค่าเริ่มต้น · เลย์เอาต์ปกติ</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">04</span>
+        <span class="lname">แก้จำนวนคน แล้วรีโหลด — ค่ายังอยู่
+          <i>ล้าง localStorage + ตัด query ทิ้ง ยังได้ 7 คนคืนจาก D1</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">05</span>
+        <span class="lname">เปิดเหมือนคนละเครื่อง — เห็นค่าเดิม
+          <i>ล้าง storage ทุกชนิด + แท็บใหม่ ค่ายังตามมา</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">06</span>
+        <span class="lname">เปิดด้วยลิงก์ที่ระบุจำนวนคน — ลิงก์ชนะ
+          <i>ลิงก์ 3/1/2 ชนะค่าที่เซฟไว้ 7/2/0 · และไม่ทับของเดิมที่เซฟ</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">07</span>
+        <span class="lname">ตอนเปิดหน้า ไม่มีการเขียนทับก่อนอ่าน
+          <i>เปิดเย็น ๆ มีแค่ GET อย่างเดียว ไม่มี PUT เลย</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+      <div class="lrow"><span class="lnum">08</span>
+        <span class="lname">เครื่องคิดเลขเดิมยังถูกต้องทุกแท็บ
+          <i>อาหาร · แบต · โตจริง · ยา · ชุด · ตั้งค่า — กดจริง คำนวณใหม่จริง</i></span>
+        <span class="ok-dot">ผ่าน</span></div>
+    </div>
+
+    <div class="side">
+
+      <div class="panel">
+        <h4>เจอแล้วแก้ที่ต้นเหตุ</h4>
+        <p class="fixline">
+          ทุกครั้งที่เปิดเว็บ เบราว์เซอร์ยิงหา <b>ไอคอนประจำเว็บ</b> แล้วไม่เจอ
+          จึงขึ้น error ค้างใน console ทุกหน้า
+          <span class="arrowto">→</span>
+          ใส่ไอคอนต้นอ่อนสีเขียวให้แอปจริง ๆ ฝังมาในหน้าเลย
+          ไม่ต้องยิงขอไฟล์เพิ่ม
+        </p>
+        <p class="fixline" style="margin-top:7px;opacity:.7;font-size:12px">
+          หลังแก้: console เหลือ 0 error 0 warning ทุกสถานการณ์ ·
+          unit test 128 ตัวยังเขียวครบ
+        </p>
+      </div>
+
+      <div class="panel" style="flex:1;min-height:0;overflow:auto">
+        <h4>ต้องให้พี่ตัดสิน — เรื่อง production</h4>
+
+        <div class="callout">
+          <b>ของที่ deploy ขึ้นไปแล้ว เก่ากว่าที่เพิ่งแก้</b><br>
+          deploy เกิดตอน 07:25–07:26 ส่วนการแก้ไอคอนเกิดหลังจากนั้น
+          → เว็บจริงยังมี error ไอคอนค้างอยู่ <b>ต้อง deploy ซ้ำอีกรอบ</b>
+          ถึงจะได้ของที่เทสผ่านรอบนี้
+        </div>
+
+        <div class="callout" style="border-left-color:#3f7d55;background:#eef6f0">
+          <b>เว็บจริงใช้งานได้ปกติ</b><br>
+          <code>rim.jairukchan.com</code> ขึ้นจริง · ยิงทุกเส้นทางแล้วได้ 401 หมด
+          แปลว่ารหัสผ่านกั้นครบ · ตาราง <code>saves</code> บน D1 จริงมาแล้วด้วย
+        </div>
+
+        <div class="callout" style="border-left-color:#8a93a0;background:#f1f3f5">
+          <b>หมายเหตุ:</b> ตอนแรกผมอ่านว่าเว็บจริงล่ม
+          แต่เป็นเพราะ DNS ในเครื่องนี้จำของเก่าไว้เอง
+          เช็คผ่าน 1.1.1.1 กับ 8.8.8.8 แล้วปกติดี — ของ TASK-008 ไม่ได้พัง
+        </div>
+      </div>
+
+      <details class="fold">
+        <summary>รายละเอียดเชิงเทคนิค · หลักฐาน</summary>
+        <div class="in">
+          headed Chrome (UA ไม่มี HeadlessChrome, หน้าต่างจริง 945x1020)<br>
+          local: wrangler dev @ 127.0.0.1:8787 + D1 local<br>
+          fix: public/index.html — เพิ่ม link rel=icon เป็น inline SVG<br>
+          หลักฐานภาพ: agent-temp/s1-unauth-blocked.png,
+          s3-app-loaded.png, s8-grow-tab.png, s8-drug-tab.png<br>
+          หมายเหตุ: ระหว่างเทสเจอ wrangler dev ค้างจากรอบก่อน 6 ตัว เก็บกวาดแล้ว
+        </div>
+      </details>
+
+    </div>
+  </div>
+
+  <div class="cta-strip">
+    <span><span class="arrow">&rarr;</span> ตอบในแชท:
+      <strong>"deploy ซ้ำเลย"</strong>
+      <strong>"commit ไอคอนก่อน"</strong>
+      <strong>"ปิด TASK-006 ได้"</strong></span>
+    <span class="muted">TASK-006 เขียว ปิดได้เลย · เหลือแค่ deploy ซ้ำให้ได้ไอคอนขึ้นเว็บจริง</span>
+  </div>
+
 </div>
-
-<script>
-/* todos.html renderer — rebuilds the board from the JSON island.
-   Agents must NEVER hand-edit the markup below; edit the JSON above. */
-(function(){
-  var S;
-  try { S = JSON.parse(document.getElementById('workflow-state').textContent); }
-  catch(e){ document.getElementById('app').innerHTML =
-    '<div class="note danger"><span class="ic">!</span><div>State JSON is invalid: '
-    +esc(e.message)+'</div></div>'; return; }
-
-  var COLS = [
-    {key:'todo',   label:'ยังไม่เริ่ม',     has:function(s){return s==='pending';}},
-    {key:'doing',  label:'กำลังทำ',       has:function(s){return s==='progress'||s==='impl'||s==='blocked';}},
-    {key:'done',   label:'เสร็จแล้ว',       has:function(s){return s==='done';}}
-  ];
-  var PILL = {pending:['todo','pending'],progress:['doing','in&nbsp;progress'],
-    impl:['impl','implemented'],done:['done','tested'],blocked:['block','blocked']};
-  var BADGE = {high:['hi','high'],medium:['mid','med'],low:['lo','low']};
-
-  function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
-
-  function card(t){
-    var p = PILL[t.status]||PILL.pending;
-    var b = t.priority?BADGE[t.priority]:null;
-    var h = '<div class="tk"'+(t.status==='blocked'
-        ?' style="border-color:var(--bad-line);box-shadow:0 0 0 3px var(--bad-soft)"'
-        :t.status==='progress'
-        ?' style="border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)"':'')+'>';
-    h += '<div class="row"><span class="pill '+p[0]+'">'+p[1]+'</span>';
-    if(b) h += '<span class="badge '+b[0]+'">'+b[1]+'</span>';
-    h += '<span class="mono small muted" style="margin-left:auto">'+esc(t.id)+'</span></div>';
-    h += '<div class="tkn">'+esc(t.name)+'</div>';
-    var meta = [];
-    (t.files||[]).forEach(function(f){meta.push('<span class="tag">'+esc(f)+'</span>');});
-    (t.skills||[]).forEach(function(s){meta.push('<span class="tag" style="color:var(--info)">'+esc(s)+'</span>');});
-    if(t.assigned && t.assigned!=='unassigned')
-      meta.push('<span class="tag" style="color:var(--accent)">'+esc(t.assigned)+'</span>');
-    if(t.executedBy){
-      var ran = esc(t.executedBy.agent)+': '+esc(t.executedBy.model);
-      if(t.executedBy.reasoning) ran += ' · '+esc(t.executedBy.reasoning);
-      meta.push('<span class="tag" style="color:var(--accent-deep)">'+ran+'</span>');
-    } else if(t.model) {
-      meta.push('<span class="tag" style="color:var(--accent-deep)">'+esc(t.model)+'</span>');
-    }
-    if(meta.length) h += '<div class="meta">'+meta.join('')+'</div>';
-    if(typeof t.progress==='number' && t.status!=='done')
-      h += '<div class="bar-track" style="margin-top:9px"><div class="bar-fill" style="width:'
-        +Math.max(0,Math.min(100,t.progress))+'%"></div></div>';
-    if(t.note) h += '<div class="small muted" style="margin-top:8px">'+esc(t.note)+'</div>';
-    return h+'</div>';
-  }
-
-  var tasks = S.tasks||[];
-  var doneN = tasks.filter(function(t){return t.status==='done';}).length;
-  var pct = tasks.length? Math.round(doneN/tasks.length*100):0;
-  var C = 2*Math.PI*19, off = C*(1-pct/100);
-
-  var html = '';
-
-  if(S.resume){
-    var r = S.resume;
-    html += '<div class="resume-banner"><div class="kicker" style="color:var(--accent);'
-      +'margin-bottom:6px">Session paused — resume context</div>'
-      +'<strong>'+esc(r.reason||'saved')+'</strong>'
-      +'<span class="small muted"> · '+esc(r.exitTime||'')+'</span>';
-    if(r.goal){
-      html += '<div class="small" style="margin-top:8px"><span class="tag" '
-        +'style="color:var(--accent-deep)">GOAL ค้างอยู่</span> '+esc(r.goal)
-        +' <span class="muted">— ตั้งต่อผ่านคำสั่ง goal ของ active host เมื่อรองรับ</span></div>';
-    }
-    if(r.agents&&r.agents.length){
-      html += '<div style="margin-top:10px;display:grid;gap:6px">';
-      r.agents.forEach(function(a){
-        html += '<div class="small"><strong>'+esc(a.name)+'</strong> — '+esc(a.task||'')
-          +' · ทำต่อ: '+esc(a.nextStep||'')+'</div>';
-      });
-      html += '</div>';
-    }
-    html += '</div>';
-  }
-
-  html += '<div class="between" style="margin-bottom:18px">'
-    +'<div><div class="kicker">Session</div>'
-    +'<h2 style="font-size:21px">'+esc(S.session)+'</h2></div>'
-    +'<div class="row" style="gap:16px">'
-    +'<div style="text-align:right"><div class="kicker">Updated</div>'
-    +'<strong class="mono small">'+esc(S.updated)+'</strong>'
-    +'<div class="small muted">by '+esc(S.updatedBy||'unknown')+'</div></div>'
-    +'<svg width="46" height="46" viewBox="0 0 46 46">'
-    +'<circle cx="23" cy="23" r="19" fill="none" stroke="#E3DACC" stroke-width="6"/>'
-    +'<circle cx="23" cy="23" r="19" fill="none" stroke="#6F864F" stroke-width="6" '
-    +'stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" '
-    +'stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 23 23)"/>'
-    +'<text x="23" y="27" text-anchor="middle" font-family="var(--mono)" '
-    +'font-size="11" font-weight="700" fill="#1B1A17">'+pct+'</text></svg></div></div>';
-
-  if(!tasks.length){
-    html += '<div class="window"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>'
-      +'<span class="title">todos.html</span></div>'
-      +'<div class="empty">ยังไม่มี task &mdash; <code>workflow-plan</code> จะเพิ่มเข้ามาเอง</div></div>';
-  } else {
-    html += '<div class="board">';
-    COLS.forEach(function(col){
-      var items = tasks.filter(function(t){return col.has(t.status);});
-      html += '<div><div class="col-h"><span>'+col.label+'</span><span>'+items.length+'</span></div>';
-      html += items.map(card).join('') ||
-        '<div class="small muted" style="padding:8px 2px">—</div>';
-      html += '</div>';
-    });
-    html += '</div>';
-  }
-
-  if((S.fileLocks||[]).length){
-    html += '<details class="fold"><summary>File locks ('+S.fileLocks.length+')</summary>'
-      +'<div class="inner"><table><thead><tr><th>ไฟล์</th><th>โดย</th><th>ตั้งแต่</th></tr></thead><tbody>';
-    S.fileLocks.forEach(function(l){
-      html += '<tr><td><code>'+esc(l.file)+'</code></td><td>'+esc(l.by)+'</td>'
-        +'<td class="mono">'+esc(l.since)+'</td></tr>';
-    });
-    html += '</tbody></table></div></details>';
-  }
-
-  document.getElementById('app').innerHTML = html;
-})();
-</script>
 </body>
 </html>

@@ -7,6 +7,14 @@
   "observability": {
     "enabled": true
   },
+  // Custom Domain (not a route): Cloudflare creates the DNS record and issues
+  // the certificate itself, and every path on the hostname reaches the Worker.
+  "routes": [
+    {
+      "pattern": "rim.jairukchan.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

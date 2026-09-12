@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Plan · แท็บสัตว์ + คำนวณ kibble</title>
+<style>/* =============================================================
+   DESIGN SYSTEM — primitives + swappable themes
+   Style is NOT locked. Themes are starters; artifacts can pick
+   one with [data-theme="..."], override inline, or invent fresh.
+   Light-only (forced) · self-contained · Thai-friendly
+   Never ship a full-page dark brief — even if the OS/app is dark.
+   ============================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+
+/* ---------- BASE TOKENS (defaults = indigo theme) ---------- */
+:root{
+  /* surfaces */
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  /* ink */
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  /* accent (theme primary) */
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  /* semantic */
+  --ok:#14C7A1; --ok-rgb:20,199,161; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-rgb:255,107,107; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --info:#4FB8E5; --info-soft:#DCF1FB;
+  --pop:#FF80B5;
+  /* shape & motion */
+  --r:14px; --r-s:10px; --r-xs:7px;
+  --shadow-sm:0 1px 2px rgba(21,23,43,.05),0 3px 10px -3px rgba(21,23,43,.08);
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(var(--accent-rgb),.18);
+  --shadow-lg:0 4px 8px rgba(21,23,43,.08),0 20px 50px -12px rgba(var(--accent-rgb),.25);
+  /* hero mesh (theme decides the wash) */
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(110,90,230,.18), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(20,199,161,.14), transparent 60%),
+    radial-gradient(420px 280px at 55% 40%, rgba(255,128,181,.08), transparent 70%);
+  /* dark code panel — usually theme-stable */
+  --dark:#15172B; --dark-2:#1F2240; --dark-ink:#E8EAF5; --dark-dim:#7F84A8;
+  --code-k:#C58FFF; --code-s:#7EE6BD; --code-n:#FFB47A;
+  /* type */
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',
+    'Sukhumvit Set','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+
+/* ---------- THEME : warm (editorial - serif type, italic kicker, calm) ---------- */
+[data-theme="warm"]{
+  --bg:#F5F1E8; --card:#FFFFFF; --card-2:#FBF8F0;
+  --chrome:#EBE5D6; --line:#E0DAC8; --line-2:#CFC6AE;
+  --ink:#1B1A17; --ink-2:#55514A; --ink-3:#8B8678; --ink-4:#B0AB99;
+  --accent:#C8623E; --accent-rgb:200,98,62;
+  --accent-soft:#F2E0D6; --accent-line:#E0A98E; --accent-deep:#A5512F;
+  --ok:#6F864F; --ok-rgb:111,134,79; --ok-soft:#E4E8D8; --ok-line:#AEBE8E; --ok-deep:#516534;
+  --bad:#B4452F; --bad-rgb:180,69,47; --bad-soft:#F3DDD5; --bad-line:#DDA993; --bad-deep:#8D3322;
+  --warn:#B98828; --warn-soft:#F1E6CC; --warn-deep:#7A5715;
+  --sans:'Iowan Old Style','Georgia','Palatino','Sukhumvit Set',serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r:8px; --r-s:6px;
+  --shadow:0 1px 2px rgba(27,26,23,.04),0 14px 32px -12px rgba(200,98,62,.16);
+  --shadow-lg:0 2px 4px rgba(27,26,23,.05),0 22px 48px -14px rgba(200,98,62,.2);
+  --hero-mesh:
+    radial-gradient(620px 380px at 90% -5%, rgba(200,98,62,.14), transparent 60%),
+    radial-gradient(500px 340px at 4% 95%, rgba(111,134,79,.1), transparent 60%);
+}
+[data-theme="warm"] .kicker{font-family:var(--sans);font-style:italic;
+  letter-spacing:.02em;text-transform:none;font-weight:500;font-size:14px}
+[data-theme="warm"] h1,[data-theme="warm"] h2,[data-theme="warm"] h3{
+  font-weight:600;letter-spacing:-.005em}
+
+/* ============================================================
+   SHARED COMPONENTS — read tokens above, work in any theme
+   ============================================================ */
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* ---- type ---- */
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+h2{font-size:22px} h3{font-size:18px}
+.lead{font-size:16.5px;color:var(--ink-2);line-height:1.65}
+.mono{font-family:var(--mono)}
+a{color:var(--accent);text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);
+  padding:2px 7px;border-radius:5px;color:var(--accent-deep);font-weight:500}
+
+/* ---- window chrome ---- */
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 24px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 22px;box-shadow:var(--shadow-sm)}
+
+/* ---- pills / tags / badges ---- */
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:20px;
+  border:1px solid transparent;text-transform:uppercase}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.95}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+
+/* ---- notes ---- */
+.note{border-radius:var(--r-s);padding:13px 16px;font-size:14px;border:1px solid;
+  display:flex;gap:11px;line-height:1.55}
+.note .ic{font-weight:800;flex:none}
+.note.info{background:var(--info-soft);border-color:var(--info);color:var(--ink-2)}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok-deep)}
+.note.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad-deep)}
+
+/* ---- table ---- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2);font-weight:700}
+td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+
+/* ---- helpers ---- */
+.row{display:flex;gap:10px;align-items:center}
+.between{display:flex;justify-content:space-between;align-items:center}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ---- BRIEF tab nav ---- */
+.brief-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.btab{font-family:var(--sans);font-size:13px;cursor:pointer;font-weight:700;
+  padding:10px 18px;border-radius:var(--r-s);border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .18s}
+.btab:hover{border-color:var(--accent-line);color:var(--accent-deep);
+  background:var(--accent-soft);transform:translateY(-1px)}
+.btab.on{background:var(--ink);color:var(--card);border-color:var(--ink);
+  box-shadow:0 2px 4px rgba(0,0,0,.08),0 8px 20px -4px rgba(0,0,0,.25)}
+
+.brief{display:none}
+.brief.on{display:block;animation:b-fade .35s ease}
+
+/* ---- CTA strip ---- */
+.cta-strip{margin-top:16px;padding:13px 16px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--ok-soft) 100%);
+  border:1px solid var(--accent-line);border-radius:var(--r-s);
+  font-size:13px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{color:var(--accent);font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{color:var(--accent-deep);font-weight:600;background:var(--card);
+  padding:4px 10px;border-radius:6px;border:1px solid var(--accent-line);
+  font-family:var(--mono);font-size:12px}
+
+/* ---- asymmetric grids ---- */
+.b-grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start}
+
+/* ---- notes list ---- */
+.notes-list{font-size:14px;line-height:1.65;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:10px 0;border-bottom:1px solid var(--line);
+  display:flex;gap:11px;align-items:flex-start}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;line-height:1;
+  background:var(--accent-soft)}
+
+/* ---- details fold ---- */
+details.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+details.fold>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"+ "}
+details.fold[open]>summary::before{content:"− "}
+details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
+
+/* ---- animations ---- */
+@keyframes b-up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+@keyframes b-grad{0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(4%,-3%) scale(1.08)}}
+.hero-deco{position:absolute;inset:-30px;pointer-events:none;z-index:0;
+  background:var(--hero-mesh);animation:b-grad 26s ease-in-out infinite}
+
+/* ---- page ---- */
+.page{max-width:1060px;margin:0 auto;padding:32px 24px 36px}
+.hero{position:relative;margin-bottom:22px;padding:6px 0 0;transition:all .4s}
+.hero>*:not(.hero-deco){position:relative;z-index:1}
+.hero h1{font-size:clamp(30px,4.6vw,44px);margin:10px 0 12px;line-height:1.18;
+  letter-spacing:-.02em;font-weight:800}
+.hero h1 em{color:var(--accent);font-style:normal;font-weight:800}
+.hero .lead{max-width:600px;font-size:16px;color:var(--ink-2);line-height:1.65}
+.foot{margin-top:14px;text-align:center;font-family:var(--mono);font-size:11px;
+  color:var(--ink-4);letter-spacing:.04em}
+
+@media(max-width:860px){
+  .b-grid-2,.grid-2{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff}
+  .window{box-shadow:none;break-inside:avoid}
+  .brief-tabs{display:none}
+}
+
+/* ============================================================
+   APP MOCK — สไตล์ของเว็บกรีนชิพจริง (สำหรับ tab "หน้าจอที่จะได้")
+   ============================================================= */
+.app{
+  --abg:#E7F0E4; --acard:#FFFEFA; --aink:#132016; --aink2:#3C5341; --aink3:#6D8571;
+  --aline:#C3D6C0; --asoft:#D8EDD6; --aac:#1B7A3C; --aac2:#14582B;
+  --awarn:#8A6A12; --awarnbg:#FFF4D4; --awarnline:#E3C56A;
+  --ameat:#8B3A2A; --ameatbg:#F8E4DE;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:
+    radial-gradient(620px 340px at 92% -8%, rgba(27,122,60,.14), transparent 58%),
+    radial-gradient(480px 280px at 4% 108%, rgba(196,154,42,.12), transparent 58%),
+    var(--abg);
+  color:var(--aink);border-radius:var(--r-s);padding:18px 18px 16px;
+  font-variant-numeric:tabular-nums;line-height:1.5
+}
+.app .anav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.app .anav span{border-radius:999px;padding:6px 13px;font-size:13px;font-weight:700;
+  background:var(--acard);color:var(--aink2);box-shadow:0 1px 2px rgba(19,32,22,.05)}
+.app .anav span.on{background:var(--aac);color:#fff}
+.app h2{font-size:20px;letter-spacing:-.035em;margin:2px 0 4px}
+.app .alead{color:var(--aink2);font-size:13px;margin-bottom:10px}
+.app .aban{
+  background:var(--asoft);border-radius:12px;padding:9px 13px;font-size:13px;color:var(--aac2);
+  font-weight:700;margin-bottom:12px;line-height:1.55
+}
+.app .aban b{color:var(--ameat)}
+.app .azoo{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.app .az{
+  display:flex;align-items:center;gap:5px;background:var(--acard);border-radius:12px;
+  padding:5px 7px 5px 10px;box-shadow:0 1px 2px rgba(19,32,22,.05);
+  font-size:12px;font-weight:700;color:var(--aink2)
+}
+.app .az.warg{outline:2px solid var(--ameat);outline-offset:-2px}
+.app .az .dn{font-size:16px;min-width:18px;text-align:center;color:var(--aink)}
+.app .az button{
+  width:30px;height:30px;border:0;border-radius:8px;background:var(--asoft);
+  color:var(--aac2);font-size:15px;font-weight:800;cursor:pointer
+}
+.app .az button:active{transform:scale(.94)}
+.app .az .dtag{font-size:9px;font-weight:800;padding:2px 4px;border-radius:4px;margin-left:auto;
+  background:var(--asoft);color:var(--aac2);text-transform:uppercase;letter-spacing:.03em}
+.app .az.warg .dtag{background:var(--ameatbg);color:var(--ameat)}
+.app .actrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;font-size:12.5px;color:var(--aink2)}
+.app .astn{display:flex;gap:0;border-radius:999px;overflow:hidden;box-shadow:0 1px 2px rgba(19,32,22,.05)}
+.app .astn button{border:0;padding:7px 12px;font-size:12.5px;font-weight:800;cursor:pointer;
+  background:var(--acard);color:var(--aink2)}
+.app .astn button.on{background:var(--aac);color:#fff}
+.app .abuf{display:flex;align-items:center;gap:8px;margin-left:auto}
+.app .abuf input{accent-color:var(--aac);cursor:pointer}
+.app .ahero{display:flex;align-items:flex-end;gap:12px;margin:2px 0 10px}
+.app .ahero .n{font-size:58px;font-weight:800;letter-spacing:-.06em;line-height:.85;color:var(--aac2)}
+.app .ahero .story{font-size:12px;color:var(--aink3);font-weight:700}
+.app .astats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.app .as{background:var(--asoft);border-radius:12px;padding:8px 11px}
+.app .as em{display:block;font-style:normal;font-size:10px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--aink3);font-weight:700}
+.app .as b{font-size:19px;font-weight:800}
+.app .awarg{margin-top:9px;background:var(--ameatbg);color:var(--ameat);border-radius:12px;
+  padding:9px 13px;font-size:13px;font-weight:700}
+.app .afoot{margin-top:9px;font-size:11.5px;color:var(--aink3)}
+@media(max-width:720px){
+  .app .azoo{grid-template-columns:1fr 1fr}
+  .app .astats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body data-theme="warm">
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-deco"></div>
+    <div class="kicker">Plan · 2026-09-12 14:11 · gravship life support</div>
+    <h1>แท็บใหม่ <em>“สัตว์”</em> — กรอกจำนวนสัตว์ บอกต้องทำ kibble กี่ชิ้น</h1>
+    <p class="lead">คำตอบคำถามเรื่องกติกามาก่อนเลย: <strong>kibble กองเดียวเลี้ยงได้ทุกตัว</strong> —
+      สัตว์กินพืช กินเนื้อ และกินทั้งคู่ กิน kiddle ร่วมกันได้หมด ไม่ต้องทำ “kibble พืช” แยก
+      (เกมก็ไม่มีให้แยก) — ยกเว้น <strong>warg</strong> ตัวเดียวที่กินเนื้อดิบ/ศพ เท่านั้น</p>
+  </header>
+
+  <nav class="brief-tabs">
+    <button class="btab on" data-t="mock">หน้าจอที่จะได้</button>
+    <button class="btab" data-t="rules">กติกา kibble — ใครกินอะไรได้</button>
+    <button class="btab" data-t="req">สิ่งที่ขอ</button>
+    <button class="btab" data-t="spec">แผนทางเทคนิค</button>
+  </nav>
+
+  <!-- ================================================== -->
+  <!-- TAB 1 : หน้าจอที่จะได้ (mock คลิกได้จริง)           -->
+  <!-- ================================================== -->
+  <section class="brief on" data-tab="mock">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">mock ใช้งานได้จริง — กด +/− สถานี และเผื่อ แล้วตัวเลขเด้งตาม</span></div>
+      <div class="body">
+        <div class="app" id="appMock">
+          <div class="anav">
+            <span>อาหาร</span><span class="on">สัตว์</span><span>แบต</span><span>โตจริง</span><span>ยา</span><span>ชุด</span><span>ตั้งค่า</span>
+          </div>
+          <h2>ต้องทำ kibble วันละกี่ชิ้น</h2>
+          <p class="alead">นับจากจำนวนสัตว์ในคอก — กินพืช กินเนื้อ กินทั้งคู่ รวมกองเดียวได้หมด</p>
+          <div class="aban">kibble กองเดียวพอทุกตัว ยกเว้น <b>warg</b> — กินได้แค่เนื้อดิบ/ศพ คิดแยกบรรทัดล่าง</div>
+
+          <div class="azoo" id="zoo"></div>
+
+          <div class="actrl">
+            <div class="astn" id="stn">
+              <button type="button" class="on" data-stn="table">Butcher table 125%</button>
+              <button type="button" data-stn="spot">Butcher spot 87.5%</button>
+            </div>
+            <div class="abuf">
+              <span>กันเหนียว</span>
+              <input id="kbuf" type="range" min="0" max="50" value="20" style="width:110px">
+              <b id="kbufOut">20%</b>
+            </div>
+          </div>
+
+          <div class="ahero">
+            <div class="n" id="kPieces">135</div>
+            <div>
+              <strong>ชิ้น kibble / วัน</strong>
+              <div class="story" id="kStory">ควัก ~3 รอบ/วัน (รอบละ 50 ชิ้น)</div>
+            </div>
+          </div>
+          <div class="astats">
+            <div class="as"><em>เนื้อดิบ</em><b id="kMeat">54</b></div>
+            <div class="as"><em>ผัก/ข้าว</em><b id="kVeg">54</b></div>
+            <div class="as"><em>โภชนาการรวม</em><b id="kNut">5.62</b></div>
+            <div class="as"><em>ต่อ quadrum 15 วัน</em><b id="kQuad">2,023</b></div>
+          </div>
+          <div class="awarg" id="kWarg">warg 1 ตัว ไม่กิน kibble — ต้องมีเนื้อดิบ/ศพอีก ~10 ชิ้น/วัน</div>
+          <div class="afoot">ผัก 54 ชิ้น/วัน ≈ ข้าว ~50 ต้นบนดิน · อัตรากินจากวิกิ 1.6 · kibble 0.05 โภชนาการ/ชิ้น ไม่เน่า ใช้เทรนได้</div>
+        </div>
+
+        <div class="b-grid-2" style="margin-top:18px">
+          <div>
+            <div class="kicker" style="margin-bottom:10px">ในแท็บนี้มีอะไร</div>
+            <ul class="notes-list">
+              <li><span class="mk">01</span><div>ปุ่ม +/− ตามชนิดสัตว์ (11 ชนิดตั้งต้น ค่าอัตรากินยืนยันจากวิกิแล้ว) — สไตล์เดียวกับตัวนับลูกเรือเดิม</div></li>
+              <li><span class="mk">02</span><div>สลับโต๊ะควัก/จุดควัก — ได้ 50 vs 35 ชิ้นต่อรอบ วัตถุดิบตามเปลี่ยนให้เอง</div></li>
+              <li><span class="mk">03</span><div>เผื่อกันเหนียวแยกจากฝั่งลูกเรือ เพราะเดี๋ยวนี้เผื่อสำหรับคนกับสัตว์คนละเรื่อง</div></li>
+              <li><span class="mk">04</span><div>เน้นตัวเลขที่ตั้งในเกมได้เลย: ชิ้น/วัน → ตั้ง bill “ทำ kibble” กี่รอบ, เนื้อ/ผักกี่ชิ้น</div></li>
+              <li><span class="mk">05</span><div>จำค่าไว้เหมือนแท็บอื่น — บันทึกลง URL + เครื่อง + ล็อกอินเดียวกัน</div></li>
+            </ul>
+          </div>
+          <div>
+            <div class="note ok" style="margin-bottom:10px">
+              <span class="ic">✓</span>
+              <div><strong>ตอบคำถามที่ถามมา:</strong> กินพืช กินเนื้อ กิน kibble — กินอันเดียวกันได้ทุกตัว
+                ไม่ต้องแยก kibble พืช ทำสูตรเดียว (เนื้อ:ผัก 1:1) แชร์กองเดียว</div>
+            </div>
+            <div class="note warn">
+              <span class="ic">!</span>
+              <div><strong>ข้อยกเว้นเดียวคือ warg</strong> — แถบแดงแยกให้ในหน้าจอ
+                ถ้าไม่เลี้ยง warg ก็แค่ไม่กดตัวเลข ไม่มีอะไรต้องแยกอีก</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong>
+            <strong>"เพิ่มสัตว์อื่น"</strong>
+            <strong>"เอา warg ออก"</strong></span>
+          <span class="muted">mock ตัวเลขจริงจากค่าวิกิ 1.6</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================== -->
+  <!-- TAB 2 : กติกา kibble                               -->
+  <!-- ================================================== -->
+  <section class="brief" data-tab="rules">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">brief · กติกาอาหารสัตว์ ยืนยันจากวิกิ 1.6</span></div>
+      <div class="body">
+        <div class="b-grid-2">
+          <div>
+            <div class="kicker" style="margin-bottom:10px">ใครกิน kibble ได้บ้าง</div>
+            <table>
+              <thead><tr><th>กลุ่มสัตว์</th><th>ตัวอย่าง</th><th>กิน kibble</th></tr></thead>
+              <tbody>
+                <tr><td>กินพืช</td><td>ไก่ วัว ม้า alpaca muffalo อูฐ ช้าง</td><td><strong style="color:var(--ok-deep)">กินได้ ✓</strong></td></tr>
+                <tr><td>กินทั้งคู่</td><td>หมู husky labrador หมี</td><td><strong style="color:var(--ok-deep)">กินได้ ✓</strong></td></tr>
+                <tr><td>กินเนื้อ</td><td>แมว หมาป่า</td><td><strong style="color:var(--ok-deep)">กินได้ ✓</strong></td></tr>
+                <tr style="background:var(--bad-soft)"><td><strong>Warg (กินเนื้อเท่านั้น)</strong></td><td>warg</td><td><strong style="color:var(--bad-deep)">กินไม่ได้ ✗</strong></td></tr>
+              </tbody>
+            </table>
+            <p class="small muted" style="margin-top:10px">
+              เหตุผล: kibble นับเป็นทั้ง “อาหารพืช” และ “อาหารเนื้อ” ในตัวเดียว —
+              เลยยัดเนื้อให้สัตว์กินพืช และยัดผักให้สัตว์กินเนื้อได้ผ่าน kibble เสมอ
+              ส่วน warg ถูกล็อกเป็นเนื้อดิบ/ศพ เท่านั้น</p>
+          </div>
+          <div>
+            <div class="kicker" style="margin-bottom:10px">สูตรและเลขที่ใช้คำนวณ</div>
+            <ul class="notes-list">
+              <li><span class="mk">สูตร</span><div><strong>20 เนื้อ + 20 ผัก → 50 ชิ้น</strong> ที่ Butcher table (โต๊ะควักเนื้อ — ได้ 125% โภชนาการ) หรือ <strong>35 ชิ้น</strong> ที่ Butcher spot (จุดควักเนื้อ — เหลือ 87.5%)</div></li>
+              <li><span class="mk">ชิ้น</span><div>kibble 1 ชิ้น = 0.05 โภชนาการ — ไก่ 6 ตัวกินรวม 1.32/วัน ≈ 27 ชิ้น</div></li>
+              <li><span class="mk">เน่า</span><div><strong>ไม่เน่าเลย</strong> แม้ไม่แช่เย็น (เสื่อมแค่วางกลางแจ้ง) — ตุนเป็นรอบ quadrum ได้สบาย</div></li>
+              <li><span class="mk">เทรน</span><div>ใช้เทรนสัตว์ได้ (ข้าว/ผักดิบเทรนไม่ได้) และกินไม่มีพิษอาหาร</div></li>
+              <li><span class="mk">วัตถุดิบ</span><div>ใส่ผักอะไรก็ได้ (ข้าว/hay/เห็ด) + เนื้ออะไรก็ได้ แม้เนื้อแมลง — บนเรือจึ้น hay ไม่ได้ก็ใช้ข้าวแทนได้</div></li>
+            </ul>
+            <div class="note info" style="margin-top:10px">
+              <span class="ic">i</span>
+              <div>ตัวเลือกในแท็บจะตั้ง default ไว้ “โต๊ะควัก” เพราะได้กำไรโภชนาการ —
+                จุดควักมีไว้ตอนยังไม่มีโต๊ะ แลกกับขาดทุน 12.5%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong>
+            <strong>"ทำไมต้องเผื่อ 20%"</strong>
+            <strong>"เอา hay คิดด้วย"</strong></span>
+          <span class="muted">ที่มา: วิกิ rimworldwiki — Kibble / Animals / Hunger rate / หน้าสัตว์แต่ละตัว</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================== -->
+  <!-- TAB 3 : สิ่งที่ขอ (requirements record)             -->
+  <!-- ================================================== -->
+  <section class="brief" data-tab="req">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">brief · requirements record</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:8px">คำขอต้นฉบับ (คงถ้อยคำเดิม)</div>
+        <blockquote style="background:var(--card-2);border-left:4px solid var(--accent);
+          border-radius:0 var(--r-s) var(--r-s) 0;padding:14px 18px;font-size:15.5px;
+          color:var(--ink-2);margin:0 0 16px;font-style:italic">
+          อยากให้เพิ่มส่วนของการคำนวณ kible ที่ต้องทำจากจำนวนสัตว์อะ กินพืชกินเนื้อกิน kibble
+          เหมือนกันได้ไหมนะ หรือยังไงต้องทำ kible พืชแยกหรือยังไงนะ ?</blockquote>
+        <div class="kicker" style="margin-bottom:8px">เป้าหมายที่ตกลง</div>
+        <ul class="notes-list">
+          <li><span class="mk">01</span><div>เพิ่มแท็บ “สัตว์” ในเว็บ กรอกจำนวนสัตว์แต่ละชนิด → บอก kibble ที่ต้องผลิตต่อวัน + วัตถุดิบเนื้อ/ผัก + รอบควัก</div></li>
+          <li><span class="mk">02</span><div>คำถามเรื่องกติกาถูกเก็บไว้ในหน้าจอเลย (แบนเนอร์ + แถบ warg) เพราะเป็นคำตอบที่ใช้ตอนเล่นจริง</div></li>
+          <li><span class="mk">03</span><div>ค่าตั้งต้นสัตว์ 11 ชนิด: ไก่ 0.22 · แมว 0.24 · alpaca 0.44 · warg 0.40 · หมู 0.80 · husky 0.80 · ม้า 0.86 · วัว 0.86 · muffalo 0.86 · อูฐ 0.86 · thrumbo 2.8 (โภชนาการ/วัน จากวิกิ 1.6)</div></li>
+          <li><span class="mk">04</span><div>ทำตามแพทเทิร์นเดิมของ repo — โมดูลคำนวณแยกไฟล์ + ชุดทดสอบ node + จำค่าใน URL/เครื่อง/เซิร์ฟเวอร์เหมือนแท็บอื่น</div></li>
+          <li><span class="mk">05</span><div>ไม่แตะระบบล็อกอิน/เซิร์ฟเวอร์เพิ่ม — เป็นงานฝั่งหน้าเว็บล้วน</div></li>
+        </ul>
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ตัวเลขสัตว์"</strong>
+            <strong>"เพิ่มเงื่อนไขอื่น"</strong></span>
+          <span class="muted">บันทึนี้อยู่ใน requirements.html ด้วย</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================== -->
+  <!-- TAB 4 : แผนทางเทคนิค (spec — สำหรับ agent)          -->
+  <!-- ================================================== -->
+  <section class="brief" data-tab="spec">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">spec · source of truth สำหรับ workers</span></div>
+      <div class="body">
+
+        <div class="kicker" style="margin-bottom:10px">สถาปัตยกรรม — ไหลของข้อมูล</div>
+        <svg viewBox="0 0 860 300" style="width:100%;height:auto" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#8B8678"/></marker>
+          </defs>
+          <!-- input -->
+          <rect x="14" y="30" width="150" height="64" rx="8" fill="var(--card-2)" stroke="var(--line)"/>
+          <text x="89" y="55" text-anchor="middle" fill="var(--ink)">index.html</text>
+          <text x="89" y="72" text-anchor="middle" fill="var(--ink-3)">แท็บ “สัตว์” +/−</text>
+          <!-- module -->
+          <rect x="220" y="14" width="270" height="130" rx="10" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+          <text x="355" y="36" text-anchor="middle" fill="var(--accent-deep)" font-weight="700">kibble.js (window.KibbleCalc)</text>
+          <rect x="236" y="48" width="238" height="26" rx="6" fill="var(--card)" stroke="var(--line)"/>
+          <text x="355" y="65" text-anchor="middle" fill="var(--ink-2)">ANIMALS[11] { id, rate, diet }</text>
+          <rect x="236" y="80" width="238" height="26" rx="6" fill="var(--card)" stroke="var(--line)"/>
+          <text x="355" y="97" text-anchor="middle" fill="var(--ink-2)">plan(counts, station, buffer)</text>
+          <rect x="236" y="112" width="238" height="26" rx="6" fill="var(--card)" stroke="var(--line)"/>
+          <text x="355" y="129" text-anchor="middle" fill="var(--ink-2)">parseKibbleState(raw)</text>
+          <!-- arrows -->
+          <line x1="164" y1="62" x2="216" y2="62" stroke="#8B8678" marker-end="url(#ar)"/>
+          <!-- output -->
+          <rect x="546" y="14" width="150" height="130" rx="10" fill="var(--ok-soft)" stroke="var(--ok-line)"/>
+          <text x="621" y="36" text-anchor="middle" fill="var(--ok-deep)" font-weight="700">ผลลัพธ์</text>
+          <text x="621" y="58" text-anchor="middle" fill="var(--ink-2)">kibble ชิ้น/วัน</text>
+          <text x="621" y="76" text-anchor="middle" fill="var(--ink-2)">รอบควัก/วัน</text>
+          <text x="621" y="94" text-anchor="middle" fill="var(--ink-2)">เนื้อ ผัก ชิ้น/วัน</text>
+          <text x="621" y="112" text-anchor="middle" fill="var(--ink-2)">warg เนื้อแยก</text>
+          <text x="621" y="130" text-anchor="middle" fill="var(--ink-2)">≈ ต้นข้าว</text>
+          <line x1="490" y1="79" x2="542" y2="79" stroke="#8B8678" marker-end="url(#ar)"/>
+          <!-- state loop -->
+          <rect x="220" y="182" width="270" height="56" rx="10" fill="var(--card-2)" stroke="var(--line)"/>
+          <text x="355" y="205" text-anchor="middle" fill="var(--ink)">kibbleState → save()</text>
+          <text x="355" y="222" text-anchor="middle" fill="var(--ink-3)">counts · station · buf</text>
+          <line x1="355" y1="144" x2="355" y2="178" stroke="#8B8678" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+          <!-- persistence -->
+          <rect x="546" y="170" width="300" height="78" rx="10" fill="var(--card)" stroke="var(--line)"/>
+          <text x="696" y="192" text-anchor="middle" fill="var(--ink-2)">URL ?an=chicken:6,husky:2&amp;kb=table</text>
+          <text x="696" y="210" text-anchor="middle" fill="var(--ink-2)">localStorage gravship-ls-v2</text>
+          <text x="696" y="228" text-anchor="middle" fill="var(--ink-2)">PUT /api/save (D1 เดิม)</text>
+          <line x1="490" y1="210" x2="542" y2="210" stroke="#8B8678" marker-end="url(#ar)"/>
+          <!-- warg exclusion note -->
+          <path d="M355 144 L355 160 L120 160 L120 250 L216 250" fill="none" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+          <text x="122" y="278" fill="var(--bad-deep)" font-size="10.5">diet==='strict' (warg) ตัดออกจาก kibble → คิดเนื้อดิบ = rate/0.05</text>
+          <!-- verified note -->
+          <text x="14" y="118" fill="var(--ink-3)" font-size="10.5">สูตร: 20+20→50 (table)</text>
+          <text x="14" y="133" fill="var(--ink-3)" font-size="10.5">      20+20→35 (spot)</text>
+          <text x="14" y="148" fill="var(--ink-3)" font-size="10.5">      1 ชิ้น = 0.05 nut</text>
+        </svg>
+
+        <div class="note danger" style="margin-top:6px">
+          <span class="ic">⚠</span>
+          <div><strong>Security:</strong> งานฝั่ง client ล้วน ไม่มี endpoint ใหม่ —
+            ค่าจาก URL/state ต้อง <code>clamp</code> ทุกตัวก่อนใช้ (จำนวน 0–50, buffer 0–0.5, station enum) และ render ผ่าน
+            <code>textContent</code> (pattern <code>el()</code> เดิม) เท่านั้น ห้าม <code>innerHTML</code> กับค่าจาก state —
+            ทุก task เป็น executionProfile standard</div>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px">
+          <div>
+            <div class="kicker" style="margin-bottom:10px">Test specs (TDD — node --test)</div>
+            <table>
+              <thead><tr><th>กลุ่ม</th><th>เคสหลัก</th></tr></thead>
+              <tbody>
+                <tr><td>ผลรวมอัตรากิน</td><td>ไก่ 6 = 1.32 · สัตว์รวมหลายชนิด · thrumbo 2.8</td></tr>
+                <tr><td>warg แยก</td><td>strict ไม่เข้า kibble · เนื้อดิบ = rate/0.05</td></tr>
+                <tr><td>สถานี</td><td>โต๊ะ 20+20→50 125% · จุด →35 87.5% · วัตถุดิบตามสถานี</td></tr>
+                <tr><td>เผื่อ + ขอบ</td><td>buffer 0% / 50% · จำนวนติดลบ · เกิน max · ทศนิยม</td></tr>
+                <tr><td>parse state</td><td>default · URL <code>an=chicken:6,husky:2</code> · ค่าหน้าปีก</td></tr>
+                <tr><td>ศูนย์สัตว์</td><td>ผลลัพธ์ 0 ทุกช่อง ไม่ NaN ไม่ติดลบ</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="kicker" style="margin-bottom:10px">งาน (รายละเอียดเต็มใน todos.html)</div>
+            <ul class="notes-list">
+              <li><span class="mk">001</span><div><strong>kibble.js + kibble.test.js</strong> — โมดูลคำนวณ + ตารางสัตว์ 11 ชนิด เขียนพร้อมทดสอบ (high)</div></li>
+              <li><span class="mk">002</span><div><strong>แท็บ “สัตว์” ใน index.html</strong> — UI ตาม mock + renderKibble + showTab/resetPrefs/save/urlOverrides (high)</div></li>
+              <li><span class="mk">003</span><div><strong>เสียบ test runner</strong> — package.json test:app เพิ่ม kibble.test.js แล้ว npm test ผ่านทั้งชุด (medium)</div></li>
+              <li><span class="mk">004</span><div><strong>ตรวจยืนยันใน browser</strong> — เปิดหน้าเว็บ กด +/− สลับสถานี ปิด-เปิด ค่าค้างถูก (medium)</div></li>
+            </ul>
+            <details class="fold">
+              <summary>ตัวอย่างสูตรที่ต้องได้ (อ้างอิงตอนเขียนเทส)</summary>
+              <div class="inner">
+                C = Σ rate·count (ไม่รวม strict) → kibble ชิ้น = C·(1+buf)/0.05 ·
+                รอบ = ชิ้น/50 (โต๊ะ) หรือ /35 (จุด) ·
+                เนื้อ = ผัก = C·(1+buf)/2.5·20 (โต๊ะ) หรือ /1.75·20 (จุด) ·
+                warg เนื้อ = Σ strict·(1+buf)/0.05 ·
+                ต้นข้าว ≈ ผัก·5.54/6 (ดิน)
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> อนุมัติแล้วตอบ:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ก่อน: ..."</strong></span>
+          <span class="muted">เริ่มงานด้วย workflow-work</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">plan 2026-09-12 14:11 · additive — ยังไม่มี plan เดิมใน work/ · เก็บค่า wiki 1.6 ตรวจแล้ว 12 ก.ย. 2569</div>
+</div>
+
+<script>
+/* ---------- brief tabs ---------- */
+document.querySelectorAll('.btab').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.btab').forEach(function (x) { x.classList.remove('on'); });
+    document.querySelectorAll('.brief').forEach(function (x) { x.classList.remove('on'); });
+    b.classList.add('on');
+    document.querySelector('.brief[data-tab="' + b.dataset.t + '"]').classList.add('on');
+  });
+});
+
+/* ---------- app mock: สูตรจริงที่จะใช้ใน kibble.js (ตัวเดียวกัน) ---------- */
+(function () {
+  var ANIMALS = [
+    { id: 'chicken', name: 'ไก่', rate: 0.22, diet: 'herb' },
+    { id: 'cat', name: 'แมว', rate: 0.24, diet: 'carn' },
+    { id: 'alpaca', name: 'Alpaca', rate: 0.44, diet: 'herb' },
+    { id: 'pig', name: 'หมู', rate: 0.8, diet: 'omni' },
+    { id: 'husky', name: 'Husky', rate: 0.8, diet: 'omni' },
+    { id: 'horse', name: 'ม้า', rate: 0.86, diet: 'herb' },
+    { id: 'cow', name: 'วัว', rate: 0.86, diet: 'herb' },
+    { id: 'muffalo', name: 'Muffalo', rate: 0.86, diet: 'herb' },
+    { id: 'dromedary', name: 'อูฐ', rate: 0.86, diet: 'herb' },
+    { id: 'thrumbo', name: 'Thrumbo', rate: 2.8, diet: 'herb' },
+    { id: 'warg', name: 'Warg', rate: 0.4, diet: 'strict' }
+  ];
+  var DIET_LABEL = { herb: 'พืช', omni: 'ทั้งคู่', carn: 'เนื้อ', strict: 'warg' };
+  var STATION = { table: { outNut: 2.5, batch: 50 }, spot: { outNut: 1.75, batch: 35 } };
+  var state = { chicken: 6, cat: 1, pig: 2, husky: 2, cow: 1, warg: 1,
+    alpaca: 0, horse: 0, muffalo: 0, dromedary: 0, thrumbo: 0 };
+  var station = 'table';
+  var buf = 0.2;
+
+  var zoo = document.getElementById('zoo');
+  ANIMALS.forEach(function (a) {
+    var z = document.createElement('div');
+    z.className = 'az' + (a.diet === 'strict' ? ' warg' : '');
+    var minus = document.createElement('button');
+    minus.type = 'button'; minus.textContent = '−';
+    minus.setAttribute('aria-label', 'ลด' + a.name);
+    var n = document.createElement('span'); n.className = 'dn'; n.id = 'n-' + a.id;
+    var plus = document.createElement('button');
+    plus.type = 'button'; plus.textContent = '+';
+    plus.setAttribute('aria-label', 'เพิ่ม' + a.name);
+    var nm = document.createElement('span'); nm.textContent = a.name;
+    var tg = document.createElement('span'); tg.className = 'dtag';
+    tg.textContent = DIET_LABEL[a.diet];
+    z.appendChild(nm); z.appendChild(minus); z.appendChild(n); z.appendChild(plus); z.appendChild(tg);
+    minus.addEventListener('click', function () { state[a.id] = Math.max(0, state[a.id] - 1); render(); });
+    plus.addEventListener('click', function () { state[a.id] = Math.min(50, state[a.id] + 1); render(); });
+    zoo.appendChild(z);
+  });
+
+  document.querySelectorAll('#stn button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      station = b.dataset.stn;
+      document.querySelectorAll('#stn button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      render();
+    });
+  });
+  document.getElementById('kbuf').addEventListener('input', function () {
+    buf = Number(this.value) / 100;
+    document.getElementById('kbufOut').textContent = this.value + '%';
+    render();
+  });
+
+  function render() {
+    var c = 0, w = 0, wargN = 0;
+    ANIMALS.forEach(function (a) {
+      document.getElementById('n-' + a.id).textContent = String(state[a.id]);
+      if (a.diet === 'strict') { w += a.rate * state[a.id]; wargN += state[a.id]; }
+      else c += a.rate * state[a.id];
+    });
+    var st = STATION[station];
+    var need = c * (1 + buf);
+    var pieces = need / 0.05;
+    document.getElementById('kPieces').textContent = Math.ceil(pieces - 1e-9).toLocaleString('en-US');
+    document.getElementById('kStory').textContent =
+      'bill "ทำ kibble" ~' + (pieces / st.batch).toFixed(1) + ' รอบ/วัน (รอบละ ' + st.batch + ' ชิ้น' +
+      (station === 'table' ? '' : ' — Butcher spot ขาดทุน 12.5%') + ')';
+    var ingr = Math.ceil(need / st.outNut * 20 - 1e-9);
+    document.getElementById('kMeat').textContent = ingr.toLocaleString('en-US');
+    document.getElementById('kVeg').textContent = ingr.toLocaleString('en-US');
+    document.getElementById('kNut').textContent = c.toFixed(2);
+    document.getElementById('kQuad').textContent = Math.ceil(pieces * 15).toLocaleString('en-US');
+    document.getElementById('kWarg').textContent = wargN === 0
+      ? 'ไม่มี warg — ทุกตัวกิน kibble กองเดียวกัน จบ'
+      : 'warg ' + wargN + ' ตัว ไม่กิน kibble — ต้องมีเนื้อดิบ/ศพอีก ~' +
+        Math.ceil(w * (1 + buf) / 0.05 - 1e-9) + ' ชิ้น/วัน';
+  }
+  render();
+})();
+</script>
+</body>
+</html>

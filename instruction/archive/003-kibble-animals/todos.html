@@ -385,7 +385,7 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
 {
   "schemaVersion": 2,
   "session": "empty",
-  "updated": "2026-09-12 16:47",
+  "updated": "2026-09-12 16:43",
   "updatedBy": "zai",
   "modelPolicy": {
     "registryVersion": 1,
@@ -433,7 +433,75 @@ details.fold .inner{padding-top:10px;font-size:13.5px;color:var(--ink-2)}
       }
     }
   },
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "kibble.js + kibble.test.js — โมดูลคำนวณ kibble (TDD)",
+      "status": "done",
+      "priority": "high",
+      "assigned": "lead",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": null,
+      "skills": [],
+      "files": [
+        "public/kibble.js",
+        "public/kibble.test.js"
+      ],
+      "note": "",
+      "progress": 100
+    },
+    {
+      "id": "TASK-002",
+      "name": "แท็บ สัตว์ ใน index.html — UI + renderKibble + state/URL wiring",
+      "status": "done",
+      "priority": "high",
+      "assigned": "lead",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": null,
+      "skills": [],
+      "files": [
+        "public/index.html"
+      ],
+      "note": "",
+      "progress": 100
+    },
+    {
+      "id": "TASK-003",
+      "name": "เสียบ kibble.test.js เข้า test:app แล้ว npm test ผ่านทั้งชุด",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "lead",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": null,
+      "skills": [],
+      "files": [
+        "package.json"
+      ],
+      "note": "",
+      "progress": 100
+    },
+    {
+      "id": "TASK-004",
+      "name": "ตรวจยืนยันใน browser — กด +/− สลับสถานี ปิด-เปิดแล้วค่าค้างถูกต้อง",
+      "status": "done",
+      "priority": "medium",
+      "assigned": "lead",
+      "executionProfile": "standard",
+      "model": "legacy-planned-route",
+      "executedBy": null,
+      "skills": [
+        "frontend-test"
+      ],
+      "files": [
+        "public/index.html"
+      ],
+      "note": "ตรวจ browser ผ่าน: ตัวเลขตรงสูตร ปุ่มทำงาน ค่าค้างหลัง reload + URL params + ภาพ layout ถูก — ระหว่างทางเจอและแก้ whitelist tab ใน power.js (+เทส)",
+      "progress": 100
+    }
+  ],
   "fileLocks": [],
   "resume": null
 }

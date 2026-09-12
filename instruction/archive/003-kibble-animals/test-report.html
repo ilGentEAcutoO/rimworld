@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Test report · kibble tab</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F5F1E8;color:#1B1A17;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:760px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#516534}
+h1{font-size:24px;margin:8px 0 16px}
+.note{border-radius:8px;padding:12px 16px;font-size:14px;border:1px solid;margin-bottom:12px;
+  display:flex;gap:10px}
+.ok{background:#E4E8D8;border-color:#AEBE8E;color:#516534}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0 18px}
+th{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;text-transform:uppercase;
+  color:#8B8678;text-align:left;padding:8px 10px;border-bottom:1px solid #CFC6AE}
+td{padding:8px 10px;border-bottom:1px solid #E0DAC8;color:#55514A}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Test report · 2026-09-12 · ทั้งหมดผ่าน</div>
+  <h1>แท็บสัตว์ + คำนวณ kibble</h1>
+  <div class="note ok"><span>✓</span><div><strong>Unit (node --test):</strong> แอป 104/104 · worker 126/126 — รวม kibble.test.js 10 เคส และเคส tab/whitelist ใหม่</div></div>
+  <div class="note ok"><span>✓</span><div><strong>Browser (headed, ผ่าน wrangler dev + login จริง):</strong> ตัวเลขตรงสูตรทุกสถานะ · ปุ่ม +/− สลับ Butcher table/spot เผื่อกันเหนียว ทำงาน · ค่าค้างหลัง reload · URL an/kb/kbuf ถูกเขียน · ล้าง localStorage แล้วค่ากลับจาก D1 ครบ · เดินครบ 7 แท็บไม่มีพัง · ภาพ layout ผ่าน</div></div>
+  <div class="note ok"><span>✓</span><div><strong>แก้ระหว่างทาง:</strong> whitelist tab ใน parseAppState (power.js) ไม่รู้จัก kibble — เจอจาก browser check แล้วแก้พร้อมเทส</div></div>
+  <div class="note ok"><span>✓</span><div><strong>Security + audit:</strong> scan ทั้งต้นไม้ไม่มี secret รั่ว · .gitignore ครอบ .env/.dev.vars · npm audit 4 high → fix → 0</div></div>
+  <table>
+    <thead><tr><th>ชุด</th><th>เครื่องมือ</th><th>ผล</th></tr></thead>
+    <tbody>
+      <tr><td>calc / power / grow / drugs</td><td>node --test</td><td>ผ่าน</td></tr>
+      <tr><td>kibble (ใหม่)</td><td>node --test</td><td>10/10</td></tr>
+      <tr><td>worker (รวมเคส an/kb/kbuf)</td><td>vitest</td><td>126/126</td></tr>
+      <tr><td>ลูป frontend เต็ม</td><td>headed browser + QA user</td><td>ผ่าน</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

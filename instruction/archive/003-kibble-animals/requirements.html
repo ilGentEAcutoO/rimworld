@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Requirements · kibble calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F5F1E8;color:#1B1A17;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:720px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#A5513F}
+h1{font-size:26px;letter-spacing:-.02em;margin:8px 0 14px}
+blockquote{background:#fff;border-left:4px solid #C8623E;border-radius:0 10px 10px 0;
+  padding:16px 20px;font-size:16px;color:#55514A;margin:0 0 18px;font-style:italic}
+ul{padding-left:0;list-style:none}
+li{padding:9px 0;border-bottom:1px solid #E0DAC8;display:flex;gap:11px}
+li:last-child{border-bottom:none}
+li .mk{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#A5513F;
+  min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;background:#F2E0D6;height:fit-content}
+.muted{color:#8B8678;font-size:13px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Requirements record · 2026-09-12</div>
+  <h1>คำนวณ kibble จากจำนวนสัตว์</h1>
+  <blockquote>อยากให้เพิ่มส่วนของการคำนวณ kible ที่ต้องทำจากจำนวนสัตว์อะ กินพืชกินเนื้อกิน kibble เหมือนกันได้ไหมนะ หรือยังไงต้องทำ kible พืชแยกหรือยังไงนะ ?</blockquote>
+  <div class="kicker">restated goal</div>
+  <p style="margin:6px 0 16px">เพิ่มแท็บใหม่ในเว็บคำนวณ ให้กรอกจำนวนสัตว์แต่ละชนิดแล้วได้คำตอบว่าต้องผลิต kibble วันละกี่ชิ้น ใช้วัตถุดิบเนื้อ/ผักเท่าไหร่ และตอบกติกาว่าสัตว์กินพืช-กินเนื้อกิน kibble ร่วมกันได้หรือต้องแยก</p>
+  <ul>
+    <li><span class="mk">01</span><div>คำตอบกติกา (ยืนยันจากวิกิแล้ว): <strong>kibble กองเดียวเลี้ยงได้ทุกสัตว์</strong> — กินพืช กินเนื้อ กินทั้งคู่ กิน kibble ได้หมด <strong>ยกเว้น warg</strong> (กินได้แค่เนื้อดิบ/ศพ) — ไม่ต้องแยก kibble พืช เกมไม่มี kibble แยกชนิด</div></li>
+    <li><span class="mk">02</span><div>สูตร: โต๊ะควัก 20 เนื้อ + 20 ผัก → 50 ชิ้น (125%) · จุดควัก → 35 ชิ้น (87.5%) · kibble 0.05 โภชนาการ/ชิ้น · ไม่เน่า</div></li>
+    <li><span class="mk">03</span><div>ค่าอัตรากิน/วัน ของสัตว์ 11 ชนิดหลัก ยืนยันจากหน้าวิกิของแต่ละตัวแล้ว</div></li>
+    <li><span class="mk">04</span><div>ทำตามแพทเทิร์นเดิมของ repo: module แยก + node --test + state/URL/localStorage เหมือนแท็บอื่น</div></li>
+  </ul>
+  <p class="muted">บันทึกเงียบตาม workflow — รายละเอียดเต็มอยู่ใน plan.html</p>
+</div>
+</body>
+</html>

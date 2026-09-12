@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Session summary · kibble calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F5F1E8;color:#1B1A17;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:820px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#A5512F}
+h1{font-size:24px;margin:8px 0 6px}
+.lead{color:#55514A;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:#FBF8F0;border:1px solid #E0DAC8;border-radius:8px;padding:14px 16px}
+.stat em{display:block;font-style:normal;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:10.5px;text-transform:uppercase;color:#8B8678;font-weight:700;margin-bottom:6px}
+.stat b{font-size:26px;font-weight:800;color:#516534}
+.note{border-radius:8px;padding:12px 16px;font-size:14px;border:1px solid;margin-bottom:10px;display:flex;gap:10px}
+.ok{background:#E4E8D8;border-color:#AEBE8E;color:#516534}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 18px}
+th{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;text-transform:uppercase;
+  color:#8B8678;text-align:left;padding:8px 10px;border-bottom:1px solid #CFC6AE}
+td{padding:8px 10px;border-bottom:1px solid #E0DAC8;color:#55514A}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Session summary · 2026-09-12</div>
+  <h1>แท็บ "สัตว์" — คำนวณ kibble จากจำนวนสัตว์</h1>
+  <p class="lead">ตอบคำถามผู้ใช้ครบ: kibble กองเดียวเลี้ยงได้ทุกสัตว์ (กินพืช/กินเนื้อ/กินทั้งคู่) ไม่ต้องแยก kibble พืช — ยกเว้น warg เท่านั้น + เพิ่มแท็บคำนวณพร้อมขึ้น production</p>
+
+  <div class="stats">
+    <div class="stat"><em>งานเสร็จ</em><b>4/4</b></div>
+    <div class="stat"><em>เทสผ่าน</em><b>230</b></div>
+    <div class="stat"><em>แก้ระหว่างทาง</em><b>2</b></div>
+    <div class="stat"><em>audit</em><b>4→0</b></div>
+  </div>
+
+  <div class="note ok"><span>✓</span><div><strong>Security:</strong> scan ทั้งต้นไม้ ไม่มี secret รั่ว · .gitignore ครอบ .env/.dev.vars · whitelist worker เพิ่มเฉพาะ scalar keys (an/kb/kbuf)</div></div>
+  <div class="note ok"><span>✓</span><div><strong>Audit:</strong> npm audit fix — 4 high → 0 (แตะแค่ package-lock.json)</div></div>
+  <div class="note ok"><span>✓</span><div><strong>Frontend (QA user, headed):</strong> login จริง · ตัวเลขตรงสูตร · ค่าค้างผ่าน D1 กลับมาหลังล้าง localStorage · เดินครบ 7 แท็บ</div></div>
+
+  <table>
+    <thead><tr><th>Task</th><th>ผล</th><th>ไฟล์</th></tr></thead>
+    <tbody>
+      <tr><td>TASK-001 โมดูลคำนวณ kibble (TDD)</td><td>10/10 เทส</td><td>public/kibble.js, kibble.test.js</td></tr>
+      <tr><td>TASK-002 แท็บสัตว์ + state/URL wiring</td><td>ผ่าน browser</td><td>public/index.html, src/worker.js, src/worker.test.js</td></tr>
+      <tr><td>TASK-003 เสียบชุดเทส</td><td>npm test ผ่าน</td><td>package.json</td></tr>
+      <tr><td>TASK-004 ตรวจ browser</td><td>ผ่าน + จับบั๊ก</td><td>public/power.js, power.test.js</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead><tr><th>ประเด็นที่เจอระหว่างทาง</th><th>การแก้</th></tr></thead>
+    <tbody>
+      <tr><td>parseAppState (power.js) whitelist ไม่รู้จักแท็บ kibble → เปิด ?tab=kibble ตกไปอาหาร</td><td>เพิ่ม kibble ใน whitelist + เคสเทส</td></tr>
+      <tr><td>เทสยอดวัตถุดิบเขียน期望ผิด (คูณผิดฐาน)</td><td>แก้ตามสูตร need/2.5×20 — โค้ดถูกอยู่แล้ว</td></tr>
+      <tr><td>ผู้ใช้ไม่เข้าใจคำ "โต๊ะควัก/จุดควัก"</td><td>เปลี่ยนป้ายเป็น Butcher table / Butcher spot + คำอธิบายไทย</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

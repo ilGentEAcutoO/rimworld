@@ -5,7 +5,7 @@
   "description": "RimWorld hydroponics / life-support calculator on Cloudflare Workers + D1",
   "scripts": {
     "test": "npm run test:app && npm run test:worker",
-    "test:app": "node --test public/calc.test.js public/power.test.js public/grow.test.js public/drugs.test.js",
+    "test:app": "node --test public/calc.test.js public/power.test.js public/grow.test.js public/drugs.test.js public/kibble.test.js",
     "test:worker": "vitest run",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",

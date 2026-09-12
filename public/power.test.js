@@ -101,6 +101,10 @@ test('parseAppState accepts drug, leather and settings tabs', () => {
   assert.equal(P.parseAppState({ tab: 'settings' }).tab, 'settings');
 });
 
+test('parseAppState accepts kibble tab', () => {
+  assert.equal(P.parseAppState({ tab: 'kibble' }).tab, 'kibble');
+});
+
 test('parseAppState drops invalid JSON-like objects', () => {
   const s = P.parseAppState({ tab: 'hack', watts: 'nope', pick: 'paste' });
   assert.equal(s.tab, 'food');

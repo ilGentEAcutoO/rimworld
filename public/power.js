@@ -60,7 +60,7 @@ function parseAppState(raw) {
   var pick = src.pick;
   if (pick !== 'simple' && pick !== 'pemmican' && pick !== 'survival') pick = 'simple';
   var tab = (src.tab === 'power' || src.tab === 'grow' || src.tab === 'drug' ||
-    src.tab === 'leather' || src.tab === 'settings')
+    src.tab === 'kibble' || src.tab === 'leather' || src.tab === 'settings')
     ? src.tab
     : 'food';
   var buffer = Number(src.buffer);

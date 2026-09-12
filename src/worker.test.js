@@ -126,6 +126,9 @@ function validPayload(over = {}) {
     drug: 'beer',
     intervalDays: 2,
     season: 60,
+    an: 'chicken:6,husky:2',
+    kb: 'table',
+    kbuf: 20,
     ...over,
   };
 }
@@ -757,6 +760,21 @@ describe('PUT /api/save', () => {
     expect(res.status).toBe(400);
     const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM saves').first();
     expect(row.n).toBe(0);
+  });
+
+  it('stores the kibble-tab keys and round-trips them via GET', async () => {
+    const payload = validPayload({ an: 'warg:1,thrumbo:2', kb: 'spot', kbuf: 35 });
+    const put = await authed('/api/save', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    expect(put.status).toBe(200);
+    const get = await authed('/api/save');
+    const saved = await get.json();
+    expect(saved.an).toBe('warg:1,thrumbo:2');
+    expect(saved.kb).toBe('spot');
+    expect(saved.kbuf).toBe(35);
   });
 
   it('rejects a wrong-typed value with 400', async () => {

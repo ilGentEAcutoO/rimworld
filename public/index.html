@@ -273,10 +273,35 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 .reftable.sortable thead th.asc::after{content:" ▲";font-size:9px;letter-spacing:0}
 .reftable.sortable thead th.desc::after{content:" ▼";font-size:9px;letter-spacing:0}
 
+.kzoo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 12px}
+.kz{
+  display:flex;align-items:center;gap:6px;background:var(--card);border-radius:14px;
+  padding:6px 8px 6px 12px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 10px 24px -14px rgba(27,122,60,.28);
+}
+.kz span{font-size:12.5px;font-weight:700;color:var(--ink2);min-width:46px}
+.kz b{font-size:18px;min-width:20px;text-align:center}
+.kz button{
+  width:34px;height:34px;border:0;border-radius:9px;background:var(--soft);
+  color:var(--accent2);font-size:16px;font-weight:800;cursor:pointer;
+  transition-property:transform,background-color;transition-duration:.15s;
+  transition-timing-function:cubic-bezier(.2,0,0,1);
+}
+.kz button:hover{background:#c8e6c6}
+.kz button:active{transform:scale(.94)}
+.kz .kz-diet{
+  font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  margin-left:auto;padding:2px 5px;border-radius:5px;background:var(--soft);color:var(--accent2);
+  white-space:nowrap;
+}
+.kz.warg{outline:2px solid var(--meat);outline-offset:-2px}
+.kz.warg .kz-diet{background:var(--meat-bg);color:var(--meat)}
+
 @media(max-width:800px){
   .ranks,.stats,.corn,.plist,.crops{grid-template-columns:1fr}
   h1{font-size:24px}
   .hero .n,.win .n{font-size:60px}
+  .kzoo{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -285,6 +310,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   <p class="kicker">Gravship · basic life support</p>
   <div class="nav" role="tablist">
     <button type="button" class="on" data-tab="food" id="tabFood">อาหาร</button>
+    <button type="button" data-tab="kibble" id="tabKibble">สัตว์</button>
     <button type="button" data-tab="power" id="tabPower">แบต</button>
     <button type="button" data-tab="grow" id="tabGrow">โตจริง</button>
     <button type="button" data-tab="drug" id="tabDrug">ยา</button>
@@ -362,6 +388,42 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
 
   <p class="foot">ข้าวในอ่าง 1×4 · โคมอาทิตย์คุมได้ 24 อ่าง · ห้องคิดแบบสองแถวมีทางเดินกลาง · วัยรุ่นนับผู้ใหญ่ · ทารกกิน baby food แยก · ตัวเลขวิกิ 1.6 / Odyssey</p>
+  </div>
+
+  <div class="view" id="view-kibble">
+  <h1>ต้องทำ kibble วันละกี่ชิ้น</h1>
+  <p class="lead">นับจากจำนวนสัตว์ — kibble กองเดียวเลี้ยงได้ทุกตัว: กินพืช กินเนื้อ กินทั้งคู่ กินร่วมกันได้หมด ไม่ต้องทำ "kibble พืช" แยก</p>
+  <p class="need">ยกเว้น warg ตัวเดียว — กินได้แค่เนื้อดิบ/ศพ · kibble 1 ชิ้น = 0.05 โภชนาการ ไม่เน่า ใช้เทรนสัตว์ได้</p>
+
+  <div class="kzoo" id="kZoo"></div>
+
+  <div class="chips" id="kStn">
+    <button type="button" class="chip on" data-stn="table">Butcher table · ได้ 50 ชิ้น (125%)</button>
+    <button type="button" class="chip" data-stn="spot">Butcher spot · ได้ 35 ชิ้น (87.5%)</button>
+  </div>
+  <p class="need" style="margin:-6px 0 14px">"ควัก" คือที่ทำอาหารสัตว์: Butcher spot วางได้ฟรีตั้งแต่ยุคหินไม่ต้องวิจัย แต่ขาดทุนวัตถุดิบ 12.5% · Butcher table ต้องวิจัย Smithing ก่อน แลกกับกำไร 25% — ทั้งสองใช้สูตร 20 เนื้อ + 20 ผัก ต่อรอบเท่ากัน</p>
+
+  <div class="buf">
+    <span>กันเหนียว</span>
+    <input id="kBuf" type="range" min="0" max="50" value="20">
+    <b id="kBufOut">20%</b>
+  </div>
+
+  <div class="win">
+    <div class="n" id="kPieces">0</div>
+    <div>
+      <strong>ชิ้น kibble / วัน</strong>
+      <div class="need" id="kStory"></div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><em>เนื้อดิบ</em><b id="kMeat">0</b></div>
+    <div class="stat"><em>ผัก/ข้าว</em><b id="kVeg">0</b></div>
+    <div class="stat"><em>โภชนาการรวม</em><b id="kNut">0</b></div>
+    <div class="stat"><em>ต่อ quadrum 15 วัน</em><b id="kQuad">0</b></div>
+  </div>
+  <div class="flare" id="kWarg"></div>
+  <p class="foot" id="kFoot"></p>
   </div>
 
   <div class="view" id="view-power">
@@ -766,12 +828,14 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 <script src="./power.js"></script>
 <script src="./grow.js"></script>
 <script src="./drugs.js"></script>
+<script src="./kibble.js"></script>
 <script>
 (function () {
   var LS = window.LifeSupport;
   var PWR = window.PowerCalc;
   var GT = window.GrowTime;
   var DC = window.DrugCalc;
+  var KC = window.KibbleCalc;
   var KEY = 'gravship-ls-v2';
   var KEY_OLD = 'gravship-ls-v1';
 
@@ -795,7 +859,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       var q = new URLSearchParams(location.search);
       ['tab', 'soil', 'kind', 'leave', 'pack', 'hours', 'watts', 'pick',
         'diagCrop', 'diagDays', 'diagPercent', 'heat', 'cool', 'sort', 'shown',
-        'trait', 'drug', 'intervalDays', 'season'].forEach(function (k) {
+        'trait', 'drug', 'intervalDays', 'season', 'an', 'kb', 'kbuf'].forEach(function (k) {
         if (q.has(k)) o[k] = q.get(k);
       });
       if (q.has('a') || q.has('adults')) o.adults = q.get('adults') || q.get('a');
@@ -825,7 +889,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       q0.has('adults') || q0.has('kids') || q0.has('babies');
   } catch (e) {}
 
-  var rawStore, stored, crew, buffer, pick, tab, season, watts, hours, grow, drugState;
+  var rawStore, stored, crew, buffer, pick, tab, season, watts, hours, grow, drugState, kibbleState;
 
   // Re-runnable so the server state can replace the first-paint state.
   function applyRawState(raw) {
@@ -846,6 +910,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     grow = GT.parseGrowState(rawStore);
     grow.kind = 'all';
     drugState = DC.parseDrugState(rawStore);
+    kibbleState = KC.parseKibbleState(rawStore);
   }
 
   applyRawState(readStore());
@@ -922,6 +987,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
           renderPower();
           renderGrow();
           renderDrug();
+          renderKibble();
           showTab(tab);
           done(false);
         })
@@ -955,7 +1021,10 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       trait: drugState.trait,
       drug: drugState.drug,
       intervalDays: drugState.intervalDays,
-      season: season
+      season: season,
+      an: KC.encodeCounts(kibbleState.counts),
+      kb: kibbleState.station,
+      kbuf: Math.round(kibbleState.buffer * 100)
     };
     try {
       localStorage.setItem(KEY, JSON.stringify(payload));
@@ -987,6 +1056,9 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       p.set('drug', drugState.drug);
       p.set('intervalDays', String(drugState.intervalDays));
       p.set('season', String(season));
+      p.set('an', KC.encodeCounts(kibbleState.counts));
+      p.set('kb', kibbleState.station);
+      p.set('kbuf', String(Math.round(kibbleState.buffer * 100)));
       var next = location.pathname + '?' + p.toString();
       if (location.search !== '?' + p.toString()) {
         history.replaceState(null, '', next);
@@ -1374,6 +1446,60 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     save();
   }
 
+  function renderKibble() {
+    var zoo = document.getElementById('kZoo');
+    if (!zoo.childNodes.length) {
+      KC.ANIMALS.forEach(function (a) {
+        var z = el('div', 'kz' + (a.diet === 'strict' ? ' warg' : ''));
+        z.appendChild(el('span', '', a.name));
+        var minus = el('button', '', '−');
+        minus.type = 'button';
+        minus.setAttribute('data-an', a.id);
+        minus.setAttribute('data-d', '-1');
+        minus.setAttribute('aria-label', 'ลด' + a.name);
+        z.appendChild(minus);
+        var n = el('b', '');
+        n.id = 'kn-' + a.id;
+        z.appendChild(n);
+        var plus = el('button', '', '+');
+        plus.type = 'button';
+        plus.setAttribute('data-an', a.id);
+        plus.setAttribute('data-d', '1');
+        plus.setAttribute('aria-label', 'เพิ่ม' + a.name);
+        z.appendChild(plus);
+        z.appendChild(el('i', 'kz-diet', KC.DIET_LABEL[a.diet]));
+        zoo.appendChild(z);
+      });
+    }
+    var r = KC.planKibble(kibbleState);
+    KC.ANIMALS.forEach(function (a) {
+      document.getElementById('kn-' + a.id).textContent = String(r.counts[a.id]);
+    });
+    document.querySelectorAll('#kStn .chip').forEach(function (c) {
+      c.classList.toggle('on', c.getAttribute('data-stn') === r.station);
+    });
+    var bufEl = document.getElementById('kBuf');
+    if (document.activeElement !== bufEl) bufEl.value = String(Math.round(r.buffer * 100));
+    document.getElementById('kBufOut').textContent = Math.round(r.buffer * 100) + '%';
+    document.getElementById('kPieces').textContent = r.piecesDay.toLocaleString('en-US');
+    document.getElementById('kStory').textContent =
+      'bill "ทำ kibble" ~' + r.billsDay + ' รอบ/วัน · รอบละ ' + KC.STATIONS[r.station].batch +
+      ' ชิ้น จาก 20 เนื้อ + 20 ผัก' +
+      (r.station === 'spot' ? ' — Butcher spot ขาดทุนวัตถุดิบ 12.5%' : '');
+    document.getElementById('kMeat').textContent = r.meatUnits.toLocaleString('en-US');
+    document.getElementById('kVeg').textContent = r.vegUnits.toLocaleString('en-US');
+    document.getElementById('kNut').textContent = r.nutrition.toFixed(2);
+    document.getElementById('kQuad').textContent = r.quadrumPieces.toLocaleString('en-US');
+    document.getElementById('kWarg').textContent = r.wargCount === 0
+      ? 'ไม่มี warg — ทุกตัวกิน kibble กองเดียวกัน จบ'
+      : 'warg ' + r.wargCount + ' ตัว กิน kibble ไม่ได้ — ต้องมีเนื้อดิบ/ศพอีก ~' +
+        r.wargMeatUnits + ' ชิ้น/วัน (แยกจากช่องเนื้อดิบด้านบน)';
+    document.getElementById('kFoot').textContent =
+      'ผัก ' + r.vegUnits + ' ชิ้น/วัน ≈ ข้าว ~' + r.ricePlants +
+      ' ต้นบนดิน (ต้นละ 6 เมล็ด ~5.5 วัน/รอบ) · ใส่ hay แทนผักได้แต่ปลูกในอ่างไม่ได้ · อัตรากินตัวเต็มวัยจากวิกิ 1.6 · ลูกสัตว์กินน้อยกว่า (วัยรุ่น 75% · วัยเด็ก 40%)';
+    save();
+  }
+
   function renderSettings() {
     var total = crew.adults;
     var label = 'ลูกเรือ ' + total + ' คน' +
@@ -1403,14 +1529,16 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 
   function showTab(next) {
     tab = next === 'power' || next === 'grow' || next === 'drug' ||
-      next === 'leather' || next === 'settings' ? next : 'food';
+      next === 'kibble' || next === 'leather' || next === 'settings' ? next : 'food';
     document.getElementById('view-food').classList.toggle('on', tab === 'food');
+    document.getElementById('view-kibble').classList.toggle('on', tab === 'kibble');
     document.getElementById('view-power').classList.toggle('on', tab === 'power');
     document.getElementById('view-grow').classList.toggle('on', tab === 'grow');
     document.getElementById('view-drug').classList.toggle('on', tab === 'drug');
     document.getElementById('view-leather').classList.toggle('on', tab === 'leather');
     document.getElementById('view-settings').classList.toggle('on', tab === 'settings');
     document.getElementById('tabFood').classList.toggle('on', tab === 'food');
+    document.getElementById('tabKibble').classList.toggle('on', tab === 'kibble');
     document.getElementById('tabPower').classList.toggle('on', tab === 'power');
     document.getElementById('tabGrow').classList.toggle('on', tab === 'grow');
     document.getElementById('tabDrug').classList.toggle('on', tab === 'drug');
@@ -1430,6 +1558,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     grow = GT.defaultGrowState();
     grow.kind = 'all';
     drugState = DC.defaultDrugState();
+    kibbleState = KC.defaultKibbleState();
     try {
       localStorage.removeItem(KEY);
       localStorage.removeItem(KEY_OLD);
@@ -1438,6 +1567,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     renderPower();
     renderGrow();
     renderDrug();
+    renderKibble();
     showTab(tab);
   }
 
@@ -1469,6 +1599,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     render();
   });
   document.getElementById('tabFood').addEventListener('click', function () { showTab('food'); });
+  document.getElementById('tabKibble').addEventListener('click', function () { showTab('kibble'); });
   document.getElementById('tabPower').addEventListener('click', function () { showTab('power'); });
   document.getElementById('tabGrow').addEventListener('click', function () { showTab('grow'); });
   document.getElementById('tabDrug').addEventListener('click', function () { showTab('drug'); });
@@ -1933,10 +2064,29 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     drugState.intervalDays = DC.freqIndexToDays(this.value);
     renderDrug();
   });
+  document.getElementById('kZoo').addEventListener('click', function (e) {
+    var t = e.target.closest('button[data-an]');
+    if (!t) return;
+    var id = t.getAttribute('data-an');
+    kibbleState.counts[id] = KC.clampInt(
+      (kibbleState.counts[id] || 0) + Number(t.getAttribute('data-d')), 0, 50);
+    renderKibble();
+  });
+  document.getElementById('kStn').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-stn]');
+    if (!t) return;
+    kibbleState.station = KC.parseStation(t.getAttribute('data-stn'));
+    renderKibble();
+  });
+  document.getElementById('kBuf').addEventListener('input', function () {
+    kibbleState.buffer = KC.clampBuffer(Number(this.value) / 100);
+    renderKibble();
+  });
   render();
   renderPower();
   renderGrow();
   renderDrug();
+  renderKibble();
   showTab(tab);
   hydrateFromServer();
 })();

@@ -68,6 +68,9 @@ const ALLOWED_KEYS = {
   drug: SCALAR,
   intervalDays: SCALAR,
   season: SCALAR,
+  an: SCALAR,
+  kb: SCALAR,
+  kbuf: SCALAR,
 };
 
 function json(body, status = 200, headers = {}) {

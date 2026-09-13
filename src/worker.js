@@ -71,6 +71,7 @@ const ALLOWED_KEYS = {
   an: SCALAR,
   kb: SCALAR,
   kbuf: SCALAR,
+  kshown: STRING_ARRAY,
 };
 
 function json(body, status = 200, headers = {}) {

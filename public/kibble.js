@@ -89,6 +89,26 @@ function parseStation(v) {
   return STATIONS[v] ? v : 'table';
 }
 
+function allShown() {
+  return ANIMALS.map(function (a) { return a.id; });
+}
+
+// รายการสัตว์ที่เลือกแสดง: รับ array หรือ string 'chicken,cat' (จาก URL)
+// ไม่มีค่า = แสดงทั้งหมด · ค่าว่าง = ไม่เหลือตัวไหน · id ที่ไม่รู้จักทิ้ง · เรียงตามลำดับ ANIMALS
+function parseShownList(raw) {
+  if (raw == null) return allShown();
+  var arr = Array.isArray(raw)
+    ? raw.map(function (x) { return String(x); })
+    : String(raw).split(',');
+  var keep = {};
+  arr.forEach(function (id) {
+    var k = id.trim();
+    if (k) keep[k] = true;
+  });
+  return ANIMALS.filter(function (a) { return keep[a.id]; })
+    .map(function (a) { return a.id; });
+}
+
 function encodeCounts(counts) {
   var src = parseCounts(counts);
   return ANIMALS.filter(function (a) { return src[a.id] > 0; })
@@ -103,6 +123,7 @@ function ceilCount(x) {
 function planKibble(input) {
   var src = input || {};
   var counts = parseCounts(src.counts);
+  var shown = parseShownList(src.shown);
   var station = STATIONS[parseStation(src.station)];
   var buffer = clampBuffer(src.buffer);
 
@@ -111,7 +132,7 @@ function planKibble(input) {
   var wargCount = 0;
   var total = 0;
   ANIMALS.forEach(function (a) {
-    var n = counts[a.id] || 0;
+    var n = shown.indexOf(a.id) >= 0 ? (counts[a.id] || 0) : 0;
     total += n;
     if (a.diet === 'strict') {
       wargNutrition += a.rate * n;
@@ -128,6 +149,7 @@ function planKibble(input) {
 
   return {
     counts: counts,
+    shown: shown,
     station: station.id,
     buffer: buffer,
     animalTotal: total,
@@ -150,7 +172,8 @@ function planKibble(input) {
 
 // raw = ส่วนของ state ที่เกี่ยวกับแท็บสัตว์ (จาก localStorage / URL / เซิร์ฟเวอร์)
 // รับ an = 'chicken:6,husky:2' · kb = 'table'|'spot' · kbuf = เปอร์เซ็นต์ 0–50
-// ไม่มีค่าเลย → ตัวอย่างเริ่มต้น · มี an แต่ว่าง → ล้างศูนย์ทั้งหมด
+// kshown = รายการที่เลือกแสดง (array หรือ 'chicken,cat') — ไม่มีค่าเลย → ตัวอย่างเริ่มต้นทั้งหมด
+// มี an แต่ว่าง → ล้างศูนย์ทั้งหมด
 function parseKibbleState(raw) {
   var src = raw || {};
   var hasCounts = src.an != null || src.counts != null;
@@ -158,7 +181,8 @@ function parseKibbleState(raw) {
     counts: parseCounts(hasCounts ? (src.an != null ? src.an : src.counts) : DEFAULT_COUNTS),
     station: parseStation(src.kb != null ? src.kb : src.station),
     buffer: src.kbuf != null ? clampBuffer(Number(src.kbuf) / 100)
-      : clampBuffer(src.buffer)
+      : clampBuffer(src.buffer),
+    shown: parseShownList(src.kshown != null ? src.kshown : src.shown)
   };
 }
 
@@ -166,7 +190,8 @@ function defaultKibbleState() {
   return {
     counts: parseCounts(DEFAULT_COUNTS),
     station: 'table',
-    buffer: DEFAULT_BUFFER
+    buffer: DEFAULT_BUFFER,
+    shown: allShown()
   };
 }
 
@@ -182,6 +207,7 @@ var api = {
   animalById: animalById,
   parseCounts: parseCounts,
   parseStation: parseStation,
+  parseShownList: parseShownList,
   encodeCounts: encodeCounts,
   planKibble: planKibble,
   parseKibbleState: parseKibbleState,

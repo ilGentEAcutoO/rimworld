@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Session summary · ตั้งค่ารายการสัตว์</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F2F4F1;color:#1A2620;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:820px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#324A41}
+h1{font-size:24px;margin:8px 0 6px}
+.lead{color:#475C50;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:#F8FAF7;border:1px solid #DBE0D8;border-radius:8px;padding:14px 16px}
+.stat em{display:block;font-style:normal;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:10.5px;text-transform:uppercase;color:#7A8D80;font-weight:700;margin-bottom:6px}
+.stat b{font-size:26px;font-weight:800;color:#557448}
+.note{border-radius:8px;padding:12px 16px;font-size:14px;border:1px solid;margin-bottom:10px;display:flex;gap:10px}
+.ok{background:#E4EEDF;border-color:#B5CDA8;color:#557448}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 18px}
+th{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;text-transform:uppercase;
+  color:#7A8D80;text-align:left;padding:8px 10px;border-bottom:1px solid #C2CABC}
+td{padding:8px 10px;border-bottom:1px solid #DBE0D8;color:#475C50}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Session summary · 2026-09-12</div>
+  <h1>ตั้งค่ารายการสัตว์ + ซ่อนแถบ warg</h1>
+  <p class="lead">หน้าสัตว์เลือกเองได้ว่าจะเอาตัวไหนอยู่ในรายการ ตัวที่ตัดไม่ถูกนับ และแถบ warg แดงแสดงเฉพาะตอนมี warg จริง</p>
+  <div class="stats">
+    <div class="stat"><em>งานเสร็จ</em><b>3/3</b></div>
+    <div class="stat"><em>เทสผ่าน</em><b>236</b></div>
+    <div class="stat"><em>เคสใหม่</em><b>8</b></div>
+    <div class="stat"><em>audit</em><b>0</b></div>
+  </div>
+  <div class="note ok"><span>✓</span><div><strong>Security:</strong> scan สะอาด · kshown เข้า whitelist เป็น string-array · id หน้าปีกทิ้งตอน parse</div></div>
+  <div class="note ok"><span>✓</span><div><strong>Browser:</strong> toggle รายการ · ตัวเลขตรงสูตร (ตัดไก่ 135→104) · เลขเดิมกลับมาเมื่อเปิดคืน · ค่าค้างหลัง reload · empty state · ภาพ layout ผ่าน</div></div>
+  <table>
+    <thead><tr><th>Task</th><th>ผล</th><th>ไฟล์</th></tr></thead>
+    <tbody>
+      <tr><td>TASK-001 kshown + กรองการคำนวณ</td><td>15/15 เทสโมดูล</td><td>public/kibble.js, kibble.test.js</td></tr>
+      <tr><td>TASK-002 chip รายการ + ซ่อนแถบ warg + wiring</td><td>ผ่าน browser</td><td>public/index.html, src/worker.js, src/worker.test.js</td></tr>
+      <tr><td>TASK-003 ตรวจ + ขึ้น production</td><td>236 เทส + deploy</td><td>—</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -129,6 +129,7 @@ function validPayload(over = {}) {
     an: 'chicken:6,husky:2',
     kb: 'table',
     kbuf: 20,
+    kshown: ['chicken', 'husky'],
     ...over,
   };
 }
@@ -775,6 +776,24 @@ describe('PUT /api/save', () => {
     expect(saved.an).toBe('warg:1,thrumbo:2');
     expect(saved.kb).toBe('spot');
     expect(saved.kbuf).toBe(35);
+  });
+
+  it('round-trips the kshown animal list and rejects non-array values', async () => {
+    const put = await authed('/api/save', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validPayload({ kshown: ['chicken', 'cat', 'warg'] })),
+    });
+    expect(put.status).toBe(200);
+    const get = await authed('/api/save');
+    await expect(get.json()).resolves.toMatchObject({ kshown: ['chicken', 'cat', 'warg'] });
+
+    const bad = await authed('/api/save', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validPayload({ kshown: 'chicken' })),
+    });
+    expect(bad.status).toBe(400);
   });
 
   it('rejects a wrong-typed value with 400', async () => {

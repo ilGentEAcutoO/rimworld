@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Requirements · ตั้งค่ารายการสัตว์ + ซ่อนแจ้งเตือน warg</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F2F4F1;color:#1A2620;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:720px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#324A41}
+h1{font-size:25px;letter-spacing:-.02em;margin:8px 0 14px}
+blockquote{background:#fff;border-left:4px solid #4A6B5C;border-radius:0 10px 10px 0;
+  padding:16px 20px;font-size:16px;color:#475C50;margin:0 0 18px;font-style:italic}
+ul{padding-left:0;list-style:none}
+li{padding:9px 0;border-bottom:1px solid #DBE0D8;display:flex;gap:11px}
+li:last-child{border-bottom:none}
+li .mk{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#324A41;
+  min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;background:#E5EBE6;height:fit-content}
+.muted{color:#7A8D80;font-size:13px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Requirements record · 2026-09-12</div>
+  <h1>ตั้งค่ารายการสัตว์ + ซ่อนแจ้งเตือน warg</h1>
+  <blockquote>แล้วหน้าสัตว์มันน่าจะ settings นะ ว่าจะเอาอะไรเพิ่มเข้ารายการไหม หรือเอาอะไรออก warg ถ้าไม่มีก็ไม่ต้องแสดงแจ้งเตือนก็ได้รก</blockquote>
+  <div class="kicker">restated goal</div>
+  <p style="margin:6px 0 16px">หน้าสัตว์ต้องมีให้เลือกเองว่าจะเอาสัตว์ตัวไหนอยู่ในรายการ (เพิ่ม/ตัดออกได้) และเมื่อไม่มี warg ในรายการ ไม่ต้องโชว์แถบแจ้งเตือนสีแดง</p>
+  <ul>
+    <li><span class="mk">01</span><div>รายการที่ตัดออก = ไม่ถูกนับในการคำนวณ (เหมือนตรรกะซ่อนพืชในแท็บโตจริง) ตัวเลขเดิมยังจำไว้ เปิดคืนเมื่อไรค่ากลับมา</div></li>
+    <li><span class="mk">02</span><div>ค่าเริ่มต้นยังแสดงครบ 11 ตัวเหมือนเดิม — ค่อยตัดเอง</div></li>
+    <li><span class="mk">03</span><div>แถบ warg แดงแสดงเฉพาะเมื่อมี warg ≥ 1 ตัวเท่านั้น</div></li>
+    <li><span class="mk">04</span><div>ค่าที่เลือกจำใน URL / เครื่อง / เซิร์ฟเวอร์ตามระบบเดิม</div></li>
+  </ul>
+  <p class="muted">บันทึกเงียบตาม workflow — รายละเอียดเต็มใน plan.html</p>
+</div>
+</body>
+</html>

@@ -71,6 +71,7 @@ const ALLOWED_KEYS = {
   an: SCALAR,
   kb: SCALAR,
   kbuf: SCALAR,
+  kcycle: SCALAR,
   kshown: STRING_ARRAY,
 };
 

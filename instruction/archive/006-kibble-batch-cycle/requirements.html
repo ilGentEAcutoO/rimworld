@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Requirements · คำนวณต่อรอบทำแทน buffer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F7F8FC;color:#15172B;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:720px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#5640D1}
+h1{font-size:25px;margin:8px 0 14px}
+blockquote{background:#fff;border-left:4px solid #6E5AE6;border-radius:0 10px 10px 0;
+  padding:16px 20px;font-size:16px;color:#4A5072;margin:0 0 18px;font-style:italic}
+ul{padding-left:0;list-style:none}
+li{padding:9px 0;border-bottom:1px solid #E8EBF3;display:flex;gap:11px}
+li:last-child{border-bottom:none}
+li .mk{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#5640D1;
+  min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;background:#EFEAFC;height:fit-content}
+.muted{color:#8B91AB;font-size:13px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Requirements record · 2026-09-13</div>
+  <h1>เอา buffer ออก คำนวณเป็นรอบทำทุก N วันแทน</h1>
+  <blockquote>อันนี้เหมือน kible ที่ต้องการต่อวันปะ เราอาจไม่ต้องเผื่อ buffer หรอก แต่มันน่าจะแบบ สักประมาณทุก ๆ 3 วันค่อยมาทำอ่ะ คำนวณเผื่อไว้สัก 3 วันได้ไหม</blockquote>
+  <div class="kicker">restated goal</div>
+  <p style="margin:6px 0 16px">ถอดตัวเลื่อน "กันเหนียว" ออก เปลี่ยนเป็นตัวเลื่อน "ทำทุกกี่วัน" (default 3) แล้วเน้นตัวเลขต่อรอบทำ: kibble กี่ชิ้นต่อรอบ ตั้ง bill กี่รอบ วัตถุดิบเตรียมกี่ชิ้นต่อรอบ</p>
+  <ul>
+    <li><span class="mk">01</span><div>ตัวเลขใหญ่กลายเป็น "ชิ้นต่อรอบทำ (N วัน)" — ค่าต่อวันยังโชว์เป็นช่องเล็ก</div></li>
+    <li><span class="mk">02</span><div>สูตรตรงวิธีเล่นจริง: ตั้ง bill "ทำ kibble จนมี ~X ชิ้น" ครั้งเดียว พ่อครัวทำ Z รอบจบ</div></li>
+    <li><span class="mk">03</span><div>เนื้อ/ผักและเนื้อดิบของพวกกินเนื้อเท่านั้น คูณตามจำนวนวันของรอบทำ</div></li>
+    <li><span class="mk">04</span><div>ค่า kcycle (1–10 วัน) จำใน URL/เครื่อง/เซิร์ฟเวอร์ตามระบบเดิม · kbuf เก่าถูกเมินอย่างปลอดภัย</div></li>
+  </ul>
+  <p class="muted">บันทึกเงียบตาม workflow — รายละเอียดเต็มใน plan.html</p>
+</div>
+</body>
+</html>

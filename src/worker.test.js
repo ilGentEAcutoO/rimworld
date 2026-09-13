@@ -128,7 +128,7 @@ function validPayload(over = {}) {
     season: 60,
     an: 'chicken:6,husky:2',
     kb: 'table',
-    kbuf: 20,
+    kcycle: 3,
     kshown: ['chicken', 'husky'],
     ...over,
   };
@@ -764,7 +764,7 @@ describe('PUT /api/save', () => {
   });
 
   it('stores the kibble-tab keys and round-trips them via GET', async () => {
-    const payload = validPayload({ an: 'warg:1,thrumbo:2', kb: 'spot', kbuf: 35 });
+    const payload = validPayload({ an: 'warg:1,thrumbo:2', kb: 'spot', kcycle: 5 });
     const put = await authed('/api/save', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -775,7 +775,14 @@ describe('PUT /api/save', () => {
     const saved = await get.json();
     expect(saved.an).toBe('warg:1,thrumbo:2');
     expect(saved.kb).toBe('spot');
-    expect(saved.kbuf).toBe(35);
+    expect(saved.kcycle).toBe(5);
+    // legacy clients still send kbuf — accepted so their saves never 400
+    const legacy = await authed('/api/save', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(validPayload({ kbuf: 35 })),
+    });
+    expect(legacy.status).toBe(200);
   });
 
   it('round-trips the kshown animal list and rejects non-array values', async () => {

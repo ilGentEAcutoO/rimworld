@@ -427,22 +427,22 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   <p class="need" style="margin:-6px 0 14px">"ควัก" คือที่ทำอาหารสัตว์: Butcher spot วางได้ฟรีตั้งแต่ยุคหินไม่ต้องวิจัย แต่ขาดทุนวัตถุดิบ 12.5% · Butcher table ต้องวิจัย Smithing ก่อน แลกกับกำไร 25% — ทั้งสองใช้สูตร 20 เนื้อ + 20 ผัก ต่อรอบเท่ากัน</p>
 
   <div class="buf">
-    <span>กันเหนียว</span>
-    <input id="kBuf" type="range" min="0" max="50" value="20">
-    <b id="kBufOut">20%</b>
+    <span>ทำทุก</span>
+    <input id="kDays" type="range" min="1" max="10" value="3">
+    <b id="kDaysOut">3 วัน</b>
   </div>
 
   <div class="win">
     <div class="n" id="kPieces">0</div>
     <div>
-      <strong>ชิ้น kibble / วัน</strong>
+      <strong>ชิ้น kibble ต่อรอบทำ</strong>
       <div class="need" id="kStory"></div>
     </div>
   </div>
   <div class="stats">
-    <div class="stat"><em>เนื้อดิบ</em><b id="kMeat">0</b></div>
-    <div class="stat"><em>ผัก/ข้าว</em><b id="kVeg">0</b></div>
-    <div class="stat"><em>โภชนาการรวม</em><b id="kNut">0</b></div>
+    <div class="stat"><em>ต่อวัน</em><b id="kDay">0</b></div>
+    <div class="stat"><em>เนื้อดิบ/รอบ</em><b id="kMeat">0</b></div>
+    <div class="stat"><em>ผัก/รอบ</em><b id="kVeg">0</b></div>
     <div class="stat"><em>ต่อ quadrum 15 วัน</em><b id="kQuad">0</b></div>
   </div>
   <div class="flare" id="kWarg"></div>
@@ -895,7 +895,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       var q = new URLSearchParams(location.search);
       ['tab', 'soil', 'kind', 'leave', 'pack', 'hours', 'watts', 'pick',
         'diagCrop', 'diagDays', 'diagPercent', 'heat', 'cool', 'sort', 'shown',
-        'trait', 'drug', 'intervalDays', 'season', 'an', 'kb', 'kbuf', 'kshown'].forEach(function (k) {
+        'trait', 'drug', 'intervalDays', 'season', 'an', 'kb', 'kcycle', 'kshown'].forEach(function (k) {
         if (q.has(k)) o[k] = q.get(k);
       });
       if (q.has('a') || q.has('adults')) o.adults = q.get('adults') || q.get('a');
@@ -1060,7 +1060,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       season: season,
       an: KC.encodeCounts(kibbleState.counts),
       kb: kibbleState.station,
-      kbuf: Math.round(kibbleState.buffer * 100),
+      kcycle: kibbleState.cycle,
       kshown: kibbleState.shown
     };
     try {
@@ -1095,7 +1095,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       p.set('season', String(season));
       p.set('an', KC.encodeCounts(kibbleState.counts));
       p.set('kb', kibbleState.station);
-      p.set('kbuf', String(Math.round(kibbleState.buffer * 100)));
+      p.set('kcycle', String(kibbleState.cycle));
       if (kibbleState.shown.length === 0) p.set('kshown', '');
       else if (!KC.isStarterShown(kibbleState.shown)) {
         p.set('kshown', kibbleState.shown.join(','));
@@ -1558,27 +1558,28 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     document.querySelectorAll('#kStn .chip').forEach(function (c) {
       c.classList.toggle('on', c.getAttribute('data-stn') === r.station);
     });
-    var bufEl = document.getElementById('kBuf');
-    if (document.activeElement !== bufEl) bufEl.value = String(Math.round(r.buffer * 100));
-    document.getElementById('kBufOut').textContent = Math.round(r.buffer * 100) + '%';
-    document.getElementById('kPieces').textContent = r.piecesDay.toLocaleString('en-US');
+    var bufEl = document.getElementById('kDays');
+    if (document.activeElement !== bufEl) bufEl.value = String(r.cycleDays);
+    document.getElementById('kDaysOut').textContent = r.cycleDays + ' วัน';
+    document.getElementById('kPieces').textContent = r.cyclePieces.toLocaleString('en-US');
     document.getElementById('kStory').textContent =
-      'bill "ทำ kibble" ~' + r.billsDay + ' รอบ/วัน · รอบละ ' + KC.STATIONS[r.station].batch +
-      ' ชิ้น จาก 20 เนื้อ + 20 ผัก' +
+      'ตั้ง bill "ทำ kibble จนมี ~' + r.cyclePieces.toLocaleString('en-US') +
+      '" ครั้งเดียว · พ่อครัวควัก ' + r.billsPerCycle + ' รอบ (รอบละ ' + KC.STATIONS[r.station].batch +
+      ' ชิ้น จาก 20 เนื้อ + 20 ผัก)' +
       (r.station === 'spot' ? ' — Butcher spot ขาดทุนวัตถุดิบ 12.5%' : '');
-    document.getElementById('kMeat').textContent = r.meatUnits.toLocaleString('en-US');
-    document.getElementById('kVeg').textContent = r.vegUnits.toLocaleString('en-US');
-    document.getElementById('kNut').textContent = r.nutrition.toFixed(2);
+    document.getElementById('kDay').textContent = r.piecesDay.toLocaleString('en-US');
+    document.getElementById('kMeat').textContent = r.meatPerCycle.toLocaleString('en-US');
+    document.getElementById('kVeg').textContent = r.vegPerCycle.toLocaleString('en-US');
     document.getElementById('kQuad').textContent = r.quadrumPieces.toLocaleString('en-US');
     var wargEl = document.getElementById('kWarg');
     wargEl.hidden = r.strictCount === 0;
     if (r.strictCount > 0) {
       wargEl.textContent = 'กินเนื้อเท่านั้น ' + r.strictCount + ' ตัว (' + r.strictNames.join(', ') +
-        ') กิน kibble ไม่ได้ — ต้องมีเนื้อดิบ/ศพอีก ~' + r.strictMeatUnits + ' ชิ้น/วัน (แยกจากช่องเนื้อดิบด้านบน)';
+        ') กิน kibble ไม่ได้ — เตรียมเนื้อดิบ/ศพ ~' + r.strictMeatPerCycle + ' ชิ้น/รอบทำ (แยกจากช่องเนื้อดิบด้านบน)';
     }
     document.getElementById('kFoot').textContent =
-      'ผัก ' + r.vegUnits + ' ชิ้น/วัน ≈ ข้าว ~' + r.ricePlants +
-      ' ต้นบนดิน (ต้นละ 6 เมล็ด ~5.5 วัน/รอบ) · ใส่ hay แทนผักได้แต่ปลูกในอ่างไม่ได้ · อัตรากินตัวเต็มวัยจากวิกิ 1.6 · ลูกสัตว์กินน้อยกว่า (วัยรุ่น 75% · วัยเด็ก 40%)';
+      'ผัก ' + r.vegPerCycle + ' ชิ้น/รอบ ต้องมีพร้อมก่อนวันทำ · ผัก/วัน ' + r.vegUnits +
+      ' ชิ้น ≈ ข้าว ~' + r.ricePlants + ' ต้นบนดิน (ต้นละ 6 เมล็ด ~5.5 วัน/รอบ) · kibble ไม่เน่า ตุนเกินรอบได้เลย · อัตรากินตัวเต็มวัยจากวิกิ 1.6 · ลูกสัตว์กินน้อยกว่า (วัยรุ่น 75% · วัยเด็ก 40%)';
     save();
   }
 
@@ -2175,8 +2176,8 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     kQuery = this.value;
     updateKPickVisibility();
   });
-  document.getElementById('kBuf').addEventListener('input', function () {
-    kibbleState.buffer = KC.clampBuffer(Number(this.value) / 100);
+  document.getElementById('kDays').addEventListener('input', function () {
+    kibbleState.cycle = KC.clampCycle(this.value);
     renderKibble();
   });
   render();

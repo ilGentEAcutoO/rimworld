@@ -112,7 +112,8 @@ var STATIONS = {
 var KIBBLE_NUT = 0.05;
 var BATCH_IN = 20;
 var MAX_PER_ANIMAL = 50;
-var DEFAULT_BUFFER = 0.2;
+var DEFAULT_CYCLE = 3;
+var MAX_CYCLE = 10;
 var QUADRUM_DAYS = 15;
 var RICE_REAL_DAYS_SOIL = 5.54;
 var RICE_YIELD = 6;
@@ -130,10 +131,11 @@ function clampInt(n, lo, hi) {
   return Math.max(lo, Math.min(hi, Math.trunc(x)));
 }
 
-function clampBuffer(n) {
+// ทำ kibble เป็นรอบทุก N วัน (bill "จนมี ~X" ตั้งครั้งเดียวต่อรอบ) — 1–10 วัน
+function clampCycle(n) {
   var x = Number(n);
-  if (!Number.isFinite(x)) return DEFAULT_BUFFER;
-  return Math.max(0, Math.min(0.5, x));
+  if (!Number.isFinite(x)) return DEFAULT_CYCLE;
+  return Math.max(1, Math.min(MAX_CYCLE, Math.trunc(x)));
 }
 
 function animalById(id) {
@@ -228,7 +230,7 @@ function planKibble(input) {
   var counts = parseCounts(src.counts);
   var shown = parseShownList(src.shown);
   var station = STATIONS[parseStation(src.station)];
-  var buffer = clampBuffer(src.buffer);
+  var cycleDays = clampCycle(src.cycleDays != null ? src.cycleDays : src.cycle);
 
   var nutrition = 0;
   var strictNutrition = 0;
@@ -247,16 +249,15 @@ function planKibble(input) {
     }
   });
 
-  var need = nutrition * (1 + buffer);
-  var pieces = need / KIBBLE_NUT;
-  var ingExact = need / station.outNut * BATCH_IN;
-  var strictNeed = strictNutrition * (1 + buffer);
+  var pieces = nutrition / KIBBLE_NUT;
+  var ingExact = nutrition / station.outNut * BATCH_IN;
+  var cyclePieces = ceilCount(pieces * cycleDays);
 
   return {
     counts: counts,
     shown: shown,
     station: station.id,
-    buffer: buffer,
+    cycleDays: cycleDays,
     animalTotal: total,
     strictCount: strictCount,
     strictNames: strictNames,
@@ -264,30 +265,31 @@ function planKibble(input) {
     strictNutrition: strictNutrition,
     pieces: pieces,
     piecesDay: ceilCount(pieces),
-    batches: pieces / station.batch,
+    cyclePieces: cyclePieces,
+    billsPerCycle: ceilCount(cyclePieces / station.batch),
     billsDay: ceilCount(pieces / station.batch),
     meatUnits: ceilCount(ingExact),
     vegUnits: ceilCount(ingExact),
+    meatPerCycle: ceilCount(ingExact * cycleDays),
+    vegPerCycle: ceilCount(ingExact * cycleDays),
     ricePlants: ceilCount(ingExact * RICE_REAL_DAYS_SOIL / RICE_YIELD),
-    strictMeatUnits: ceilCount(strictNeed / KIBBLE_NUT),
-    quadrumPieces: ceilCount(pieces * QUADRUM_DAYS),
-    quadrumMeat: ceilCount(ingExact * QUADRUM_DAYS),
-    quadrumVeg: ceilCount(ingExact * QUADRUM_DAYS)
+    strictMeatUnits: ceilCount(strictNutrition / KIBBLE_NUT),
+    strictMeatPerCycle: ceilCount(strictNutrition * cycleDays / KIBBLE_NUT),
+    quadrumPieces: ceilCount(pieces * QUADRUM_DAYS)
   };
 }
 
 // raw = ส่วนของ state ที่เกี่ยวกับแท็บสัตว์ (จาก localStorage / URL / เซิร์ฟเวอร์)
-// รับ an = 'chicken:6,husky:2' · kb = 'table'|'spot' · kbuf = เปอร์เซ็นต์ 0–50
-// kshown = รายการที่เลือกแสดง (array หรือ 'chicken,cat') — ไม่มีค่าเลย → ตัวอย่างเริ่มต้นทั้งหมด
-// มี an แต่ว่าง → ล้างศูนย์ทั้งหมด
+// รับ an = 'chicken:6,husky:2' · kb = 'table'|'spot' · kcycle = วันต่อรอบทำ 1–10
+// kshown = รายการที่เลือกแสดง (array หรือ 'chicken,cat') — ไม่มีค่าเลย → ชุดตัวอย่าง
+// kbuf ของเก่าถูกเมิน (เลิกเผื่อกันเหนียวแล้ว) · มี an แต่ว่าง → ล้างศูนย์ทั้งหมด
 function parseKibbleState(raw) {
   var src = raw || {};
   var hasCounts = src.an != null || src.counts != null;
   return {
     counts: parseCounts(hasCounts ? (src.an != null ? src.an : src.counts) : DEFAULT_COUNTS),
     station: parseStation(src.kb != null ? src.kb : src.station),
-    buffer: src.kbuf != null ? clampBuffer(Number(src.kbuf) / 100)
-      : clampBuffer(src.buffer),
+    cycle: clampCycle(src.kcycle != null ? src.kcycle : src.cycle),
     shown: parseShownList(src.kshown != null ? src.kshown : src.shown)
   };
 }
@@ -296,7 +298,7 @@ function defaultKibbleState() {
   return {
     counts: parseCounts(DEFAULT_COUNTS),
     station: 'table',
-    buffer: DEFAULT_BUFFER,
+    cycle: DEFAULT_CYCLE,
     shown: STARTER.slice()
   };
 }
@@ -310,7 +312,7 @@ var api = {
   STARTER: STARTER,
   DEFAULT_COUNTS: DEFAULT_COUNTS,
   clampInt: clampInt,
-  clampBuffer: clampBuffer,
+  clampCycle: clampCycle,
   animalById: animalById,
   parseCounts: parseCounts,
   parseStation: parseStation,

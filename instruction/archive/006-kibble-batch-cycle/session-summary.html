@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Session summary · คำนวณต่อรอบทำ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#F7F8FC;color:#15172B;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:820px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#5640D1}
+h1{font-size:24px;margin:8px 0 6px}
+.lead{color:#4A5072;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid #E8EBF3;border-radius:10px;padding:14px 16px}
+.stat em{display:block;font-style:normal;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:10.5px;text-transform:uppercase;color:#8B91AB;font-weight:700;margin-bottom:6px}
+.stat b{font-size:26px;font-weight:800;color:#5640D1}
+.note{border-radius:10px;padding:12px 16px;font-size:14px;border:1px solid;margin-bottom:10px;display:flex;gap:10px}
+.ok{background:#DEFAF1;border-color:#8FE5CE;color:#0E9D80}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 18px}
+th{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;text-transform:uppercase;
+  color:#8B91AB;text-align:left;padding:8px 10px;border-bottom:1px solid #D2D8E6}
+td{padding:8px 10px;border-bottom:1px solid #E8EBF3;color:#4A5072}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Session summary · 2026-09-13</div>
+  <h1>เลิกเผื่อกันเหนียว คำนวณ kibble ต่อรอบทำ</h1>
+  <p class="lead">ตัวเลื่อน buffer ออก เปลี่ยนเป็น "ทำทุกกี่วัน" (1–10, default 3) — ตัวเลขหลักคือ kibble ต่อรอบทำ พร้อมจำนวน bill ที่ตั้งครั้งเดียวตามสไตล์ "make until you have"</p>
+  <div class="stats">
+    <div class="stat"><em>งานเสร็จ</em><b>3/3</b></div>
+    <div class="stat"><em>เทสผ่าน</em><b>244</b></div>
+    <div class="stat"><em>เคสใหม่</em><b>6</b></div>
+    <div class="stat"><em>audit</em><b>0</b></div>
+  </div>
+  <div class="note ok"><span>✓</span><div><strong>Browser:</strong> default 3 วัน = 338 ชิ้น/bill 7 รอบ · 1 วัน = 113 · 10 วัน = 1,124/bill 23 · Butcher spot = bill 33/เนื้อ 643 · strict 24 ชิ้น/รอบ · URL เก่า kbuf=35 เปิดได้ถูกเมินกลับ default 3 · reload ค่าค้าง</div></div>
+  <div class="note ok"><span>✓</span><div><strong>Compat:</strong> state เก่าผู้ใช้เดิม (มี kbuf ติดมา) ไม่พัง — whitelist ยังรับ kbuf, kcycle ใหม่เข้าเป็น scalar</div></div>
+  <table>
+    <thead><tr><th>Task</th><th>ผล</th><th>ไฟล์</th></tr></thead>
+    <tbody>
+      <tr><td>TASK-001 ถอด buffer + cycleDays + outputs ต่อรอบ</td><td>23/23 เทสโมดูล</td><td>public/kibble.js, kibble.test.js</td></tr>
+      <tr><td>TASK-002 slider ทำทุกกี่วัน + UI ต่อรอบ + kcycle wiring</td><td>ผ่าน browser</td><td>public/index.html, src/worker.js, src/worker.test.js</td></tr>
+      <tr><td>TASK-003 ตรวจ + ขึ้น production</td><td>244 เทส + deploy</td><td>—</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

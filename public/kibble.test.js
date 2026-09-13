@@ -66,20 +66,51 @@ test('butcher table: 20+20 → 50 pieces at 125%; spot: 35 at 87.5%', () => {
   assert.ok(spot.meatUnits > table.meatUnits);
 });
 
-test('buffer scales pieces and ingredients', () => {
-  const none = kc.planKibble({ counts: { cow: 1 }, station: 'table', buffer: 0 });
-  const with20 = kc.planKibble({ counts: { cow: 1 }, station: 'table', buffer: 0.2 });
-  assert.equal(none.piecesDay, 18); // 0.86/0.05 = 17.2
-  assert.equal(with20.piecesDay, 21); // 17.2*1.2 = 20.64
-  assert.equal(none.meatUnits, 7); // 0.86/2.5*20 = 6.88
-  assert.equal(with20.meatUnits, Math.ceil(none.nutrition * 1.2 / 2.5 * 20));
-  assert.ok(with20.meatUnits > none.meatUnits);
+test('no buffer anywhere: results are pure hunger rates, old buffer input ignored', () => {
+  const base = kc.planKibble({ counts: { cow: 1 }, station: 'table', cycleDays: 3 });
+  const withLegacyBuf = kc.planKibble({ counts: { cow: 1 }, station: 'table', cycleDays: 3, buffer: 0.5, kbuf: 200 });
+  assert.equal(base.cyclePieces, withLegacyBuf.cyclePieces);
+  assert.equal(base.piecesDay, 18); // 0.86/0.05 = 17.2 ไม่มีการเผื่อ
 });
 
-test('buffer clamps junk to 0.2 and bounds 0–0.5', () => {
-  assert.equal(kc.clampBuffer('x'), 0.2);
-  assert.equal(kc.clampBuffer(9), 0.5);
-  assert.equal(kc.clampBuffer(-3), 0);
+test('sample pen on a 3-day cycle: 338 pieces, 7 bills at table, 135 meat/veg', () => {
+  const counts = { chicken: 6, cat: 1, pig: 2, husky: 2, cow: 1 };
+  const table = kc.planKibble({ counts, station: 'table', cycleDays: 3 });
+  assert.ok(Math.abs(table.nutrition - 5.62) < 1e-9);
+  assert.equal(table.piecesDay, 113); // 112.4
+  assert.equal(table.cyclePieces, 338); // 337.2
+  assert.equal(table.billsPerCycle, 7);
+  assert.equal(table.meatPerCycle, 135); // 5.62*3/2.5*20 = 134.88
+  assert.equal(table.vegPerCycle, 135);
+  const spot = kc.planKibble({ counts, station: 'spot', cycleDays: 3 });
+  assert.equal(spot.billsPerCycle, 10); // 337.2/35 = 9.63
+  assert.equal(spot.meatPerCycle, 193); // 5.62*3/1.75*20 = 192.7
+});
+
+test('cycle clamps junk to 3 and bounds 1–10', () => {
+  assert.equal(kc.clampCycle('x'), 3);
+  assert.equal(kc.clampCycle(0), 1);
+  assert.equal(kc.clampCycle(-9), 1);
+  assert.equal(kc.clampCycle(2.9), 2);
+  assert.equal(kc.clampCycle(99), 10);
+});
+
+test('cycle of 1 day equals the daily figure; 10 days scales', () => {
+  const counts = { cow: 1 };
+  const one = kc.planKibble({ counts, station: 'table', cycleDays: 1 });
+  assert.equal(one.cyclePieces, one.piecesDay);
+  const ten = kc.planKibble({ counts, station: 'table', cycleDays: 10 });
+  assert.equal(ten.cyclePieces, Math.ceil(one.pieces * 10));
+});
+
+test('strict raw meat scales with the cycle', () => {
+  const r = kc.planKibble({
+    counts: { warg: 1, wolverine: 2, vulture: 1 },
+    shown: ['warg', 'wolverine', 'vulture'],
+    station: 'table', cycleDays: 3
+  });
+  assert.equal(r.strictMeatUnits, 31); // 1.51/0.05 = 30.2 ต่อวัน
+  assert.equal(r.strictMeatPerCycle, 91); // 1.51*3/0.05 = 90.6
 });
 
 test('parseCounts accepts string form and clamps junk', () => {
@@ -152,19 +183,26 @@ test('hiding warg removes the strict bar data; unhiding restores it', () => {
   assert.ok(Math.abs(noWarg.nutrition - 0.8) < 1e-9);
 });
 
-test('parseKibbleState reads kshown from URL form and server form; default = starter', () => {
-  const url = kc.parseKibbleState({ an: 'chicken:6', kb: 'spot', kbuf: '30', kshown: 'chicken,warg' });
+test('parseKibbleState reads kcycle, ignores legacy kbuf; default cycle = 3', () => {
+  const url = kc.parseKibbleState({ an: 'chicken:6', kb: 'spot', kcycle: '5', kshown: 'chicken,warg' });
   assert.deepEqual(url.shown, ['chicken', 'warg']);
+  assert.equal(url.cycle, 5);
+  const legacy = kc.parseKibbleState({ kbuf: 35, kcycle: 7 });
+  assert.equal(legacy.cycle, 7);
+  assert.equal(kc.parseKibbleState({}).cycle, 3);
+  assert.equal(kc.defaultKibbleState().cycle, 3);
+  const junk = kc.parseKibbleState({ an: '!!!', kb: 'microwave', kcycle: 'x' });
+  assert.equal(junk.station, 'table');
+  assert.equal(junk.cycle, 3);
+  assert.equal(junk.counts.chicken, 0);
+});
+
+test('parseKibbleState kshown still parses arrays, empty and defaults', () => {
   const server = kc.parseKibbleState({ kshown: ['cat', 'pig'] });
   // เรียงกลับตามลำดับในตาราง: หมู (omni) มาก่อนแมว (carn)
   assert.deepEqual(server.shown, ['pig', 'cat']);
-  const empty = kc.parseKibbleState({ kshown: '' });
-  assert.deepEqual(empty.shown, []);
+  assert.deepEqual(kc.parseKibbleState({ kshown: '' }).shown, []);
   assert.deepEqual(kc.parseKibbleState({}).shown, kc.STARTER);
-  assert.deepEqual(kc.defaultKibbleState().shown, kc.STARTER);
-  const junk = kc.parseKibbleState({ an: '!!!', kb: 'microwave', kbuf: 'x' });
-  assert.equal(junk.station, 'table');
-  assert.equal(junk.counts.chicken, 0);
 });
 
 test('zero animals → all zeros, never NaN', () => {
@@ -188,12 +226,11 @@ test('shown empty → zero results, never NaN', () => {
 });
 
 test('quadrum (15 days) and rice plant equivalents', () => {
-  const r = kc.planKibble({ counts: { cow: 1 }, station: 'table', buffer: 0.2 });
-  // 0.86*1.2 = 1.032 nut → 20.64 pieces → 310/quadrum
-  assert.equal(r.quadrumPieces, 310);
-  // veg 1.032/2.5*20 = 8.256 → 9 units/day → 8.256*5.54/6 = 7.63 → 8 plants
-  assert.equal(r.vegUnits, 9);
-  assert.equal(r.ricePlants, 8);
+  const r = kc.planKibble({ counts: { cow: 1 }, station: 'table', cycleDays: 3 });
+  assert.equal(r.quadrumPieces, 258); // 17.2*15 = 258
+  // veg/day 0.86/2.5*20 = 6.88 → 7 units/day → 6.88*5.54/6 = 6.35 → 7 plants (อิงค่า/วัน)
+  assert.equal(r.vegUnits, 7);
+  assert.equal(r.ricePlants, 7);
 });
 
 test('legacy 11-animal kshown from a saved session still works untouched', () => {

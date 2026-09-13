@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Plan · คำนวณ kibble ต่อรอบทำ</title>
+<style>/* =============================================================
+   DESIGN SYSTEM — indigo (default) + app-green mock
+   Light-only (forced) · self-contained · Thai-friendly
+   ============================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+:root{
+  --bg:#F7F8FC; --card:#FFFFFF; --card-2:#FBFBFE;
+  --chrome:#EFF1F8; --line:#E8EBF3; --line-2:#D2D8E6;
+  --ink:#15172B; --ink-2:#4A5072; --ink-3:#8B91AB; --ink-4:#B8BED1;
+  --accent:#6E5AE6; --accent-rgb:110,90,230;
+  --accent-soft:#EFEAFC; --accent-line:#C7BAF6; --accent-deep:#5640D1;
+  --ok:#14C7A1; --ok-soft:#DEFAF1; --ok-line:#8FE5CE; --ok-deep:#0E9D80;
+  --bad:#FF6B6B; --bad-soft:#FFE5E5; --bad-line:#FFB1B1; --bad-deep:#E54848;
+  --warn:#FFC53D; --warn-soft:#FFF4D1; --warn-deep:#A87800;
+  --r:14px; --r-s:10px;
+  --shadow:0 2px 4px rgba(21,23,43,.06),0 12px 28px -8px rgba(110,90,230,.18);
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI','Sukhumvit Set',sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+.lead{font-size:16px;color:var(--ink-2);line-height:1.65}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 24px}
+.note{border-radius:var(--r-s);padding:13px 16px;font-size:14px;border:1px solid;
+  display:flex;gap:11px;line-height:1.55}
+.note .ic{font-weight:800;flex:none}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad-deep)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2);font-weight:700}
+td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+.brief-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.btab{font-family:var(--sans);font-size:13px;cursor:pointer;font-weight:700;
+  padding:10px 18px;border-radius:var(--r-s);border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .18s}
+.btab:hover{border-color:var(--accent-line);color:var(--accent-deep);background:var(--accent-soft)}
+.btab.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.brief{display:none}
+.brief.on{display:block;animation:b-fade .35s ease}
+.cta-strip{margin-top:16px;padding:13px 16px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--ok-soft) 100%);
+  border:1px solid var(--accent-line);border-radius:var(--r-s);
+  font-size:13px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{color:var(--accent);font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{color:var(--accent-deep);font-weight:600;background:var(--card);
+  padding:4px 10px;border-radius:6px;border:1px solid var(--accent-line);
+  font-family:var(--mono);font-size:12px}
+.notes-list{font-size:14px;line-height:1.65;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:11px}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:5px;background:var(--accent-soft)}
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+.page{max-width:1040px;margin:0 auto;padding:32px 24px 36px}
+.hero{margin-bottom:20px;padding:6px 0 0}
+.hero h1{font-size:clamp(28px,4vw,40px);margin:10px 0 12px;line-height:1.2}
+.hero h1 em{color:var(--accent);font-style:normal;font-weight:800}
+.hero .lead{max-width:640px;font-size:15.5px}
+.foot{margin-top:14px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+@media(max-width:900px){.b2{grid-template-columns:1fr!important}}
+@media print{body{background:#fff}.brief-tabs{display:none}}
+
+/* ---------- app mock ---------- */
+.app{
+  --abg:#E7F0E4; --acard:#FFFEFA; --aink:#132016; --aink2:#3C5341; --aink3:#6D8571;
+  --aline:#C3D6C0; --asoft:#D8EDD6; --aac:#1B7A3C; --aac2:#14582B;
+  --ameat:#8B3A2A; --ameatbg:#F8E4DE; --awarn:#8A6A12; --awarnbg:#FFF4D4;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:var(--abg);color:var(--aink);border-radius:12px;padding:18px;
+  font-variant-numeric:tabular-nums;line-height:1.5
+}
+.b2{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:start}
+.app h2{font-size:19px;letter-spacing:-.035em;margin:2px 0 3px}
+.app .alead{color:var(--aink2);font-size:13px;margin-bottom:10px}
+.app .kzoo{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 10px}
+.app .kz{display:flex;align-items:center;gap:5px;background:var(--acard);border-radius:10px;
+  padding:5px 6px 5px 9px;box-shadow:0 1px 2px rgba(19,32,22,.05);font-size:11.5px;font-weight:700;color:var(--aink2)}
+.app .kz .fakebtn{width:22px;height:22px;border-radius:6px;background:var(--asoft);color:var(--aac2);
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.app .kz .dn{font-size:14px;min-width:12px;text-align:center}
+.app .kz .dt{font-size:8px;font-weight:800;padding:1px 4px;border-radius:4px;margin-left:auto;
+  background:var(--asoft);color:var(--aac2);text-transform:uppercase;white-space:nowrap}
+.app .kz.warg{outline:2px solid var(--ameat);outline-offset:-2px}
+.app .kz.warg .dt{background:var(--ameatbg);color:var(--ameat)}
+.app .astn{display:inline-flex;gap:0;border-radius:999px;overflow:hidden;box-shadow:0 1px 2px rgba(19,32,22,.05);margin-bottom:10px}
+.app .astn button{border:0;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer;
+  background:var(--acard);color:var(--aink2);font-family:inherit}
+.app .astn button.on{background:var(--aac);color:#fff}
+.app .acycle{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--aink2);margin-bottom:6px}
+.app .acycle input{accent-color:var(--aac);cursor:pointer}
+.app .acycle b{color:var(--aac2)}
+.app .anum{font-size:54px;font-weight:800;letter-spacing:-.05em;color:var(--aac2);line-height:.9}
+.app .asub{font-size:12.5px;color:var(--aink2);font-weight:700}
+.app .astory{font-size:12px;color:var(--aink3);font-weight:700;margin-top:2px}
+.app .astats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.app .as{background:var(--asoft);border-radius:10px;padding:8px 10px}
+.app .as em{display:block;font-style:normal;font-size:9.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--aink3);font-weight:700}
+.app .as b{font-size:17px;font-weight:800}
+.app .flare{background:var(--ameatbg);color:var(--ameat);border-radius:10px;
+  padding:8px 11px;font-size:12.5px;font-weight:700}
+.app .afoot{margin-top:8px;font-size:11.5px;color:var(--aink3)}
+.old{position:relative}
+.old::after{content:"ตัดทิ้ง";position:absolute;top:-8px;right:-6px;background:var(--ameatbg);
+  color:var(--ameat);font-size:11px;font-weight:800;padding:2px 9px;border-radius:6px;transform:rotate(4deg)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="kicker">Plan · 2026-09-13 12:14 · ปรับหน้า kibble</div>
+    <h1>เลิกเผื่อกันเหนียว <em>คำนวณเป็นรอบทำ</em> ทุก 3 วันแทน</h1>
+    <p class="lead">ถอดตัวเลื่อน "กันเหนียว" ที่เผื่อเปอร์เซ็นต์แบบเหมา ๆ ออก
+      แล้วเปลี่ยนเป็นสิ่งที่ตรงกับตอนเล่นจริง: <strong>"ทำทุกกี่วัน"</strong> (เลื่อนได้ 1–10 วัน เริ่มที่ 3)
+      แล้วตัวเลขหลักจะกลายเป็น <strong>kibble ที่ต้องมีต่อรอบทำ</strong> — ตั้ง bill ครั้งเดียวจบ
+      ลองเลื่อนใน mock ได้เลย</p>
+  </header>
+
+  <nav class="brief-tabs">
+    <button class="btab on" data-t="mock">ผลลัพธ์ใหม่ (เลื่อนได้)</button>
+    <button class="btab" data-t="req">สิ่งที่ขอ</button>
+    <button class="btab" data-t="spec">แผนทางเทคนิค</button>
+  </nav>
+
+  <!-- ===== TAB 1 ===== -->
+  <section class="brief on" data-tab="mock">
+    <div class="b2">
+      <div class="app">
+        <h2>ต้องทำ kibble กี่ชิ้นต่อรอบ</h2>
+        <p class="alead">คอกตัวอย่าง 6 ตัว (ไก่ 6 · แมว 1 · หมู 2 · Husky 2 · วัว 1 · Warg 1) — ไม่มีการเผื่อแล้ว ตัวเลขคือของจริงจากอัตรากิน</p>
+        <div class="kzoo" id="mZoo"></div>
+        <div class="astn">
+          <button type="button" class="on" id="stTable">Butcher table · 50 ชิ้น/รอบ</button>
+          <button type="button" id="stSpot">Butcher spot · 35 ชิ้น/รอบ</button>
+        </div>
+        <div class="acycle">
+          <span>ทำทุก</span>
+          <input id="mDays" type="range" min="1" max="10" value="3" style="width:130px">
+          <b id="mDaysOut">3 วัน</b>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:11px;margin-top:4px">
+          <span class="anum" id="mPieces">338</span>
+          <div>
+            <div class="asub">ชิ้น kibble ต่อรอบทำ</div>
+            <div class="astory" id="mStory"></div>
+          </div>
+        </div>
+        <div class="astats">
+          <div class="as"><em>ต่อวัน</em><b id="mDay">113</b></div>
+          <div class="as"><em>เนื้อดิบ/รอบ</em><b id="mMeat">135</b></div>
+          <div class="as"><em>ผัก/รอบ</em><b id="mVeg">135</b></div>
+          <div class="as"><em>ต่อ quadrum 15 วัน</em><b id="mQuad">1,686</b></div>
+        </div>
+        <div class="flare" id="mStrict"></div>
+        <p class="afoot" id="mFoot"></p>
+      </div>
+      <div>
+        <div class="note ok" style="margin-bottom:12px">
+          <span class="ic">✓</span>
+          <div><strong>ตรงวิธีตั้งในเกม:</strong> ตัวเลขใหญ่ = จำนวนที่ตั้งใน bill
+            "Make kibble until you have ~338" — พ่อครัวจะควักให้ครบเอง 7 รอบ แล้วเงียบจนกว่าจะหมดตามรอบ</div>
+        </div>
+        <div class="window old" style="margin-bottom:12px">
+          <div class="body" style="padding:14px 16px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:13px;color:var(--ink-2)">กันเหนียว</span>
+            <div style="flex:1;height:6px;border-radius:3px;background:var(--line);position:relative">
+              <div style="position:absolute;left:40%;top:-5px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid #fff"></div>
+            </div>
+            <b style="font-size:13px">20%</b>
+          </div>
+        </div>
+        <ul class="notes-list">
+          <li><span class="mk">01</span><div>ตัวเลื่อนเดิมออก แทนด้วย "ทำทุก 1–10 วัน" (จำค่าไว้ · เริ่ม 3 วันตามที่ขอ)</div></li>
+          <li><span class="mk">02</span><div>ตัวเลขทุกตัวคืออัตรากินจริง ไม่คูณเผื่อ — ของเหลือจากรอบก่อนกินต่อเป็นเงื่อนไขธรรมชาติของการทำเป็นก้อน</div></li>
+          <li><span class="mk">03</span><div>เนื้อ/ผักต่อรอบ = ของที่ต้อง "มีพร้อม" ก่อนถึงวันทำ เผื่อตุนลงตู้เย็นครั้งเดียว</div></li>
+          <li><span class="mk">04</span><div>พวกกินเนื้อเท่านั้น (warg ฯลฯ) แถบแดงก็คูณตามรอบทำเช่นกัน</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <span><span class="arrow">→</span> ตอบใน chat:
+        <strong>"ลุย"</strong>
+        <strong>"เอา default 5 วัน"</strong>
+        <strong>"เพิ่มช่องกรอกตัวเลขเอง"</strong></span>
+      <span class="muted">mock ใช้สูตรจริง เลื่อนวัน/สลับสถานีได้</span>
+    </div>
+  </section>
+
+  <!-- ===== TAB 2 ===== -->
+  <section class="brief" data-tab="req">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">brief · requirements record</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:8px">คำขอต้นฉบับ (คงถ้อยคำเดิม)</div>
+        <blockquote style="background:var(--card-2);border-left:4px solid var(--accent);
+          border-radius:0 var(--r-s) var(--r-s) 0;padding:14px 18px;font-size:15.5px;
+          color:var(--ink-2);margin:0 0 16px;font-style:italic">
+          อันนี้เหมือน kible ที่ต้องการต่อวันปะ เราอาจไม่ต้องเผื่อ buffer หรอก
+          แต่มันน่าจะแบบ สักประมาณทุก ๆ 3 วันค่อยมาทำอ่ะ คำนวณเผื่อไว้สัก 3 วันได้ไหม</blockquote>
+        <div class="kicker" style="margin-bottom:8px">ข้อตกลง</div>
+        <ul class="notes-list">
+          <li><span class="mk">01</span><div>เอา buffer ออกจากหน้าและสูตรทั้งหมด — ตัวเลข = อัตรากินจริงล้วน</div></li>
+          <li><span class="mk">02</span><div>เพิ่ม "ทำทุกกี่วัน" 1–10 วัน default 3 · ตัวเลขหลักเป็นชิ้นต่อรอบทำ พร้อมจำนวน bill ที่ตั้งครั้งเดียว</div></li>
+          <li><span class="mk">03</span><div>เนื้อ/ผัก/เนื้อดิบ-strict แสดงต่อรอบทำ · เก็บ "ต่อวัน" เป็นช่องอ้างอิงเล็ก · ต่อ quadrum ยังอยู่</div></li>
+          <li><span class="mk">04</span><div>ค่า kcycle จำใน URL/เครื่อง/เซิร์ฟเวอร์ · kbuf เก่าใน state ผู้ใช้เดิมเมินปลอดภัย ไม่พัง</div></li>
+        </ul>
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ ..."</strong></span>
+          <span class="muted">บันทึนี้อยู่ใน requirements.html ด้วย</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TAB 3 ===== -->
+  <section class="brief" data-tab="spec">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">spec · source of truth สำหรับ workers</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:10px">สูตรก่อน–หลัง</div>
+        <svg viewBox="0 0 860 190" style="width:100%;height:auto" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">
+          <defs>
+            <marker id="ar5" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#8B91AB"/></marker>
+          </defs>
+          <rect x="14" y="30" width="200" height="64" rx="10" fill="var(--bad-soft)" stroke="var(--bad-line)"/>
+          <text x="114" y="56" text-anchor="middle" fill="var(--bad-deep)" font-weight="700">เดิม: need = C × (1+buf)</text>
+          <text x="114" y="74" text-anchor="middle" fill="var(--ink-2)">ชิ้น/วัน → ×1.2 เสมอ</text>
+          <line x1="214" y1="62" x2="256" y2="62" stroke="#8B91AB" marker-end="url(#ar5)"/>
+          <rect x="260" y="22" width="230" height="80" rx="10" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+          <text x="375" y="46" text-anchor="middle" fill="var(--accent-deep)" font-weight="700">ใหม่: ไม่มี buf</text>
+          <text x="375" y="66" text-anchor="middle" fill="var(--ink-2)">dayPieces = C / 0.05</text>
+          <text x="375" y="84" text-anchor="middle" fill="var(--ink-2)">cycle = clampInt(kcycle, 1..10, 3)</text>
+          <line x1="490" y1="62" x2="532" y2="62" stroke="#8B91AB" marker-end="url(#ar5)"/>
+          <rect x="536" y="14" width="310" height="96" rx="10" fill="var(--ok-soft)" stroke="var(--ok-line)"/>
+          <text x="691" y="38" text-anchor="middle" fill="var(--ok-deep)" font-weight="700">ผลลัพธ์ต่อรอบทำ</text>
+          <text x="691" y="58" text-anchor="middle" fill="var(--ink-2)">cyclePieces = ceil(dayPieces × cycle)</text>
+          <text x="691" y="74" text-anchor="middle" fill="var(--ink-2)">bills = ceil(cyclePieces / batch)</text>
+          <text x="691" y="90" text-anchor="middle" fill="var(--ink-2)">meat = veg = ceil(C×cycle / outNut × 20)</text>
+          <text x="14" y="146" fill="var(--ink-3)" font-size="10.5">strict เนื้อดิบ = ceil(strictC × cycle / 0.05) · quadrum = ceil(dayPieces × 15) เหมือนเดิม · ต้นข้าวอิงผัก/วันตามเดิม</text>
+        </svg>
+
+        <div class="note danger" style="margin-top:6px">
+          <span class="ic">⚠</span>
+          <div><strong>Security:</strong> state key ใหม่ <code>kcycle</code> เข้า whitelist worker เป็น scalar (1–10)
+            · เลิกส่ง kbuf (เก็บไว้ใน whitelist เพื่อรับ state เก่าโดยไม่พัง) · executionProfile standard</div>
+        </div>
+
+        <div class="kicker" style="margin:14px 0 10px">Test specs (TDD — node --test)</div>
+        <table>
+          <thead><tr><th>กลุ่ม</th><th>เคสหลัก</th></tr></thead>
+          <tbody>
+            <tr><td>รอบทำ</td><td>คอกตัวอย่าง 3 วัน → 338 ชิ้น · bills 7 (table) / 10 (spot) · เนื้อ=ผัก 135</td></tr>
+            <tr><td>ไม่มี buffer</td><td>ผลลัพธ์ไม่เปลี่ยนแม้ส่ง kbuf 200 มา · input เก่าที่แอบส่ง buffer ถูกเมิน</td></tr>
+            <tr><td>ขอบวัน</td><td>kcycle 1 วัน = ค่าต่อวันปัดขึ้น · 10 วัน · junk → 3 · ทศนิยม/ติดลบ</td></tr>
+            <tr><td>strict ต่อรอบ</td><td>warg+wolverine+vulture ×3 วัน → ceil(1.51×3/0.05) = 91 ชิ้น</td></tr>
+            <tr><td>state/URL</td><td>kcycle round-trip · default 3 · URL เก่าที่มี kbuf เปิดได้ไม่พัง</td></tr>
+            <tr><td>worker</td><td>PUT เก็บ kcycle · ยังรับ kbuf เก่า · คีย์ปลอม 400</td></tr>
+          </tbody>
+        </table>
+
+        <div class="kicker" style="margin:14px 0 10px">งาน</div>
+        <ul class="notes-list">
+          <li><span class="mk">001</span><div><strong>kibble.js + เทส</strong> — ถอด buffer ทั้งสูตร/state + cycleDays + outputs ต่อรอบ + parse kcycle (high)</div></li>
+          <li><span class="mk">002</span><div><strong>index.html + worker</strong> — สลับ slider เป็น "ทำทุกกี่วัน" + hero/story/stats/แถบ strict ต่อรอบ + whitelist kcycle (high)</div></li>
+          <li><span class="mk">003</span><div><strong>ตรวจ + ขึ้น production</strong> — npm test + browser (เลื่อนวัน สลับสถานี state เก่าไม่พัง) + commit/push/deploy (medium)</div></li>
+        </ul>
+
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> อนุมัติแล้วตอบ:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ก่อน: ..."</strong></span>
+          <span class="muted">เริ่มงานด้วย workflow-work</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">plan 2026-09-13 12:14 · ต่อจาก archive/005 · ตัวเลขอ้างอิงคอกตัวอย่าง 6 ตัว ไม่มีเผื่อ</div>
+</div>
+
+<script>
+document.querySelectorAll('.btab').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.btab').forEach(function (x) { x.classList.remove('on'); });
+    document.querySelectorAll('.brief').forEach(function (x) { x.classList.remove('on'); });
+    b.classList.add('on');
+    document.querySelector('.brief[data-tab="' + b.dataset.t + '"]').classList.add('on');
+  });
+});
+
+/* mock — สูตรชุดเดียวกับ kibble.js ปลอด buffer */
+(function () {
+  var ZOO = [
+    ['ไก่', 6, 'พืช', ''], ['แมว', 1, 'เนื้อ', ''], ['หมู', 2, 'ทั้งคู่', ''],
+    ['Husky', 2, 'ทั้งคู่', ''], ['วัว', 1, 'พืช', 'นม'], ['Warg', 1, 'เนื้อเท่านั้น', '']
+  ];
+  var C = 0.22 * 6 + 0.24 + 0.8 * 2 + 0.8 * 2 + 0.86; // 5.62
+  var STRICT_C = 0.4;
+  var zoo = document.getElementById('mZoo');
+  ZOO.forEach(function (z) {
+    var d = document.createElement('div');
+    d.className = 'kz' + (z[3 - 1] === 'เนื้อเท่านั้น' ? ' warg' : '');
+    d.innerHTML = '<span>' + z[0] + '</span><span class="fakebtn">−</span><span class="dn">' + z[1] +
+      '</span><span class="fakebtn">+</span><span class="dt">' + z[2] + '</span>';
+    zoo.appendChild(d);
+  });
+  var days = 3, station = 'table';
+  var STN = { table: { outNut: 2.5, batch: 50 }, spot: { outNut: 1.75, batch: 35 } };
+  function ceil(x) { return x <= 1e-12 ? 0 : Math.ceil(x - 1e-9); }
+  function render() {
+    var st = STN[station];
+    var dayPieces = C / 0.05;
+    var cyclePieces = ceil(dayPieces * days);
+    document.getElementById('mDaysOut').textContent = days + ' วัน';
+    document.getElementById('mPieces').textContent = cyclePieces.toLocaleString('en-US');
+    document.getElementById('mStory').textContent = 'ตั้ง bill "ทำ kibble จนมี ~' + cyclePieces +
+      '" ครั้งเดียว · พ่อครัวควัก ' + ceil(cyclePieces / st.batch) + ' รอบ (รอบละ ' + st.batch + ' ชิ้น)';
+    document.getElementById('mDay').textContent = ceil(dayPieces);
+    var ing = ceil(C * days / st.outNut * 20);
+    document.getElementById('mMeat').textContent = ing.toLocaleString('en-US');
+    document.getElementById('mVeg').textContent = ing.toLocaleString('en-US');
+    document.getElementById('mQuad').textContent = ceil(dayPieces * 15).toLocaleString('en-US');
+    document.getElementById('mStrict').textContent = 'กินเนื้อเท่านั้น 1 ตัว (Warg) กิน kibble ไม่ได้ — เตรียมเนื้อดิบ/ศพ ~' +
+      ceil(STRICT_C * days / 0.05) + ' ชิ้น/รอบทำ (แยกจากช่องเนื้อดิบด้านบน)';
+    document.getElementById('mFoot').textContent = 'ผัก ' + ing + ' ชิ้น/รอบ ต้องมีพร้อมก่อนวันทำ · ผัก/วัน ' +
+      ceil(C / st.outNut * 20) + ' ชิ้น ≈ ข้าว ~' + ceil(C / st.outNut * 20 * 5.54 / 6) + ' ต้นบนดิน · kibble ไม่เน่า ตุนเกินรอบได้เลย';
+  }
+  document.getElementById('mDays').addEventListener('input', function () {
+    days = Number(this.value); render();
+  });
+  document.getElementById('stTable').addEventListener('click', function () {
+    station = 'table'; this.classList.add('on'); document.getElementById('stSpot').classList.remove('on'); render();
+  });
+  document.getElementById('stSpot').addEventListener('click', function () {
+    station = 'spot'; this.classList.add('on'); document.getElementById('stTable').classList.remove('on'); render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

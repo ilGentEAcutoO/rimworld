@@ -1,109 +1,109 @@
 'use strict';
 
-// อัตรากิน (โภชนาการ/วัน) ของสัตว์ตัวเต็มวัย — ยืนยันจากหน้าวิกิรายตัว 1.6 (เก็บ 13 ก.ย. 2569)
-// diet: herb กินพืช · omni กินทั้งคู่ · carn กินเนื้อ · strict กินเนื้อเท่านั้น (กิน kibble ไม่ได้)
-// tag: '' เกมหลัก · 'OD' Odyssey · 'B' Biotech · prod: ผลผลิตระหว่างเลี้ยง (ถ้ามี)
+// Hunger rate (nutrition/day) of adult animals — verified per-species from the wiki, 1.6 (collected Sep 13, 2026)
+// diet: herb herbivore · omni omnivore · carn carnivore · strict meat only (cannot eat kibble)
+// tag: '' base game · 'OD' Odyssey · 'B' Biotech · prod: output while kept (if any)
 var ANIMALS = [
-  { id: 'chicken', name: 'ไก่', rate: 0.22, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'duck', name: 'เป็ด', rate: 0.28, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'goose', name: 'ห่าน', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'turkey', name: 'ไก่งวง', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'cassowary', name: 'Cassowary', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'emu', name: 'Emu', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'ostrich', name: 'Ostrich', rate: 0.67, diet: 'herb', tag: '', prod: 'ไข่' },
-  { id: 'guineapig', name: 'กินีพิก', rate: 0.16, diet: 'herb', tag: '', prod: '' },
-  { id: 'chinchilla', name: 'ชินชิลลา', rate: 0.2, diet: 'herb', tag: '', prod: '' },
-  { id: 'squirrel', name: 'กระรอก', rate: 0.16, diet: 'herb', tag: '', prod: '' },
-  { id: 'hare', name: 'กระต่ายป่า', rate: 0.18, diet: 'herb', tag: '', prod: '' },
-  { id: 'snowhare', name: 'กระต่ายหิมะ', rate: 0.18, diet: 'herb', tag: '', prod: '' },
-  { id: 'capybara', name: 'คาปิบารา', rate: 0.36, diet: 'herb', tag: '', prod: '' },
-  { id: 'goat', name: 'แพะ', rate: 0.36, diet: 'herb', tag: '', prod: 'นม' },
-  { id: 'sheep', name: 'แกะ', rate: 0.36, diet: 'herb', tag: '', prod: 'ขน' },
-  { id: 'alpaca', name: 'Alpaca', rate: 0.44, diet: 'herb', tag: '', prod: 'ขน' },
-  { id: 'cow', name: 'วัว', rate: 0.86, diet: 'herb', tag: '', prod: 'นม' },
-  { id: 'yak', name: 'Yak', rate: 0.86, diet: 'herb', tag: '', prod: 'นม' },
-  { id: 'horse', name: 'ม้า', rate: 0.86, diet: 'herb', tag: '', prod: '' },
-  { id: 'donkey', name: 'ลา', rate: 0.52, diet: 'herb', tag: '', prod: '' },
-  { id: 'dromedary', name: 'อูฐ', rate: 0.86, diet: 'herb', tag: '', prod: 'นม' },
-  { id: 'muffalo', name: 'Muffalo', rate: 0.86, diet: 'herb', tag: '', prod: 'ขน' },
-  { id: 'bison', name: 'Bison', rate: 0.86, diet: 'herb', tag: '', prod: 'ขน' },
-  { id: 'boomalope', name: 'Boomalope', rate: 0.86, diet: 'herb', tag: '', prod: 'เชื้อเพลิง' },
-  { id: 'elephant', name: 'ช้าง', rate: 2.57, diet: 'herb', tag: '', prod: '' },
-  { id: 'rhinoceros', name: 'แรด', rate: 1.71, diet: 'herb', tag: '', prod: '' },
-  { id: 'megasloth', name: 'Megasloth', rate: 1.6, diet: 'herb', tag: '', prod: 'ขน' },
+  { id: 'chicken', name: 'Chicken', rate: 0.22, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'duck', name: 'Duck', rate: 0.28, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'goose', name: 'Goose', rate: 0.45, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'turkey', name: 'Turkey', rate: 0.45, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'cassowary', name: 'Cassowary', rate: 0.45, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'emu', name: 'Emu', rate: 0.45, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'ostrich', name: 'Ostrich', rate: 0.67, diet: 'herb', tag: '', prod: 'Eggs' },
+  { id: 'guineapig', name: 'Guinea pig', rate: 0.16, diet: 'herb', tag: '', prod: '' },
+  { id: 'chinchilla', name: 'Chinchilla', rate: 0.2, diet: 'herb', tag: '', prod: '' },
+  { id: 'squirrel', name: 'Squirrel', rate: 0.16, diet: 'herb', tag: '', prod: '' },
+  { id: 'hare', name: 'Hare', rate: 0.18, diet: 'herb', tag: '', prod: '' },
+  { id: 'snowhare', name: 'Snowhare', rate: 0.18, diet: 'herb', tag: '', prod: '' },
+  { id: 'capybara', name: 'Capybara', rate: 0.36, diet: 'herb', tag: '', prod: '' },
+  { id: 'goat', name: 'Goat', rate: 0.36, diet: 'herb', tag: '', prod: 'Milk' },
+  { id: 'sheep', name: 'Sheep', rate: 0.36, diet: 'herb', tag: '', prod: 'Wool' },
+  { id: 'alpaca', name: 'Alpaca', rate: 0.44, diet: 'herb', tag: '', prod: 'Wool' },
+  { id: 'cow', name: 'Cow', rate: 0.86, diet: 'herb', tag: '', prod: 'Milk' },
+  { id: 'yak', name: 'Yak', rate: 0.86, diet: 'herb', tag: '', prod: 'Milk' },
+  { id: 'horse', name: 'Horse', rate: 0.86, diet: 'herb', tag: '', prod: '' },
+  { id: 'donkey', name: 'Donkey', rate: 0.52, diet: 'herb', tag: '', prod: '' },
+  { id: 'dromedary', name: 'Dromedary', rate: 0.86, diet: 'herb', tag: '', prod: 'Milk' },
+  { id: 'muffalo', name: 'Muffalo', rate: 0.86, diet: 'herb', tag: '', prod: 'Wool' },
+  { id: 'bison', name: 'Bison', rate: 0.86, diet: 'herb', tag: '', prod: 'Wool' },
+  { id: 'boomalope', name: 'Boomalope', rate: 0.86, diet: 'herb', tag: '', prod: 'Chemfuel' },
+  { id: 'elephant', name: 'Elephant', rate: 2.57, diet: 'herb', tag: '', prod: '' },
+  { id: 'rhinoceros', name: 'Rhinoceros', rate: 1.71, diet: 'herb', tag: '', prod: '' },
+  { id: 'megasloth', name: 'Megasloth', rate: 1.6, diet: 'herb', tag: '', prod: 'Wool' },
   { id: 'thrumbo', name: 'Thrumbo', rate: 2.8, diet: 'herb', tag: '', prod: '' },
   { id: 'alphabeaver', name: 'Alphabeaver', rate: 4.8, diet: 'herb', tag: '', prod: '' },
-  { id: 'pig', name: 'หมู', rate: 0.8, diet: 'omni', tag: '', prod: '' },
-  { id: 'boar', name: 'หมูป่า', rate: 0.48, diet: 'omni', tag: '', prod: '' },
-  { id: 'iguana', name: 'อิกัวนา', rate: 0.32, diet: 'omni', tag: '', prod: 'ไข่' },
-  { id: 'tortoise', name: 'เต่า', rate: 0.13, diet: 'omni', tag: '', prod: 'ไข่' },
-  { id: 'monkey', name: 'ลิง', rate: 0.2, diet: 'omni', tag: '', prod: '' },
-  { id: 'raccoon', name: 'แรคคูน', rate: 0.32, diet: 'omni', tag: '', prod: '' },
+  { id: 'pig', name: 'Pig', rate: 0.8, diet: 'omni', tag: '', prod: '' },
+  { id: 'boar', name: 'Wild boar', rate: 0.48, diet: 'omni', tag: '', prod: '' },
+  { id: 'iguana', name: 'Iguana', rate: 0.32, diet: 'omni', tag: '', prod: 'Eggs' },
+  { id: 'tortoise', name: 'Tortoise', rate: 0.13, diet: 'omni', tag: '', prod: 'Eggs' },
+  { id: 'monkey', name: 'Monkey', rate: 0.2, diet: 'omni', tag: '', prod: '' },
+  { id: 'raccoon', name: 'Raccoon', rate: 0.32, diet: 'omni', tag: '', prod: '' },
   { id: 'husky', name: 'Husky', rate: 0.8, diet: 'omni', tag: '', prod: '' },
-  { id: 'labrador', name: 'ลาบราดอร์', rate: 0.64, diet: 'omni', tag: '', prod: '' },
+  { id: 'labrador', name: 'Labrador retriever', rate: 0.64, diet: 'omni', tag: '', prod: '' },
   { id: 'yorkie', name: 'Yorkshire terrier', rate: 0.24, diet: 'omni', tag: '', prod: '' },
-  { id: 'grizzly', name: 'หมีกริซลี', rate: 0.56, diet: 'omni', tag: '', prod: '' },
-  { id: 'polarbear', name: 'หมีขั้ว', rate: 0.56, diet: 'omni', tag: '', prod: '' },
+  { id: 'grizzly', name: 'Grizzly bear', rate: 0.56, diet: 'omni', tag: '', prod: '' },
+  { id: 'polarbear', name: 'Polar bear', rate: 0.56, diet: 'omni', tag: '', prod: '' },
   { id: 'boomrat', name: 'Boomrat', rate: 0.22, diet: 'omni', tag: '', prod: '' },
-  { id: 'rat', name: 'หนู', rate: 0.16, diet: 'omni', tag: '', prod: '' },
-  { id: 'cat', name: 'แมว', rate: 0.24, diet: 'carn', tag: '', prod: '' },
-  { id: 'cobra', name: 'งูเห่า', rate: 0.11, diet: 'carn', tag: '', prod: 'ไข่' },
-  { id: 'timberwolf', name: 'หมาป่า', rate: 0.29, diet: 'carn', tag: '', prod: '' },
-  { id: 'arcticwolf', name: 'หมาป่าขั้ว', rate: 0.29, diet: 'carn', tag: '', prod: '' },
-  { id: 'panther', name: 'เสือดำ', rate: 0.32, diet: 'carn', tag: '', prod: '' },
-  { id: 'cougar', name: 'พูมา', rate: 0.32, diet: 'carn', tag: '', prod: '' },
-  { id: 'lynx', name: 'ลินซ์', rate: 0.19, diet: 'carn', tag: '', prod: '' },
-  { id: 'redfox', name: 'จิ้งจอกแดง', rate: 0.16, diet: 'carn', tag: '', prod: '' },
-  { id: 'arcticfox', name: 'จิ้งจอกขั้ว', rate: 0.16, diet: 'carn', tag: '', prod: '' },
-  { id: 'fennecfox', name: 'จิ้งจอกฟีเนค', rate: 0.16, diet: 'carn', tag: '', prod: '' },
+  { id: 'rat', name: 'Rat', rate: 0.16, diet: 'omni', tag: '', prod: '' },
+  { id: 'cat', name: 'Cat', rate: 0.24, diet: 'carn', tag: '', prod: '' },
+  { id: 'cobra', name: 'Cobra', rate: 0.11, diet: 'carn', tag: '', prod: 'Eggs' },
+  { id: 'timberwolf', name: 'Timber wolf', rate: 0.29, diet: 'carn', tag: '', prod: '' },
+  { id: 'arcticwolf', name: 'Arctic wolf', rate: 0.29, diet: 'carn', tag: '', prod: '' },
+  { id: 'panther', name: 'Panther', rate: 0.32, diet: 'carn', tag: '', prod: '' },
+  { id: 'cougar', name: 'Cougar', rate: 0.32, diet: 'carn', tag: '', prod: '' },
+  { id: 'lynx', name: 'Lynx', rate: 0.19, diet: 'carn', tag: '', prod: '' },
+  { id: 'redfox', name: 'Red fox', rate: 0.16, diet: 'carn', tag: '', prod: '' },
+  { id: 'arcticfox', name: 'Arctic fox', rate: 0.16, diet: 'carn', tag: '', prod: '' },
+  { id: 'fennecfox', name: 'Fennec fox', rate: 0.16, diet: 'carn', tag: '', prod: '' },
   { id: 'warg', name: 'Warg', rate: 0.4, diet: 'strict', tag: '', prod: '' },
-  { id: 'hippo', name: 'ฮิปโป', rate: 1.6, diet: 'herb', tag: 'OD', prod: '' },
-  { id: 'moose', name: 'มูส', rate: 0.86, diet: 'herb', tag: 'OD', prod: '' },
-  { id: 'muskox', name: 'Muskox', rate: 0.86, diet: 'herb', tag: 'OD', prod: 'ขน' },
-  { id: 'panda', name: 'แพนด้า', rate: 0.32, diet: 'herb', tag: 'OD', prod: '' },
-  { id: 'mastodon', name: 'Mastodon', rate: 2.88, diet: 'herb', tag: 'OD', prod: 'ขน' },
-  { id: 'porcupine', name: 'เม่น', rate: 0.24, diet: 'herb', tag: 'OD', prod: '' },
-  { id: 'prairiedog', name: 'แพร์รีด็อก', rate: 0.16, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'hippo', name: 'Hippo', rate: 1.6, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'moose', name: 'Moose', rate: 0.86, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'muskox', name: 'Muskox', rate: 0.86, diet: 'herb', tag: 'OD', prod: 'Wool' },
+  { id: 'panda', name: 'Panda', rate: 0.32, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'mastodon', name: 'Mastodon', rate: 2.88, diet: 'herb', tag: 'OD', prod: 'Wool' },
+  { id: 'porcupine', name: 'Porcupine', rate: 0.24, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'prairiedog', name: 'Prairie dog', rate: 0.16, diet: 'herb', tag: 'OD', prod: '' },
   { id: 'lavasnail', name: 'Lava snail', rate: 0.32, diet: 'herb', tag: 'OD', prod: '' },
-  { id: 'peafowl', name: 'นกยูง', rate: 0.37, diet: 'herb', tag: 'OD', prod: 'ไข่' },
-  { id: 'quail', name: 'นกควาย', rate: 0.19, diet: 'herb', tag: 'OD', prod: 'ไข่' },
-  { id: 'swan', name: 'หงส์', rate: 0.45, diet: 'herb', tag: 'OD', prod: 'ไข่' },
-  { id: 'macaw', name: 'มะคอว์', rate: 0.19, diet: 'herb', tag: 'OD', prod: 'ไข่' },
-  { id: 'bluebird', name: 'บลูเบิร์ด', rate: 0.13, diet: 'herb', tag: 'OD', prod: 'ไข่' },
-  { id: 'sparrow', name: 'นกกระจอก', rate: 0.13, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'peafowl', name: 'Peafowl', rate: 0.37, diet: 'herb', tag: 'OD', prod: 'Eggs' },
+  { id: 'quail', name: 'Quail', rate: 0.19, diet: 'herb', tag: 'OD', prod: 'Eggs' },
+  { id: 'swan', name: 'Swan', rate: 0.45, diet: 'herb', tag: 'OD', prod: 'Eggs' },
+  { id: 'macaw', name: 'Macaw', rate: 0.19, diet: 'herb', tag: 'OD', prod: 'Eggs' },
+  { id: 'bluebird', name: 'Bluebird', rate: 0.13, diet: 'herb', tag: 'OD', prod: 'Eggs' },
+  { id: 'sparrow', name: 'Sparrow', rate: 0.13, diet: 'herb', tag: 'OD', prod: 'Eggs' },
   { id: 'alphathrumbo', name: 'Alpha thrumbo', rate: 2.8, diet: 'herb', tag: 'OD', prod: '' },
-  { id: 'gorilla', name: 'กอริลลา', rate: 0.86, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'badger', name: 'แบดเจอร์', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'armadillo', name: 'อาร์มาดิลโล', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'otter', name: 'นาก', rate: 0.24, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'mink', name: 'มิงก์', rate: 0.16, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'gorilla', name: 'Gorilla', rate: 0.86, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'badger', name: 'Badger', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'armadillo', name: 'Armadillo', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'otter', name: 'Otter', rate: 0.24, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'mink', name: 'Mink', rate: 0.16, diet: 'omni', tag: 'OD', prod: '' },
   { id: 'boghound', name: 'Bog hound', rate: 0.29, diet: 'omni', tag: 'OD', prod: '' },
   { id: 'megavole', name: 'Megavole', rate: 0.8, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'crow', name: 'อีกา', rate: 0.13, diet: 'omni', tag: 'OD', prod: 'ไข่' },
-  { id: 'flamingo', name: 'ฟลามิงโก', rate: 0.45, diet: 'omni', tag: 'OD', prod: 'ไข่' },
-  { id: 'heron', name: 'นกกระสา', rate: 0.45, diet: 'omni', tag: 'OD', prod: 'ไข่' },
-  { id: 'seaturtle', name: 'เต่าทะเล', rate: 0.16, diet: 'omni', tag: 'OD', prod: 'ไข่' },
-  { id: 'monitorlizard', name: 'Monitor lizard', rate: 0.32, diet: 'omni', tag: 'OD', prod: 'ไข่' },
-  { id: 'bullfrog', name: 'บูลฟรอก', rate: 0.16, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'crow', name: 'Crow', rate: 0.13, diet: 'omni', tag: 'OD', prod: 'Eggs' },
+  { id: 'flamingo', name: 'Flamingo', rate: 0.45, diet: 'omni', tag: 'OD', prod: 'Eggs' },
+  { id: 'heron', name: 'Heron', rate: 0.45, diet: 'omni', tag: 'OD', prod: 'Eggs' },
+  { id: 'seaturtle', name: 'Sea turtle', rate: 0.16, diet: 'omni', tag: 'OD', prod: 'Eggs' },
+  { id: 'monitorlizard', name: 'Monitor lizard', rate: 0.32, diet: 'omni', tag: 'OD', prod: 'Eggs' },
+  { id: 'bullfrog', name: 'Bullfrog', rate: 0.16, diet: 'omni', tag: 'OD', prod: '' },
   { id: 'colossustoad', name: 'Colossus toad', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'hermitcrab', name: 'ปูเจ้าสำนัก', rate: 0.13, diet: 'omni', tag: 'OD', prod: '' },
-  { id: 'stonecrab', name: 'ปูหิน', rate: 0.19, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'hermitcrab', name: 'Hermit crab', rate: 0.13, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'stonecrab', name: 'Stone crab', rate: 0.19, diet: 'omni', tag: 'OD', prod: '' },
   { id: 'greatwolf', name: 'Greatwolf', rate: 0.64, diet: 'carn', tag: 'OD', prod: '' },
   { id: 'scimitarcat', name: 'Scimitar cat', rate: 0.42, diet: 'carn', tag: 'OD', prod: '' },
-  { id: 'tiger', name: 'เสือโคร่ง', rate: 0.32, diet: 'carn', tag: 'OD', prod: '' },
-  { id: 'walrus', name: 'วอลรัส', rate: 0.86, diet: 'carn', tag: 'OD', prod: '' },
-  { id: 'sealion', name: 'สิงโตทะเล', rate: 0.48, diet: 'carn', tag: 'OD', prod: '' },
-  { id: 'seal', name: 'แมวน้ำ', rate: 0.48, diet: 'carn', tag: 'OD', prod: '' },
-  { id: 'penguin', name: 'เพนกวิน', rate: 0.45, diet: 'carn', tag: 'OD', prod: 'ไข่' },
-  { id: 'alligator', name: 'Alligator', rate: 0.48, diet: 'carn', tag: 'OD', prod: 'ไข่' },
+  { id: 'tiger', name: 'Tiger', rate: 0.32, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'walrus', name: 'Walrus', rate: 0.86, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'sealion', name: 'Sea lion', rate: 0.48, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'seal', name: 'Seal', rate: 0.48, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'penguin', name: 'Penguin', rate: 0.45, diet: 'carn', tag: 'OD', prod: 'Eggs' },
+  { id: 'alligator', name: 'Alligator', rate: 0.48, diet: 'carn', tag: 'OD', prod: 'Eggs' },
   { id: 'wolverine', name: 'Wolverine', rate: 0.37, diet: 'strict', tag: 'OD', prod: '' },
-  { id: 'vulture', name: 'Vulture', rate: 0.37, diet: 'strict', tag: 'OD', prod: 'ไข่' },
+  { id: 'vulture', name: 'Vulture', rate: 0.37, diet: 'strict', tag: 'OD', prod: 'Eggs' },
   { id: 'toxalope', name: 'Toxalope', rate: 0.86, diet: 'herb', tag: 'B', prod: '' }
 ];
 
-var DIET_LABEL = { herb: 'กินพืช', omni: 'กินทั้งคู่', carn: 'กินเนื้อ', strict: 'เนื้อเท่านั้น' };
+var DIET_LABEL = { herb: 'Herbivore', omni: 'Omnivore', carn: 'Carnivore', strict: 'Meat only' };
 
-// สูตร: 20 เนื้อ + 20 ผัก ต่อรอบ — Butcher table ได้ 50 ชิ้น (125%) · Butcher spot ได้ 35 (87.5%)
+// Recipe: 20 meat + 20 veg per batch — Butcher table yields 50 (125%) · Butcher spot yields 35 (87.5%)
 var STATIONS = {
   table: { id: 'table', name: 'Butcher table', outNut: 2.5, batch: 50 },
   spot: { id: 'spot', name: 'Butcher spot', outNut: 1.75, batch: 35 }
@@ -118,7 +118,7 @@ var QUADRUM_DAYS = 15;
 var RICE_REAL_DAYS_SOIL = 5.54;
 var RICE_YIELD = 6;
 
-// เปิดมาครั้งแรกแสดงแค่ชุดตัวอย่างนี้ — 96 ตัวโชว์หมดจะรกเกิน ให้ค้นหาแล้วกดเพิ่มเอง
+// First open shows only this starter set — showing all 95 at once is too noisy; search and add your own
 var STARTER = ['chicken', 'cat', 'pig', 'husky', 'cow', 'warg'];
 
 var DEFAULT_COUNTS = {
@@ -131,7 +131,7 @@ function clampInt(n, lo, hi) {
   return Math.max(lo, Math.min(hi, Math.trunc(x)));
 }
 
-// ทำ kibble เป็นรอบทุก N วัน (bill "จนมี ~X" ตั้งครั้งเดียวต่อรอบ) — 1–10 วัน
+// Kibble is cooked in cycles of N days (one "until you have ~X" bill per cycle) — 1–10 days
 function clampCycle(n) {
   var x = Number(n);
   if (!Number.isFinite(x)) return DEFAULT_CYCLE;
@@ -151,7 +151,7 @@ function zeroCounts() {
   return o;
 }
 
-// รับได้ทั้ง object {chicken: 6} และ string 'chicken:6,husky:2' (จาก URL)
+// Accepts both an object {chicken: 6} and a string 'chicken:6,husky:2' (from the URL)
 function parseCounts(raw) {
   var out = zeroCounts();
   if (typeof raw === 'string') {
@@ -182,8 +182,8 @@ function allShown() {
   return ANIMALS.map(function (a) { return a.id; });
 }
 
-// รายการสัตว์ที่เลือกแสดง: รับ array หรือ string 'chicken,cat' (จาก URL)
-// ไม่มีค่า = ชุดตัวอย่างเริ่มต้น · ค่าว่าง = ไม่เหลือตัวไหน · id ที่ไม่รู้จักทิ้ง · เรียงตามลำดับ ANIMALS
+// Shown-animal list: accepts an array or 'chicken,cat' (from the URL)
+// Missing = starter set · empty = nothing shown · unknown ids dropped · ordered like ANIMALS
 function parseShownList(raw) {
   if (raw == null) return STARTER.slice();
   var arr = Array.isArray(raw)
@@ -204,7 +204,7 @@ function isStarterShown(shown) {
   return STARTER.every(function (id) { return list.indexOf(id) >= 0; });
 }
 
-// ค้นหาสัตว์จากชื่อไทยหรือ id อังกฤษ — pure function ให้ UI และเทสใช้ร่วมกัน
+// Search animals by display name or id — pure function shared by UI and tests
 function filterAnimals(query, list) {
   var q = String(query || '').trim().toLowerCase();
   var src = list || ANIMALS;
@@ -279,10 +279,10 @@ function planKibble(input) {
   };
 }
 
-// raw = ส่วนของ state ที่เกี่ยวกับแท็บสัตว์ (จาก localStorage / URL / เซิร์ฟเวอร์)
-// รับ an = 'chicken:6,husky:2' · kb = 'table'|'spot' · kcycle = วันต่อรอบทำ 1–10
-// kshown = รายการที่เลือกแสดง (array หรือ 'chicken,cat') — ไม่มีค่าเลย → ชุดตัวอย่าง
-// kbuf ของเก่าถูกเมิน (เลิกเผื่อกันเหนียวแล้ว) · มี an แต่ว่าง → ล้างศูนย์ทั้งหมด
+// raw = the animal-tab slice of state (localStorage / URL / server)
+// an = 'chicken:6,husky:2' · kb = 'table'|'spot' · kcycle = days per cook cycle 1–10
+// kshown = shown list (array or 'chicken,cat') — absent → starter set
+// legacy kbuf is ignored (no more safety margin) · an present but empty → zero everything
 function parseKibbleState(raw) {
   var src = raw || {};
   var hasCounts = src.an != null || src.counts != null;

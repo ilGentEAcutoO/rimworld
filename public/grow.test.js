@@ -39,7 +39,7 @@ test('listed growDays match wiki for the full sowable set', () => {
   };
   G.CROPS.forEach((c) => {
     assert.equal(c.grow, listed[c.id], c.id);
-    assert.ok(c.name && !/[ก-๙]/.test(c.name), c.name);
+    assert.ok(c.name && /^[A-Za-z]/.test(c.name), c.name);
   });
   assert.equal(G.CROPS.length, 15);
 });

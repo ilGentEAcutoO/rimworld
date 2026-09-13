@@ -217,7 +217,7 @@ function compareMeals(input) {
     nutrition: nutritionOf(parseCrew(src)),
     meals: meals,
     recommend: 'simple',
-    reason: 'ปลูกผักบนเรืออย่างเดียวแล้วครบ',
+    reason: 'growing vegetables on the ship alone covers it',
     corn: cornSoil({
       adults: src.adults,
       kids: src.kids,

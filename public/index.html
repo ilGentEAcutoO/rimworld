@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -332,45 +332,45 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 <div class="wrap">
   <p class="kicker">Gravship · basic life support</p>
   <div class="nav" role="tablist">
-    <button type="button" class="on" data-tab="food" id="tabFood">อาหาร</button>
-    <button type="button" data-tab="kibble" id="tabKibble">สัตว์</button>
-    <button type="button" data-tab="power" id="tabPower">แบต</button>
-    <button type="button" data-tab="grow" id="tabGrow">โตจริง</button>
-    <button type="button" data-tab="drug" id="tabDrug">ยา</button>
-    <button type="button" data-tab="leather" id="tabLeather">ชุด</button>
-    <button type="button" data-tab="settings" id="tabSettings">ตั้งค่า</button>
-    <button type="button" class="reset" id="resetPrefs">ค่าเริ่มต้น</button>
-    <form class="logout" method="post" action="/logout"><button type="submit">ออกจากระบบ</button></form>
+    <button type="button" class="on" data-tab="food" id="tabFood">Food</button>
+    <button type="button" data-tab="kibble" id="tabKibble">Animals</button>
+    <button type="button" data-tab="power" id="tabPower">Battery</button>
+    <button type="button" data-tab="grow" id="tabGrow">Grow</button>
+    <button type="button" data-tab="drug" id="tabDrug">Drugs</button>
+    <button type="button" data-tab="leather" id="tabLeather">Gear</button>
+    <button type="button" data-tab="settings" id="tabSettings">Settings</button>
+    <button type="button" class="reset" id="resetPrefs">Reset defaults</button>
+    <form class="logout" method="post" action="/logout"><button type="submit">Log out</button></form>
   </div>
 
   <div class="view on" id="view-food">
-  <h1>ต้องใช้กี่ช่องในห้องปลูก</h1>
-  <p class="lead">ไม่มี nutrient paste — เทียบ simple meal, pemmican และ packaged survival meal จากลูกเรือที่ปนเด็กกับผู้ใหญ่</p>
+  <h1>How many hydro basins do you need</h1>
+  <p class="lead">No nutrient paste — comparing simple meals, pemmican and packaged survival meals for a mixed adult/child crew</p>
   <p class="need" id="need"></p>
 
   <div class="crew" id="crew">
     <div class="g">
-      <span>ผู้ใหญ่</span>
-      <button type="button" data-k="adults" data-d="-1" aria-label="ลดผู้ใหญ่">−</button>
+      <span>Adults</span>
+      <button type="button" data-k="adults" data-d="-1" aria-label="fewer adults">−</button>
       <b id="nA">4</b>
-      <button type="button" data-k="adults" data-d="1" aria-label="เพิ่มผู้ใหญ่">+</button>
+      <button type="button" data-k="adults" data-d="1" aria-label="more adults">+</button>
     </div>
     <div class="g">
-      <span>เด็ก 3–12</span>
-      <button type="button" data-k="kids" data-d="-1" aria-label="ลดเด็ก">−</button>
+      <span>Kids 3–12</span>
+      <button type="button" data-k="kids" data-d="-1" aria-label="fewer kids">−</button>
       <b id="nK">2</b>
-      <button type="button" data-k="kids" data-d="1" aria-label="เพิ่มเด็ก">+</button>
+      <button type="button" data-k="kids" data-d="1" aria-label="more kids">+</button>
     </div>
     <div class="g">
-      <span>ทารก</span>
-      <button type="button" data-k="babies" data-d="-1" aria-label="ลดทารก">−</button>
+      <span>Babies</span>
+      <button type="button" data-k="babies" data-d="-1" aria-label="fewer babies">−</button>
       <b id="nB">0</b>
-      <button type="button" data-k="babies" data-d="1" aria-label="เพิ่มทารก">+</button>
+      <button type="button" data-k="babies" data-d="1" aria-label="more babies">+</button>
     </div>
   </div>
 
   <div class="buf">
-    <span>กันเหนียว</span>
+    <span>Safety margin</span>
     <input id="buffer" type="range" min="0" max="50" value="20">
     <b id="bufOut">20%</b>
   </div>
@@ -380,21 +380,21 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   <div class="corn" id="corn"></div>
 
   <section class="plants" id="plants" aria-labelledby="plants-title">
-    <h3 id="plants-title">พืชที่รับโบนัสอ่างเต็ม 280%</h3>
-    <p class="sub">Fertility sensitivity 100% และปลูกใน hydroponics ได้ — โตเร็วสุดบนเรือ</p>
+    <h3 id="plants-title">Plants that get the full 280% basin bonus</h3>
+    <p class="sub">Fertility sensitivity 100% and hydroponics-capable — fastest growth on the ship</p>
     <div class="plist">
-      <div class="pi"><b>Rice</b><span>food · คุ้มช่องที่สุด</span></div>
-      <div class="pi"><b>Strawberry</b><span>food · กินดิบได้</span></div>
+      <div class="pi"><b>Rice</b><span>food · best per tile</span></div>
+      <div class="pi"><b>Strawberry</b><span>food · edible raw</span></div>
       <div class="pi"><b>Cotton</b><span>textile</span></div>
       <div class="pi"><b>Smokeleaf</b><span>drug</span></div>
       <div class="pi"><b>Healroot</b><span>medicine</span></div>
       <div class="pi"><b>Tinctoria</b><span>dye</span></div>
     </div>
-    <p class="dim">ไม่เต็ม: hops ~70% · psychoid / มันฝรั่ง ~40% · nutrifungus ~15% · toxipotato 0% · ข้าวโพด · hay และ devilstrand ปลูกอ่างไม่ได้</p>
+    <p class="dim">Not full: hops ~70% · psychoid/potato ~40% · nutrifungus ~15% · toxipotato 0% · corn, hay and devilstrand can't go in basins</p>
   </section>
 
   <div class="dxbox">
-    <h3>อุณหภูมิห้องปลูก</h3>
+    <h3>Grow room temperature</h3>
     <div class="thermo">
       <div class="tfield">
         <label for="heatIn">Heater °C</label>
@@ -405,115 +405,115 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
         <label for="coolIn">Cooler °C</label>
         <input id="coolIn" type="number" inputmode="numeric" min="-20" max="80" step="1" value="41">
       </div>
-      <div class="tfactor" id="tempFactorOut">100%<small>โต</small></div>
+      <div class="tfactor" id="tempFactorOut">100%<small>growth</small></div>
     </div>
     <p class="refnote" id="tempNote"></p>
   </div>
 
-  <p class="foot">ข้าวในอ่าง 1×4 · โคมอาทิตย์คุมได้ 24 อ่าง · ห้องคิดแบบสองแถวมีทางเดินกลาง · วัยรุ่นนับผู้ใหญ่ · ทารกกิน baby food แยก · ตัวเลขวิกิ 1.6 / Odyssey</p>
+  <p class="foot">Rice is 1×4 per basin · one sun lamp covers 24 basins · room assumes two rows with a center aisle · teenagers count as adults · babies need separate baby food · wiki 1.6 / Odyssey numbers</p>
   </div>
 
   <div class="view" id="view-kibble">
-  <h1>ต้องทำ kibble วันละกี่ชิ้น</h1>
-  <p class="lead">นับจากจำนวนสัตว์ — kibble กองเดียวเลี้ยงได้ทุกตัว: กินพืช กินเนื้อ กินทั้งคู่ กินร่วมกันได้หมด ไม่ต้องทำ "kibble พืช" แยก</p>
-  <p class="need">ยกเว้นพวกกินเนื้อเท่านั้น (warg, wolverine, vulture) — กินได้แค่เนื้อดิบ/ศพ · kibble 1 ชิ้น = 0.05 โภชนาการ ไม่เน่า ใช้เทรนสัตว์ได้</p>
+  <h1>How much kibble per cook cycle</h1>
+  <p class="lead">Counted from your animals — one kibble pile feeds everyone: herbivores, carnivores and omnivores all share it, no separate "plant kibble" needed</p>
+  <p class="need">Except meat-only animals (warg, wolverine, vulture) — they eat only raw meat/corpses · 1 kibble = 0.05 nutrition, never rots, works for training</p>
 
   <div class="kzoo" id="kZoo"></div>
 
   <div class="chips" id="kStn">
-    <button type="button" class="chip on" data-stn="table">Butcher table · ได้ 50 ชิ้น (125%)</button>
-    <button type="button" class="chip" data-stn="spot">Butcher spot · ได้ 35 ชิ้น (87.5%)</button>
+    <button type="button" class="chip on" data-stn="table">Butcher table · 50 pieces (125%)</button>
+    <button type="button" class="chip" data-stn="spot">Butcher spot · 35 pieces (87.5%)</button>
   </div>
-  <p class="need" style="margin:-6px 0 14px">"ควัก" คือที่ทำอาหารสัตว์: Butcher spot วางได้ฟรีตั้งแต่ยุคหินไม่ต้องวิจัย แต่ขาดทุนวัตถุดิบ 12.5% · Butcher table ต้องวิจัย Smithing ก่อน แลกกับกำไร 25% — ทั้งสองใช้สูตร 20 เนื้อ + 20 ผัก ต่อรอบเท่ากัน</p>
+  <p class="need" style="margin:-6px 0 14px">"Butchering" is where animal food is made: a Butcher spot is free to place from the stone age with no research but wastes 12.5% of ingredients · a Butcher table needs Smithing research and pays 25% more — both use the same 20 meat + 20 veg per batch</p>
 
   <div class="buf">
-    <span>ทำทุก</span>
+    <span>Cook every</span>
     <input id="kDays" type="range" min="1" max="10" value="3">
-    <b id="kDaysOut">3 วัน</b>
+    <b id="kDaysOut">3 days</b>
   </div>
 
   <div class="win">
     <div class="n" id="kPieces">0</div>
     <div>
-      <strong>ชิ้น kibble ต่อรอบทำ</strong>
+      <strong>kibble pieces per cook cycle</strong>
       <div class="need" id="kStory"></div>
     </div>
   </div>
   <div class="stats">
-    <div class="stat"><em>ต่อวัน</em><b id="kDay">0</b></div>
-    <div class="stat"><em>เนื้อดิบ/รอบ</em><b id="kMeat">0</b></div>
-    <div class="stat"><em>ผัก/รอบ</em><b id="kVeg">0</b></div>
-    <div class="stat"><em>ต่อ quadrum 15 วัน</em><b id="kQuad">0</b></div>
+    <div class="stat"><em>per day</em><b id="kDay">0</b></div>
+    <div class="stat"><em>raw meat/cycle</em><b id="kMeat">0</b></div>
+    <div class="stat"><em>veg/cycle</em><b id="kVeg">0</b></div>
+    <div class="stat"><em>per quadrum (15 days)</em><b id="kQuad">0</b></div>
   </div>
   <div class="flare" id="kWarg"></div>
   <p class="foot" id="kFoot"></p>
 
   <div class="kpicker">
     <div class="kpicker-h">
-      <b>รายการสัตว์ทั้งเกม</b>
+      <b>Full game animal roster</b>
       <small id="kCount"></small>
     </div>
     <div class="ksearch">
       <span aria-hidden="true">⌕</span>
-      <input id="kSearch" type="text" placeholder="ค้นหาสัตว์… เช่น หมี, fox, ไก่" autocomplete="off" aria-label="ค้นหาสัตว์">
+      <input id="kSearch" type="text" placeholder="Search animals… e.g. bear, fox, chicken" autocomplete="off" aria-label="Search animals">
     </div>
     <div class="chips" id="kPicks"></div>
-    <p class="need" style="margin:8px 0 0">ชิปเขียว = อยู่ในคอก กดเพื่อเพิ่ม/ตัด · ตัวที่ตัดไม่ถูกนับ แต่เลขเดิมยังจำให้ · OD = Odyssey · B = Biotech</p>
+    <p class="need" style="margin:8px 0 0">Green chip = in your pen, click to add/remove · removed animals stop counting but keep their numbers · OD = Odyssey · B = Biotech</p>
   </div>
   </div>
 
   <div class="view" id="view-power">
-    <h1>ผ่านกลางคืนต้องมีแบตกี่ก้อน</h1>
-    <p class="lead">พิมพ์กำลังไฟของกริดตอนนั้น — ค่าเริ่มต้น 15 ชม. คือช่วงที่โซลาร์ไม่เต็มที่เส้นศูนย์สูตร (มืด 8 + รุ่ง/สนธยา 7)</p>
+    <h1>How many batteries to survive the night</h1>
+    <p class="lead">Type your grid's power draw at that moment — the default 15 h is the solar-poor stretch at the equator (8 h dark + 7 h dawn/dusk)</p>
     <div class="pwr-ctrl">
       <div class="wattbox">
-        <input id="wattsIn" type="text" inputmode="numeric" value="1000" aria-label="วัตต์">
+        <input id="wattsIn" type="text" inputmode="numeric" value="1000" aria-label="watts">
         <span>W</span>
       </div>
       <div class="g">
-        <span>ชั่วโมง</span>
+        <span>hours</span>
         <input id="hours" type="range" min="1" max="18" value="15" style="width:140px;accent-color:var(--accent)">
         <b id="hoursOut">15</b>
       </div>
     </div>
     <div class="chips" id="hourPresets">
-      <button type="button" class="chip on" data-h="15">โซลาร์ไม่เต็ม ~15 ชม.</button>
-      <button type="button" class="chip" data-h="8">มืดสนิท 8 ชม.</button>
-      <button type="button" class="chip" data-h="6">พักเครื่อง 6 ชม.</button>
-      <button type="button" class="chip" data-h="13">โคมติดทั้งวัน 13 ชม.</button>
+      <button type="button" class="chip on" data-h="15">Solar-poor ~15 h</button>
+      <button type="button" class="chip" data-h="8">Full dark 8 h</button>
+      <button type="button" class="chip" data-h="6">Engines off 6 h</button>
+      <button type="button" class="chip" data-h="13">Lamps all day 13 h</button>
     </div>
     <div class="hero">
       <div class="n" id="batN">1</div>
       <div>
-        <strong>ก้อนแบต</strong>
-        <div class="need" id="batStory">1,000 W ตลอด 15 ชม.</div>
+        <strong>batteries</strong>
+        <div class="need" id="batStory">1,000 W for 15 h</div>
       </div>
     </div>
     <div class="cells" id="batCells"></div>
     <div class="stats">
-      <div class="stat"><em>ต้องเก็บ</em><b id="needWd">458 Wd</b></div>
-      <div class="stat"><em>ความจุ</em><b id="storeWd">600 Wd</b></div>
-      <div class="stat"><em>เหลือเผื่อ</em><b id="spareWd">142 Wd</b></div>
-      <div class="stat"><em>ก้อนละ</em><b>600 Wd</b></div>
+      <div class="stat"><em>Must store</em><b id="needWd">458 Wd</b></div>
+      <div class="stat"><em>Capacity</em><b id="storeWd">600 Wd</b></div>
+      <div class="stat"><em>Spare</em><b id="spareWd">142 Wd</b></div>
+      <div class="stat"><em>Per battery</em><b>600 Wd</b></div>
     </div>
-    <p class="flare">Solar flare แบตช่วยไม่ได้ — เกมตัดทั้งกริด รวมแบต</p>
+    <p class="flare">Solar flare — batteries can't help: the game cuts the whole grid including batteries</p>
   </div>
 
   <div class="view" id="view-grow">
-    <h1 id="growTitle">แผนหว่าน ต้นนานไว้ก่อน</h1>
-    <p class="lead">ยังไม่รู้วันโจมตีก็วางแผนหว่านได้ — Cotton ในเกม 8d บนดินจริง 14.8d เพราะพืชพัก 19:00–05:00</p>
+    <h1 id="growTitle">Sowing plan — long crops first</h1>
+    <p class="lead">Plan sowing before you know the attack date — Cotton is 8d in-game but 14.8d real on soil because plants rest 19:00–05:00</p>
     <div class="chips" id="leaveMode">
-      <button type="button" class="chip on" data-leave="open">ยังไม่รู้วันโจมตี</button>
-      <button type="button" class="chip" data-leave="set">มีวันออก</button>
+      <button type="button" class="chip on" data-leave="open">No attack date yet</button>
+      <button type="button" class="chip" data-leave="set">Have a launch date</button>
     </div>
     <div class="pwr-ctrl" id="leaveCtrl" hidden>
       <div class="g">
-        <span>ออกวันที่</span>
+        <span>Launch on day</span>
         <input id="leaveDays" type="range" min="2" max="30" value="14" style="width:140px;accent-color:var(--accent)">
         <b id="leaveOut">14</b>
       </div>
       <div class="g">
-        <span>เผื่อเก็บ+ขน</span>
+        <span>Haul+load margin</span>
         <input id="packDays" type="range" min="0" max="5" value="3" style="width:120px;accent-color:var(--accent)">
         <b id="packOut">3</b>
       </div>
@@ -526,13 +526,13 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     </div>
     <div class="pwr-ctrl">
       <div class="g">
-        <span>ฤดูโตได้/ปี</span>
+        <span>Growing days/year</span>
         <input id="seasonIn" type="range" min="1" max="60" value="60" style="width:140px;accent-color:var(--accent)">
-        <b id="seasonOut">60/60 วัน</b>
+        <b id="seasonOut">60/60 days</b>
       </div>
     </div>
     <div class="chips" id="sortChips">
-      <button type="button" class="chip on" data-sort="days">หว่านยาวก่อน</button>
+      <button type="button" class="chip on" data-sort="days">Long crops first</button>
       <button type="button" class="chip" data-sort="az">A–Z</button>
     </div>
     <div class="showbox" id="showBox"></div>
@@ -540,25 +540,25 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     <div class="win">
       <div class="n" id="winN">11</div>
       <div>
-        <strong>วันให้พืชสุก</strong>
-        <div class="need" id="winStory">ต้องสุกภายในวันที่ 11 แล้วใช้ 3 วันเก็บ-ขน บินวันที่ 14</div>
+        <strong>Days for crops to ripen</strong>
+        <div class="need" id="winStory">Must ripen by day 11, then 3 days to harvest and haul, launch day 14</div>
       </div>
     </div>
     <div class="crops" id="cropList"></div>
-    <p class="need" style="margin-top:10px">ตัวเลข "ปลูก X ต้น" = เลี้ยงลูกเรือทั้งปีที่ฤดูที่ตั้งไว้ (คิดเฉลี่ยรายวันแล้ว ต้องมียุ้งข้ามฤดู) · ยอดผลผลิตวิกิ 1.6: ข้าว 6 · มันฝรั่ง 11 · ข้าวโพด 22 · สตรอว์เบอร์รี 8 · ปี = 60 วัน</p>
+    <p class="need" style="margin-top:10px">"Grow X plants" = feeds the crew all year at the set season (daily average; you need a barn across seasons) · wiki 1.6 yields: rice 6 · potato 11 · corn 22 · strawberry 8 · year = 60 days</p>
     <div class="dxbox">
-      <h3>อยู่มาแล้วยังไม่สุก?</h3>
+      <h3>Been growing a while, still not ripe?</h3>
       <div class="dxrow">
         <div>
-          <label for="diagCrop">พืช</label>
+          <label for="diagCrop">Crop</label>
           <select id="diagCrop"></select>
         </div>
         <div>
-          <label for="diagDays">อยู่มา (วัน)</label>
+          <label for="diagDays">Elapsed (days)</label>
           <input id="diagDays" type="number" inputmode="numeric" min="0" max="60" value="14">
         </div>
         <div>
-          <label for="diagPct">โตอยู่ %</label>
+          <label for="diagPct">Growth %</label>
           <input id="diagPct" type="number" inputmode="decimal" min="0" max="100" step="1" value="76">
         </div>
         <div>
@@ -576,108 +576,108 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
 
   <div class="view" id="view-drug">
-    <h1>จัดยาไม่ให้ overdose</h1>
-    <p class="lead">เน้นยากลุ่มช่วยงาน/ลดง่วงมากกว่าสันทนาการ — ตัวเลขประมาณจากวิกิ 1.5/1.6 ใช้เป็นไกด์ ไม่ใช่สูตรเป๊ะของเกม เช็คทูลทิปในเกมอีกทีถ้าจะเอาชัวร์</p>
+    <h1>Dose drugs without overdosing</h1>
+    <p class="lead">Focused on work/sleep-less drugs over recreation — approximate numbers from wiki 1.5/1.6 as a guide, not exact game formulas; double-check the in-game tooltip when it matters</p>
 
-    <p class="need">ตัวละครมียีน/trait อะไร — เลือกแล้วบอกยาที่แนะนำให้เลย ไม่ต้องเลือกเอง</p>
+    <p class="need">Pick the pawn's genes/trait and the recommended drug is named for you — no manual picking</p>
     <div class="chips" id="traitPick"></div>
 
-    <p class="need" id="drugPickLabel">ยาที่เข้ากับ trait นี้ (เรียงจาก overdose ยากสุด → ง่ายสุด — ตัวแรกคือที่แนะนำ)</p>
+    <p class="need" id="drugPickLabel">Drugs that fit this trait (hardest to overdose first — the first one is the recommendation)</p>
     <div class="showbox" id="drugPick"></div>
 
     <div class="dxbox" id="drugBox">
-      <h3>จะให้ถี่แค่ไหน — เส้นเดียวเหมือน Frequency ในเกม</h3>
+      <h3>How often — one slider like the in-game Frequency</h3>
       <div class="g" style="max-width:420px">
-        <span>ความถี่</span>
+        <span>Frequency</span>
         <input id="freqSlider" type="range" min="0" max="18" value="5" step="1" style="width:200px;accent-color:var(--accent)">
-        <b id="freqOut">วันละครั้ง</b>
+        <b id="freqOut">once a day</b>
       </div>
       <div class="dxout" id="drugOut"></div>
     </div>
 
     <div class="dxbox" id="stackBoxWrap">
-      <h3>ผสมยาได้ไหม (ใช้พร้อมกันไม่ overdose)</h3>
+      <h3>Can drugs be mixed (used together without overdose)</h3>
       <div id="stackRows"></div>
     </div>
   </div>
 
   <div class="view" id="view-leather">
   <div class="nav subnav" id="leatherSub" role="tablist">
-    <button type="button" class="on" data-sub="hide">หนัง</button>
-    <button type="button" data-sub="weapon">อาวุธประชิด</button>
-    <button type="button" data-sub="gun">ปืน</button>
-    <button type="button" data-sub="armor">เกราะ</button>
+    <button type="button" class="on" data-sub="hide">Leather</button>
+    <button type="button" data-sub="weapon">Melee</button>
+    <button type="button" data-sub="gun">Guns</button>
+    <button type="button" data-sub="armor">Armor</button>
   </div>
   <div id="sub-hide">
-  <h1>หนังไหนอย่าเอามาทำ patchleather</h1>
-  <p class="lead">ไม่มีหนังสักชนิดที่ถูกกว่าหรือแย่กว่า patchleather — มันแพงน้อยสุดและสถิติต่ำสุดในตารางหมด สูตรรวม 50 → 50 ตัวต่อตัว เงินที่หายไปคือส่วนต่างราคา ยิ่งหนังแพงยิ่งขาดทุนหนัก</p>
+  <h1>Which leathers to never turn into patchleather</h1>
+  <p class="lead">No leather is cheaper or worse than patchleather — it is the cheapest, lowest-stat entry in every column. The recipe is 50 → 50 piece for piece; the money lost is the price gap, so the pricier the leather the heavier the loss</p>
 
   <div class="dxbox">
-    <h3>กติกาเร็ว</h3>
-    <p class="mnow">หนัง thrumbo ทั้งสองแบบ ห้ามโดนเด็ดขาด · ราคา 3 ขึ้นไปเก็บทำเสื้อหรือขาย · ต่ำกว่า 2 (หนังนก หนังบาง หนังหมู หนังหมา) เท่านั้นที่เหมาะเอามารวมเป็น patch</p>
-    <p class="refnote">สูตร: hand / electric tailor bench รับหนังได้ทุกชนิดยกเว้น human leather (dread leather ใส่ได้) · ถ้าจะขายอยู่ดี ขายหนังเดิมตรง ๆ ได้เงินมากกว่าเสมอ แม้หนังถูกสุด — patch มีไว้ใช้เองตอนเศษหนังเล็ก ๆ หลายกองรวมกันไม่พอเสื้อ หรือจงใจลดมูลค่าฐาน</p>
+    <h3>Quick rules</h3>
+    <p class="mnow">Both thrumbo leathers: never touch · value 3+: keep for clothes or sell · under 2 (birdskin, lightleather, pigskin, dog leather) is what belongs in a patch</p>
+    <p class="refnote">Recipe: hand/electric tailor bench takes every leather except human leather (dread leather is fine) · if selling anyway, selling the original leather always pays more even for the cheapest — patch is for wearing yourself when scraps won't make a shirt, or for deliberately tanking value</p>
   </div>
 
   <div class="dxbox">
-    <h3>ตารางเรียงจากแพงสุด → ถูกสุด</h3>
-    <p class="refnote">ตัวคูณคือสถิติวัสดุ ไม่ใช่ % ตรง ๆ — เช่น duster ฐาน 0.3 ใช้ plainleather ×0.81 ได้เกราะแหลม 24.3% · เกราะไฟของหนังทุกชนิด = ×1.5 (patch ×0.9) · คลิกหัวคอลัมน์เพื่อเรียงใหม่ได้</p>
+    <h3>Table sorted priciest → cheapest</h3>
+    <p class="refnote">The multiplier is the material stat, not a direct % — e.g. a 0.3-base duster in plainleather ×0.81 reaches 24.3% sharp · heat armor of every leather = ×1.5 (patch ×0.9) · click column headers to re-sort</p>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>หนัง</th><th>มูลค่า</th><th>แพงกว่า patch · แปลง 50 ชิ้นขาดทุน</th><th>เกราะ แหลม / ทุบ</th><th>กันหนาว / ร้อน</th><th>คำตัดสิน</th></tr>
+          <tr><th>Leather</th><th>Value</th><th>Pricier than patch · loss on 50</th><th>Armor sharp / blunt</th><th>Insulation cold / heat</th><th>Verdict</th></tr>
         </thead>
         <tbody id="leatherBody">
-          <tr><td>Thrumbomane<i class="tagd">OD</i></td><td>20.0</td><td>13.3× · −93%</td><td>×2.12 / ×0.40</td><td>+36 / +24</td><td><span class="chip bad">ห้ามโดนเด็ดขาด</span></td></tr>
-          <tr><td>Thrumbofur</td><td>14.0</td><td>9.3× · −89%</td><td>×2.08 / ×0.36</td><td>+34 / +22</td><td><span class="chip bad">ห้ามโดนเด็ดขาด</span></td></tr>
-          <tr><td>Chinchilla fur</td><td>6.5</td><td>4.3× · −77%</td><td>×0.67 / ×0.14</td><td>+30 / +16</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
-          <tr><td>Mink fur<i class="tagd">OD</i></td><td>5.2</td><td>3.5× · −71%</td><td>×0.67 / ×0.14</td><td>+32 / +12</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
-          <tr><td>Guinea pig fur</td><td>5.0</td><td>3.3× · −70%</td><td>×0.67 / ×0.14</td><td>+38 / +18</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
-          <tr><td>Human leather</td><td>4.2</td><td>2.8× · แปลงไม่ได้</td><td>×0.64 / ×0.24</td><td>+12 / +12</td><td><span class="chip warn">สูตรไม่รับ — ห้ามใส่</span></td></tr>
-          <tr><td>Rhinoceros leather</td><td>4.2</td><td>2.8× · −64%</td><td>×1.29 / ×0.24</td><td>+14 / +14</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
-          <tr><td>Sealskin<i class="tagd">OD</i></td><td>4.0</td><td>2.7× · −63%</td><td>×0.81 / ×0.24</td><td>+36 / +20</td><td><span class="chip bad">แพงมาก — เก็บ / ขาย</span></td></tr>
-          <tr><td>Hippo leather<i class="tagd">OD</i></td><td>3.7</td><td>2.5× · −59%</td><td>×1.12 / ×0.24</td><td>+14 / +16</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Foxfur</td><td>3.5</td><td>2.3× · −57%</td><td>×0.81 / ×0.21</td><td>+20 / +16</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Dread leather<i class="tagd">AN</i></td><td>3.5</td><td>2.3× · −57%</td><td>×1.27 / ×0.24</td><td>+20 / +12</td><td><span class="chip warn">รับได้แต่อย่า — เกราะดีสุดตอนเล่น Anomaly</span></td></tr>
-          <tr><td>Bearskin</td><td>3.4</td><td>2.3× · −56%</td><td>×1.12 / ×0.24</td><td>+20 / +20</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Heavy fur</td><td>3.3</td><td>2.2× · −55%</td><td>×1.24 / ×0.24</td><td>+30 / +14</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Armadillo leather<i class="tagd">OD</i></td><td>3.2</td><td>2.1× · −53%</td><td>×1.24 / ×0.24</td><td>+16 / +18</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Elephant leather</td><td>3.0</td><td>2.0× · −50%</td><td>×1.12 / ×0.24</td><td>+14 / +12</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Panthera fur</td><td>3.0</td><td>2.0× · −50%</td><td>×0.93 / ×0.24</td><td>+16 / +24</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Wolfskin</td><td>3.0</td><td>2.0× · −50%</td><td>×1.02 / ×0.24</td><td>+24 / +16</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Mastodon leather<i class="tagd">OD</i></td><td>3.0</td><td>2.0× · −50%</td><td>×1.12 / ×0.24</td><td>+30 / +12</td><td><span class="chip warn">อย่าทำ — ดีกว่า patch ไกล</span></td></tr>
-          <tr><td>Bluefur</td><td>2.3</td><td>1.5× · −35%</td><td>×0.81 / ×0.24</td><td>+20 / +16</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
-          <tr><td>Camelhide</td><td>2.3</td><td>1.5× · −35%</td><td>×0.81 / ×0.24</td><td>+16 / +24</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
-          <tr><td>Lizardskin</td><td>2.1</td><td>1.4× · −29%</td><td>×0.81 / ×0.27</td><td>+12 / +12</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
-          <tr><td>Plainleather</td><td>2.1</td><td>1.4× · −29%</td><td>×0.81 / ×0.24</td><td>+16 / +16</td><td><span class="chip warn">แพงกว่า patch อยู่ — อย่าเผลอใส่</span></td></tr>
-          <tr><td>Dog leather</td><td>2.0</td><td>1.3× · −25%</td><td>×0.81 / ×0.24</td><td>+14 / +16</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
-          <tr><td>Pigskin</td><td>1.9</td><td>1.3× · −21%</td><td>×0.64 / ×0.24</td><td>+12 / +12</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
-          <tr><td>Lightleather</td><td>1.9</td><td>1.3× · −21%</td><td>×0.54 / ×0.14</td><td>+12 / +12</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
-          <tr><td>Birdskin</td><td>1.8</td><td>1.2× · −17%</td><td>×0.67 / ×0.14</td><td>+10 / +10</td><td><span class="chip ok">เศษพวกนี้ค่อยทำ patch</span></td></tr>
-          <tr class="now"><td>Patchleather</td><td>1.5</td><td>1.0× · —</td><td>×0.45 / ×0.19</td><td>+9 / +9</td><td><span class="chip ok">ตัวมันเอง — ต่ำสุดทุกช่อง</span></td></tr>
+          <tr><td>Thrumbomane<i class="tagd">OD</i></td><td>20.0</td><td>13.3× · −93%</td><td>×2.12 / ×0.40</td><td>+36 / +24</td><td><span class="chip bad">Never touch</span></td></tr>
+          <tr><td>Thrumbofur</td><td>14.0</td><td>9.3× · −89%</td><td>×2.08 / ×0.36</td><td>+34 / +22</td><td><span class="chip bad">Never touch</span></td></tr>
+          <tr><td>Chinchilla fur</td><td>6.5</td><td>4.3× · −77%</td><td>×0.67 / ×0.14</td><td>+30 / +16</td><td><span class="chip bad">Very pricey — keep / sell</span></td></tr>
+          <tr><td>Mink fur<i class="tagd">OD</i></td><td>5.2</td><td>3.5× · −71%</td><td>×0.67 / ×0.14</td><td>+32 / +12</td><td><span class="chip bad">Very pricey — keep / sell</span></td></tr>
+          <tr><td>Guinea pig fur</td><td>5.0</td><td>3.3× · −70%</td><td>×0.67 / ×0.14</td><td>+38 / +18</td><td><span class="chip bad">Very pricey — keep / sell</span></td></tr>
+          <tr><td>Human leather</td><td>4.2</td><td>2.8× · can't convert</td><td>×0.64 / ×0.24</td><td>+12 / +12</td><td><span class="chip warn">Recipe rejects — never use</span></td></tr>
+          <tr><td>Rhinoceros leather</td><td>4.2</td><td>2.8× · −64%</td><td>×1.29 / ×0.24</td><td>+14 / +14</td><td><span class="chip bad">Very pricey — keep / sell</span></td></tr>
+          <tr><td>Sealskin<i class="tagd">OD</i></td><td>4.0</td><td>2.7× · −63%</td><td>×0.81 / ×0.24</td><td>+36 / +20</td><td><span class="chip bad">Very pricey — keep / sell</span></td></tr>
+          <tr><td>Hippo leather<i class="tagd">OD</i></td><td>3.7</td><td>2.5× · −59%</td><td>×1.12 / ×0.24</td><td>+14 / +16</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Foxfur</td><td>3.5</td><td>2.3× · −57%</td><td>×0.81 / ×0.21</td><td>+20 / +16</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Dread leather<i class="tagd">AN</i></td><td>3.5</td><td>2.3× · −57%</td><td>×1.27 / ×0.24</td><td>+20 / +12</td><td><span class="chip warn">Accepted but don't — best armor for Anomaly runs</span></td></tr>
+          <tr><td>Bearskin</td><td>3.4</td><td>2.3× · −56%</td><td>×1.12 / ×0.24</td><td>+20 / +20</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Heavy fur</td><td>3.3</td><td>2.2× · −55%</td><td>×1.24 / ×0.24</td><td>+30 / +14</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Armadillo leather<i class="tagd">OD</i></td><td>3.2</td><td>2.1× · −53%</td><td>×1.24 / ×0.24</td><td>+16 / +18</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Elephant leather</td><td>3.0</td><td>2.0× · −50%</td><td>×1.12 / ×0.24</td><td>+14 / +12</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Panthera fur</td><td>3.0</td><td>2.0× · −50%</td><td>×0.93 / ×0.24</td><td>+16 / +24</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Wolfskin</td><td>3.0</td><td>2.0× · −50%</td><td>×1.02 / ×0.24</td><td>+24 / +16</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Mastodon leather<i class="tagd">OD</i></td><td>3.0</td><td>2.0× · −50%</td><td>×1.12 / ×0.24</td><td>+30 / +12</td><td><span class="chip warn">Don't — far better than patch</span></td></tr>
+          <tr><td>Bluefur</td><td>2.3</td><td>1.5× · −35%</td><td>×0.81 / ×0.24</td><td>+20 / +16</td><td><span class="chip warn">Still pricier than patch — don't slip it in</span></td></tr>
+          <tr><td>Camelhide</td><td>2.3</td><td>1.5× · −35%</td><td>×0.81 / ×0.24</td><td>+16 / +24</td><td><span class="chip warn">Still pricier than patch — don't slip it in</span></td></tr>
+          <tr><td>Lizardskin</td><td>2.1</td><td>1.4× · −29%</td><td>×0.81 / ×0.27</td><td>+12 / +12</td><td><span class="chip warn">Still pricier than patch — don't slip it in</span></td></tr>
+          <tr><td>Plainleather</td><td>2.1</td><td>1.4× · −29%</td><td>×0.81 / ×0.24</td><td>+16 / +16</td><td><span class="chip warn">Still pricier than patch — don't slip it in</span></td></tr>
+          <tr><td>Dog leather</td><td>2.0</td><td>1.3× · −25%</td><td>×0.81 / ×0.24</td><td>+14 / +16</td><td><span class="chip ok">These scraps are what patch is for</span></td></tr>
+          <tr><td>Pigskin</td><td>1.9</td><td>1.3× · −21%</td><td>×0.64 / ×0.24</td><td>+12 / +12</td><td><span class="chip ok">These scraps are what patch is for</span></td></tr>
+          <tr><td>Lightleather</td><td>1.9</td><td>1.3× · −21%</td><td>×0.54 / ×0.14</td><td>+12 / +12</td><td><span class="chip ok">These scraps are what patch is for</span></td></tr>
+          <tr><td>Birdskin</td><td>1.8</td><td>1.2× · −17%</td><td>×0.67 / ×0.14</td><td>+10 / +10</td><td><span class="chip ok">These scraps are what patch is for</span></td></tr>
+          <tr class="now"><td>Patchleather</td><td>1.5</td><td>1.0× · —</td><td>×0.45 / ×0.19</td><td>+9 / +9</td><td><span class="chip ok">Itself — lowest in every column</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <p class="foot">ตัวเลขวิกิ 1.6 · OD = Odyssey · AN = Anomaly · หนังแพง ๆ มี beauty สูงด้วย (thrumbomane ×8, chinchilla ×3.6) เอาไว้ปูเฟอร์นิเจอร์ได้</p>
+  <p class="foot">wiki 1.6 numbers · OD = Odyssey · AN = Anomaly · pricey leathers also have high beauty (thrumbomane ×8, chinchilla ×3.6) — nice for furniture</p>
   </div>
 
   <div id="sub-weapon" hidden>
-  <h1>อาวุธประชิดตัดสินแล้ว อาวุธละวัสดุเดียว</h1>
-  <p class="lead">ไม่ต้องเปรียบเทียบเอง — แหลมจบที่ plasteel ทุบจบที่ uranium ตัวเลขคือผลลัพธ์จริงเมื่อใช้วัสดุที่ตัดสิน (คุณภาพ normal) คลิกหัวคอลัมน์เพื่อเรียงใหม่ได้</p>
+  <h1>Melee weapons decided — the material is the only question</h1>
+  <p class="lead">No comparing needed — sharp ends at plasteel, blunt at uranium; numbers are real results with the deciding material (normal quality); click headers to re-sort</p>
 
   <div class="dxbox">
-    <h3>เหมาะกับสู้อะไร</h3>
-    <p class="refnote">สู้ mech/เกราะหนา: ใช้ทุบ — เกราะ sharp ของ mech สูงกว่า blunt ชัดเจน และการแหลมที่โดนเกราะพอดี ๆ จะถูกหั่นครึ่งแล้วแปลงเป็นทุบด้วยแรงเหลือครึ่งเดียว · สู้คน/สัตว์เกราะบาง: ใช้แหลม ดาเมจต้นสูงกว่าและทำแผลตกเลือด · เงิน/ทอง ตีอาวุธได้แต่ไม่คุ้ม — ฝั่งทุบได้ค่าเท่าเหล็กเป๊ะ จ่ายแพงกว่าโดยไม่ได้อะไรเลย</p>
-    <p class="refnote">อาวุธไฟ (plasmasword / zeelutter) กับ persona (monosword ฯลฯ) ไม่ผูกวัสดุ สูตรตายตัว · วัสดุ improvised: obsidian (OD) แหลม ×1.4 แรงกว่า plasteel แต่ HP ครึ่ง, bioferrite (AN) แหลม ×1.3 · หินทำได้แค่กระบอง</p>
+    <h3>What it's good at fighting</h3>
+    <p class="refnote">Fighting mechs/heavy armor: go blunt — mech sharp armor clearly beats blunt, and sharp hits against matching armor get halved into blunt at half force · fighting people/lightly-armored animals: go sharp, higher base damage and bleeding wounds · silver/gold forge fine but aren't worth it — the blunt side matches steel exactly while costing more for nothing</p>
+    <p class="refnote">Fire weapons (plasmasword/zeelutter) and persona weapons (monosword etc.) don't bind material — fixed stats · improvised materials: obsidian (OD) ×1.4 sharp, stronger than plasteel but half HP, bioferrite (AN) ×1.3 sharp · stone only makes clubs</p>
   </div>
 
   <div class="dxbox">
-    <h3>คำตัดสินรายอาวุธ</h3>
+    <h3>Per-weapon verdicts</h3>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>อาวุธ</th><th>ชนิด</th><th>วัสดุที่ตัดสิน</th><th>ดาเมจ/ฮิต</th><th>DPS</th><th>AP</th><th>เหตุผล</th></tr>
+          <tr><th>Weapon</th><th>Type</th><th>Deciding material</th><th>Damage/hit</th><th>DPS</th><th>AP</th><th>Why</th></tr>
         </thead>
         <tbody id="verdictBody"></tbody>
       </table>
@@ -685,37 +685,37 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
 
   <div class="dxbox">
-    <h3>เกราะ mech — ทำไมทุบชนะ</h3>
-    <p class="refnote">mech ทุกตัวเกราะไฟ 200% = โดนไฟ/heat เฉย ๆ plasmasword เลยห้ามเอาไปสู้ mech · ทุบต่ำกว่าแหลมทุกตัวและ mech ไม่มีเลือดให้ตก อาวุธแหลมเสียเปรียบหมด — สูตรคือ EMP มืดก่อน แล้วเข้าทุบด้วย mace ยูเรเนียม · เรียงจากอ่อนทุบสุดไว้บน</p>
+    <h3>Mech armor — why blunt wins</h3>
+    <p class="refnote">Every mech has 200% heat armor = fire/heat does nothing, so never take a plasmasword to a mech fight · blunt sits below sharp on every mech and mechs don't bleed, so sharp loses all around — the formula is EMP first, then a uranium mace · sorted by weakest blunt armor first</p>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>mech</th><th>แหลม</th><th>ทุบ</th><th>ไฟ</th><th>อาวุธหลัก</th></tr>
+          <tr><th>mech</th><th>sharp</th><th>blunt</th><th>heat</th><th>Main weapon</th></tr>
         </thead>
         <tbody id="mechBody"></tbody>
       </table>
     </div>
   </div>
 
-  <p class="foot">ฐานเหล็ก คุณภาพ normal จากหน้า Melee weapons ของวิกิ 1.6 · ตัวคูณวัสดุจากหน้าเดียวกัน · Roy = Royalty DLC · OD = Odyssey · AN = Anomaly</p>
+  <p class="foot">Steel base, normal quality from the wiki 1.6 Melee weapons page · material multipliers from the same page · Roy = Royalty DLC · OD = Odyssey · AN = Anomaly</p>
   </div>
 
   <div id="sub-gun" hidden>
-  <h1>ปืนตัดสินแล้ว เก่งเรื่องอะไรบ้าง</h1>
-  <p class="lead">ปืนไม่ผูกวัสดุ — ตัวชี้ขาดคือคุณภาพงานฝีมือกับสกิลนักยิงแทน ตารางนี้เลยเป็นการตัดสินว่าจะ craft กระบอกไหน เก่งเรื่องอะไร คลิกหัวคอลัมน์เรียงใหม่ได้</p>
+  <h1>Guns decided — what each is good at</h1>
+  <p class="lead">Guns don't bind material — craft quality and the shooter's skill decide instead. This table is the verdict on which gun to craft and what it's good at; click headers to re-sort</p>
 
   <div class="dxbox">
-    <h3>เหมาะกับสู้อะไร</h3>
-    <p class="refnote">ไล่ฝูง: LMG / chain shotgun (DPS 18+) · ยิงไกลคุมพื้นที่: sniper 45 ช่อง · ปราบ mech: EMP ก่อน แล้ว charge lance AP 45% หรือเข้าตีด้วย mace ยูเรเนียม · จบ spacer: charge rifle · minigun 41.7 DPS สูงสุดของเกมแต่ได้จาก loot เท่านั้น craft ไม่ได้</p>
-    <p class="refnote">เส้นทางอุตสาหกรรมคุ้มสุด: bolt-action → heavy SMG → assault rifle แล้วขึ้น spacer เอา charge rifle เลย · ปืน DLC: hellcat rifle (AN) ระดับ assault rifle, flamebow (Biotech) ธนูไฟเผาพื้น</p>
+    <h3>What it's good at fighting</h3>
+    <p class="refnote">Crowd control: LMG/chain shotgun (18+ DPS) · long range: sniper, 45 tiles · anti-mech: EMP first, then charge lance AP 45% or a uranium mace · endgame spacer: charge rifle · minigun's 41.7 DPS is the game's highest but loot-only, not craftable</p>
+    <p class="refnote">Best industrial path: bolt-action → heavy SMG → assault rifle, then jump straight to charge rifle at spacer · DLC guns: hellcat rifle (AN) is assault-rifle class, flamebow (Biotech) burns the ground</p>
   </div>
 
   <div class="dxbox">
-    <h3>ปืน</h3>
+    <h3>Guns</h3>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>ปืน</th><th>เทค</th><th>ดาเมจ/นัด</th><th>นัด/รอบ</th><th>ระยะ</th><th>AP</th><th>DPS</th><th>เหมาะกับ</th></tr>
+          <tr><th>Gun</th><th>Tech</th><th>Damage/shot</th><th>Shots/burst</th><th>Range</th><th>AP</th><th>DPS</th><th>Good for</th></tr>
         </thead>
         <tbody id="gunsBody"></tbody>
       </table>
@@ -723,38 +723,38 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
 
   <div class="dxbox">
-    <h3>ระเบิด จรวด ของยิงพิเศษ</h3>
+    <h3>Explosives, rockets, special launchers</h3>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>ชื่อ</th><th>เทค</th><th>ดาเมจ/ลูก</th><th>ลูก/รอบ</th><th>ระยะ</th><th>AP</th><th>DPS</th><th>เหมาะกับ</th></tr>
+          <tr><th>Name</th><th>Tech</th><th>Damage/round</th><th>Rounds/burst</th><th>Range</th><th>AP</th><th>DPS</th><th>Good for</th></tr>
         </thead>
         <tbody id="boomBody"></tbody>
       </table>
     </div>
   </div>
 
-  <p class="foot">ตัวเลขคุณภาพ normal จากหน้า Weapons ของวิกิ 1.6 · DPS เป็นค่าเฉลี่ยช่วงระยะกำลังดี · Neo = ยุคหิน · Ind = อุตสาหกรรม · Spacer = อวกาศ · AN = Anomaly</p>
+  <p class="foot">Normal-quality numbers from the wiki 1.6 Weapons page · DPS averaged at good range · Neo = neolithic · Ind = industrial · Spacer = space · AN = Anomaly</p>
   </div>
 
   <div id="sub-armor" hidden>
-  <h1>เกราะตัดสินแล้ว ชุดไหนเหมาะงานไร</h1>
-  <p class="lead">power armor หุ้มทั้งตัวยกเว้นหัว ทำที่ fabrication bench — เลือกตามหน้าที่: ตีประชิดเอา cataphract ยิง-เดินเอา recon อวกาศเอา vacsuit งบน้อยเอา flak ซ้อนชั้น คลิกหัวคอลัมน์เรียงใหม่ได้</p>
+  <h1>Armor decided — which set fits the job</h1>
+  <p class="lead">Power armor covers everything but the head and is made at the fabrication bench — pick by role: melee tanks take cataphract, shoot-and-move takes recon, space takes vacsuit, tight budgets layer flak; click headers to re-sort</p>
 
   <div class="dxbox">
-    <h3>สูตรผสมของดีสุด</h3>
-    <p class="refnote">กลางเกมงบน้อย: flak vest + duster ผ้า devilstrand + flak pants + flak helmet — เกราะลำตัวแหลม 100% ทั้งที่ยังไม่มี power armor เพราะ vest อยู่ชั้นในซ้อนใต้ duster ได้ · ปลายเกมโหดสุด: duster ขน thrumbofur/hyperweave คุณภาพ legend + flak vest แซง cataphract ที่ลำตัว (cataphract ยังชนะที่แขนขา) — เสื้อ devilstrand ธรรมดา ๆ ก็ได้ 28% แหลมทั้งที่เป็นผ้า</p>
-    <p class="refnote">งานโคจร (OD): ดูตารางเดินอวกาศด้านล่าง · หนาวสุดขั้ว: parka + tuque ไม่ต้องเกราะ</p>
+    <h3>Best mixes</h3>
+    <p class="refnote">Mid-game budget: flak vest + devilstrand duster + flak pants + flak helmet — 100% sharp on the torso before any power armor, because the vest layers under the duster · brutal endgame: legendary thrumbofur/hyperweave duster + flak vest beats cataphract on the torso (cataphract still wins on arms/legs) — a plain devilstrand shirt already gives 28% sharp despite being cloth</p>
+    <p class="refnote">Orbital work (OD): see the spacewalk table below · extreme cold: parka + tuque, no armor needed</p>
   </div>
 
   <div class="dxbox">
-    <h3>เดินอวกาศ (OD) — ชุดไหนแทน vacsuit ได้</h3>
-    <p class="refnote">นอกเรือคือ vacuum 100% ที่ −75°C — ชุดในตารางมีกันหนาวมาให้พออยู่แล้ว · power armor ทุกตัวให้ +30% เท่ากันหมด ตัวชี้ขาดคือหมวก · ค่า vacuum ไม่ขึ้นกับคุณภาพ · ปิด gravship สนิทก็อยู่ได้โดยไม่ต้องชุด แต่อุกกาบาต/raid drop-pod เจาะหลังคาได้ เตรียมชุดสำรอง · Biotech: gene vacskin gland หรือ Breathless ช่วยต้าน vacuum โดยไม่ต้องใส่อะไร</p>
-    <p class="refnote">โบนัสซ่อนของหมวก: vacsuit helmet กัน toxic ด้วย — toxic environment resistance 80% + ภูมิ tox gas เต็ม ๆ เท่า gas mask แถมเกราะแหลมดีกว่า ใส่ทีเดียวได้ทั้งอวกาศ+พิษ · toxic 100% ไม่มีจากชุดชิ้นเดียว — เติมต่อด้วย detoxifier lung (Biotech) หรือยีน tox resistance อีก stat ที่คูณซ้อนกันได้ · face mask เองก็กัน toxic แต่แค่ 50% และไม่กัน tox gas</p>
+    <h3>Spacewalks (OD) — which sets replace a vacsuit</h3>
+    <p class="refnote">Outside the ship is 100% vacuum at −75°C — the sets in the table come with enough cold insulation · every power armor gives the same +30%, so the helmet is the decider · the vacuum rating doesn't depend on quality · a sealed gravship is livable without a suit, but meteorites/drop-pod raids punch through the roof — keep spares · Biotech: the vacskin gland gene or Breathless resist vacuum with nothing worn</p>
+    <p class="refnote">Hidden helmet bonus: the vacsuit helmet also blocks toxic — 80% toxic environment resistance + full tox gas immunity like a gas mask, plus better sharp armor; one item covers space and poison · 100% toxic never comes from a single piece — top up with a detoxifier lung (Biotech) or the tox-resistance gene, another stacking stat · the face mask also blocks toxic but only 50% and no tox gas</p>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>ชุด + หมวก</th><th>vacuum</th><th>อยู่นอกได้</th><th>โทษเดิน</th><th>เหมาะกับ</th></tr>
+          <tr><th>Suit + helmet</th><th>vacuum</th><th>Time outside</th><th>Move penalty</th><th>Good for</th></tr>
         </thead>
         <tbody id="spaceBody"></tbody>
       </table>
@@ -762,11 +762,11 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
 
   <div class="dxbox">
-    <h3>ชุดเกราะเจาะจง — ตัวเลขตรง %</h3>
+    <h3>Specific armor sets — exact % numbers</h3>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>ชื่อ</th><th>แหลม</th><th>ทุบ</th><th>ไฟ</th><th>กันหนาว</th><th>โทษเดิน</th><th>วิจัย</th><th>เหมาะกับ</th></tr>
+          <tr><th>Name</th><th>Sharp</th><th>Blunt</th><th>Heat</th><th>Cold insulation</th><th>Move penalty</th><th>Research</th><th>Good for</th></tr>
         </thead>
         <tbody id="gearBody"></tbody>
       </table>
@@ -774,44 +774,44 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
 
   <div class="dxbox">
-    <h3>ของ stuff ได้ — เกราะตามวัสดุ ×</h3>
-    <p class="refnote">ตัวเลขคือตัวคูณฐาน คูณกับสถิติวัสดุ (โลหะ plasteel ดีสุด) และคุณภาพ 0.6–1.8 เช่น plate เหล็ก = 0.9 × 1.08</p>
+    <h3>Stuffable — armor by material ×</h3>
+    <p class="refnote">Numbers are base multipliers, times the material stat (plasteel is the best metal) and quality 0.6–1.8, e.g. steel plate = 0.9 × 1.08</p>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>ชื่อ</th><th>เกราะ ×</th><th>กันหนาว / ร้อน</th><th>โทษเดิน</th><th>เหมาะกับ</th></tr>
+          <tr><th>Name</th><th>Armor ×</th><th>Insulation cold / heat</th><th>Move penalty</th><th>Good for</th></tr>
         </thead>
         <tbody id="gearStuffBody"></tbody>
       </table>
     </div>
   </div>
 
-  <p class="foot">คุณภาพ normal จากหน้า Apparel และ Vacsuit ของวิกิ 1.6 · Roy = Royalty · OD = Odyssey · power armor ต้องผ่านวิจัยถึงจะ craft ที่ fabrication bench</p>
+  <p class="foot">Normal quality from the wiki 1.6 Apparel and Vacsuit pages · Roy = Royalty · OD = Odyssey · power armor needs its research before crafting at the fabrication bench</p>
   </div>
   </div>
 
   <div class="view" id="view-settings">
-    <h1>Rimworld settings อ้างอิง</h1>
-    <p class="lead">คัดลอกมาจาก Notion ตรง ๆ — เป็นตารางอ้างอิงเฉย ๆ ไม่ได้คำนวณอะไรให้ ไปเปิด Notion ถ้าจะแก้ไข</p>
+    <h1>RimWorld settings reference</h1>
+    <p class="lead">Copied straight from Notion — a plain reference table, nothing calculated; open Notion to edit</p>
 
     <div class="dxbox">
-      <h3>กำหนดวัน Custom Game / CS / PB / RD</h3>
+      <h3>Custom Game / CS / PB / RD day schedule</h3>
       <p class="mnow" id="milestoneNow"></p>
-      <p class="refnote">คอลัมน์ &quot;ทำงาน&quot; กับ &quot;เล่น&quot; คือ milestone เดียวกันแค่คนละจังหวะเล่น ส่วน &quot;×4/3&quot; คือ No. คูณ 4/3 (ปัดเศษ)</p>
+      <p class="refnote">The &quot;work&quot; and &quot;play&quot; columns are the same milestones at different play paces; &quot;×4/3&quot; is No. × 4/3 (rounded)</p>
       <div class="reftable-wrap">
         <table class="reftable">
           <thead>
-            <tr><th>No.</th><th>ทำงาน</th><th>เล่น</th><th>×4/3</th><th>หมายเหตุ</th></tr>
+            <tr><th>No.</th><th>Work</th><th>Play</th><th>×4/3</th><th>Note</th></tr>
           </thead>
           <tbody id="milestoneBody">
-            <tr data-no="2"><td>2</td><td></td><td>Custom Game</td><td>3</td><td class="dim">← จำนวนทรัพยากรเสก</td></tr>
+            <tr data-no="2"><td>2</td><td></td><td>Custom Game</td><td>3</td><td class="dim">← resources to spawn</td></tr>
             <tr data-no="3"><td>3</td><td></td><td>Load Save</td><td>4</td><td></td></tr>
             <tr data-no="5"><td>5</td><td></td><td>Commitment Mode</td><td>7</td><td></td></tr>
             <tr data-no="7"><td>7</td><td></td><td>CS 1</td><td>10</td><td></td></tr>
             <tr data-no="11"><td>11</td><td></td><td>PB 1</td><td>15</td><td></td></tr>
             <tr data-no="13"><td>13</td><td>Custom Game</td><td>RD 1</td><td>18</td><td></td></tr>
             <tr data-no="17"><td>17</td><td>Load Save</td><td>CS 2</td><td>23</td><td></td></tr>
-            <tr data-no="19"><td>19</td><td>Commitment Mode</td><td>PB 2</td><td>25</td><td class="dim">← จำนวนทรัพยากรสร้าง</td></tr>
+            <tr data-no="19"><td>19</td><td>Commitment Mode</td><td>PB 2</td><td>25</td><td class="dim">← resources to build</td></tr>
             <tr data-no="23"><td>23</td><td>CS 1</td><td>RD 2</td><td>30</td><td></td></tr>
             <tr data-no="29"><td>29</td><td>PB 1</td><td>CS 3</td><td>38</td><td></td></tr>
             <tr data-no="31"><td>31</td><td>RD 1</td><td>PB 3</td><td>41</td><td></td></tr>
@@ -828,32 +828,32 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 
     <div class="dxbox">
       <h3>Punishment Settings</h3>
-      <p class="refnote">เลื่อน level ขึ้นเมื่อเกิด Rebel หรือ Prison Break แล้วไม่เข้าร่วม</p>
+      <p class="refnote">Level up when a Rebel or Prison Break happens without them taking part</p>
 
-      <p class="reftable-title">Slave — ใช้กับพวก Unwavering Royalty หรือ หลุดจากข้อ 3</p>
+      <p class="reftable-title">Slave — for Unwavering Royalty types, or dropped from row 3</p>
       <div class="reftable-wrap">
         <table class="reftable">
           <thead><tr><th>Level</th><th>Penal</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>ชุดอิสระ</td></tr>
-            <tr><td>2</td><td>ชุด Slave</td></tr>
-            <tr><td>3</td><td>พิการขา</td></tr>
-            <tr><td>4</td><td>พิการแขน</td></tr>
+            <tr><td>1</td><td>Free clothes</td></tr>
+            <tr><td>2</td><td>Slave outfit</td></tr>
+            <tr><td>3</td><td>Crippled legs</td></tr>
+            <tr><td>4</td><td>Crippled arms</td></tr>
             <tr><td>5</td><td>Hemoglobin Farm</td></tr>
-            <tr><td>6</td><td>กลายเป็น Ghoul</td></tr>
+            <tr><td>6</td><td>Becomes a Ghoul</td></tr>
           </tbody>
         </table>
       </div>
 
-      <p class="reftable-title">Prisoner — อดเป็น Colonist</p>
+      <p class="reftable-title">Prisoner — starving into a Colonist</p>
       <div class="reftable-wrap">
         <table class="reftable">
-          <thead><tr><th>Level</th><th>Penal</th><th>หมายเหตุ</th></tr></thead>
+          <thead><tr><th>Level</th><th>Penal</th><th>Note</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>ชุดอิสระ</td><td></td></tr>
+            <tr><td>1</td><td>Free clothes</td><td></td></tr>
             <tr><td>2</td><td>Extract Hemoglobin + Stripe</td><td></td></tr>
-            <tr><td>3</td><td>Bloodfeed</td><td class="dim">ไปเป็น Slave Lv1</td></tr>
-            <tr><td>4</td><td>Hemoglobin Farm / นอนกับ entity</td><td class="dim">มาจาก Slave</td></tr>
+            <tr><td>3</td><td>Bloodfeed</td><td class="dim">becomes Slave Lv1</td></tr>
+            <tr><td>4</td><td>Hemoglobin Farm / sleep with an entity</td><td class="dim">comes from Slave</td></tr>
           </tbody>
         </table>
       </div>
@@ -1117,8 +1117,8 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     return String(m.roomTiles);
   }
   function tempNoteText(gf, tail) {
-    var s = 'พืชโตเต็มที่ 6–42°C · default 7/41 = ขอบ ideal ±1';
-    if (gf < 0.999) s += ' · ห้องนี้โต ~' + Math.round(gf * 100) + '%' + tail;
+    var s = 'Plants grow fully at 6–42°C · default 7/41 = ideal edge ±1';
+    if (gf < 0.999) s += ' · this room grows ~' + Math.round(gf * 100) + '%' + tail;
     return s;
   }
 
@@ -1138,19 +1138,19 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var coolIn = document.getElementById('coolIn');
     if (document.activeElement !== coolIn) coolIn.value = String(grow.cool);
     var fEl = document.getElementById('tempFactorOut');
-    fEl.innerHTML = Math.round(gf * 100) + '%<small>โต</small>';
+    fEl.innerHTML = Math.round(gf * 100) + '%<small>growth</small>';
     fEl.className = 'tfactor' + (gf < 0.5 ? ' bad' : gf < 0.999 ? ' warn' : '');
     document.getElementById('tempNote').textContent =
-      tempNoteText(gf, ' → ช่องปลูกบวกเพิ่มให้แล้ว');
+      tempNoteText(gf, ' → grow tiles increased to match');
     document.getElementById('need').textContent =
-      cmp.nutrition.toFixed(2) + ' โภชนาการต่อวัน · คุ้มสุดถ้าปลูกอย่างเดียว: Simple meal';
+      cmp.nutrition.toFixed(2) + ' nutrition/day · best single crop: Simple meal';
 
     var ranks = document.getElementById('ranks');
     ranks.textContent = '';
     var copy = {
-      simple: { title: 'Simple meal', who: 'คุ้มสุดบนเรือ', why: 'ผักอย่างเดียวครบ ไม่ต้องล่า' },
-      pemmican: { title: 'Pemmican', who: 'อ่างน้อยกว่า ถ้ามีเนื้อ', why: '70 วันไม่ตู้เย็น · กินทีละคำ' },
-      survival: { title: 'Survival pack', who: 'คลังเดินทาง', why: 'ไม่เน่า แต่กินวัตถุดิบมากกว่า pemmican' }
+      simple: { title: 'Simple meal', who: 'best on the ship', why: 'vegetables alone cover it, no hunting' },
+      pemmican: { title: 'Pemmican', who: 'fewer basins if you have meat', why: '70 days unrefrigerated · eaten bite by bite' },
+      survival: { title: 'Survival pack', who: 'travel rations', why: 'never spoils but costs more ingredients than pemmican' }
     };
     cmp.meals.forEach(function (m) {
       var meta = copy[m.id];
@@ -1160,28 +1160,28 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       b.appendChild(el('div', 'who', meta.who));
       b.appendChild(el('h2', '', meta.title));
       var amt = el('div', 'amt', String(m.basins) + ' ');
-      amt.appendChild(el('small', '', 'อ่าง'));
+      amt.appendChild(el('small', '', 'basins'));
       b.appendChild(amt);
       var ul = el('ul');
-      ul.appendChild(el('li', '', 'ช่องปลูก ' + m.growTiles));
-      ul.appendChild(el('li', '', 'ห้องใน ' + roomLabel(m) + ' ช่อง'));
+      ul.appendChild(el('li', '', 'grow tiles ' + m.growTiles));
+      ul.appendChild(el('li', '', 'room in ' + roomLabel(m) + ' tiles'));
       ul.appendChild(el('li', '', meta.why));
       b.appendChild(ul);
       b.appendChild(el('div', m.completeFromHydro ? 'okflag' : 'flag',
-        m.completeFromHydro ? 'ปลูกบนเรืออย่างเดียวพอ' : 'ต้องมีเนื้อเพิ่ม'));
+        m.completeFromHydro ? 'vegetables alone cover it' : 'needs added meat'));
       ranks.appendChild(b);
     });
 
     var selected = cmp.meals.find(function (m) { return m.id === pick; }) || cmp.meals[0];
     var pickBox = document.getElementById('pick');
     pickBox.textContent = '';
-    pickBox.appendChild(el('h3', '', copy[selected.id].title + ' — ใช้ในห้องปลูก'));
+    pickBox.appendChild(el('h3', '', copy[selected.id].title + ' — for the grow room'));
     var stats = el('div', 'stats');
     [
-      ['อ่าง', selected.basins],
-      ['ช่องปลูก', selected.growTiles],
-      ['ห้องใน', selected.roomTiles],
-      ['โคม / ไฟ', selected.lamps + ' · ' + selected.wattsDay.toLocaleString('en-US') + ' W']
+      ['Basins', selected.basins],
+      ['Grow tiles', selected.growTiles],
+      ['Room in', selected.roomTiles],
+      ['Lamps / power', selected.lamps + ' · ' + selected.wattsDay.toLocaleString('en-US') + ' W']
     ].forEach(function (row) {
       var s = el('div', 'stat');
       s.appendChild(el('em', '', row[0]));
@@ -1193,11 +1193,11 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var corn = document.getElementById('corn');
     corn.textContent = '';
     var left = el('div');
-    left.appendChild(el('strong', '', 'ข้าวโพดปลูกในอ่างบนเรือไม่ได้'));
-    left.appendChild(el('p', '', 'เกมห้ามลง corn ใน hydroponics — ใช้ตอนลงจอดปลูกดินเท่านั้น คุ้มแรงงาน ไม่คุ้มพื้นที่เรือ'));
+    left.appendChild(el('strong', '', 'Corn can\'t go in ship basins'));
+    left.appendChild(el('p', '', 'The game blocks corn in hydroponics — plant it in soil on landings only; great labor value, poor ship-space value'));
     var right = el('div');
-    right.appendChild(el('div', 'n', cmp.corn.soilTiles + ' ช่องดิน'));
-    right.appendChild(el('p', '', 'ถ้าปลูกข้าวโพดบนดินธรรมดาด้วยสูตร simple มื้อเดียวกัน'));
+    right.appendChild(el('div', 'n', cmp.corn.soilTiles + ' soil tiles'));
+    right.appendChild(el('p', '', 'if growing corn on ordinary soil for the same simple-meal plan'));
     corn.appendChild(left);
     corn.appendChild(right);
     renderSettings();
@@ -1212,7 +1212,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     document.getElementById('hoursOut').textContent = String(r.hours);
     document.getElementById('batN').textContent = String(r.batteries);
     document.getElementById('batStory').textContent =
-      r.watts.toLocaleString('en-US') + ' W ตลอด ' + r.hours + ' ชม.';
+      r.watts.toLocaleString('en-US') + ' W for ' + r.hours + ' h';
     document.getElementById('needWd').textContent = Math.round(r.needWd) + ' Wd';
     document.getElementById('storeWd').textContent = r.storedWd.toLocaleString('en-US') + ' Wd';
     document.getElementById('spareWd').textContent = Math.round(r.spareWd) + ' Wd';
@@ -1246,11 +1246,11 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var seasonIn = document.getElementById('seasonIn');
     if (seasonIn && document.activeElement !== seasonIn) seasonIn.value = String(season);
     var seasonOut = document.getElementById('seasonOut');
-    if (seasonOut) seasonOut.textContent = season + '/60 วัน';
+    if (seasonOut) seasonOut.textContent = season + '/60 days';
     var plan = GT.planCrops(grow);
     document.getElementById('growTitle').textContent = plan.open
-      ? 'แผนหว่าน ต้นนานไว้ก่อน'
-      : 'ออกวันสุดท้าย ต้องหว่านอะไร';
+      ? 'Sowing plan — long crops first'
+      : 'Last-day launch — what to sow';
     document.getElementById('leaveCtrl').hidden = !!plan.open;
     document.querySelectorAll('#leaveMode .chip').forEach(function (c) {
       var mode = c.getAttribute('data-leave');
@@ -1264,10 +1264,10 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     document.getElementById('packOut').textContent = String(plan.pack);
     document.getElementById('winN').textContent = plan.open ? '—' : String(plan.deadline);
     document.getElementById('winStory').textContent = plan.open
-      ? 'ยังไม่รู้วันโจมตี — หว่านต้นที่วันจริงนานไว้ก่อน ต้นสั้นตามหลัง'
+      ? 'No attack date yet — sow the longest-ripening crops first, short ones follow'
       : (plan.deadline <= 0
-        ? 'เผื่อเก็บครบเท่าวันออก — ไม่เหลือเวลาให้พืชสุก'
-        : ('ต้องสุกภายในวันที่ ' + plan.deadline + ' แล้วใช้ ' + plan.pack + ' วันเก็บ-ขน บินวันที่ ' + plan.leave));
+        ? 'haul margin equals the launch date — no time left for crops to ripen'
+        : ('Must ripen by day ' + plan.deadline + ', then ' + plan.pack + ' days to harvest and haul, launch day ' + plan.leave));
     document.querySelectorAll('#soilChips .chip').forEach(function (c) {
       c.classList.toggle('on', c.getAttribute('data-soil') === plan.soil);
     });
@@ -1283,7 +1283,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       var row = el('div', 'krow');
       row.appendChild(el('span', 'khead', GT.KIND_LABEL[kind]));
       var allOn = crops.every(function (c) { return on[c.id]; });
-      var tog = el('button', '', allOn ? 'ล้างกลุ่ม' : 'ทั้งกลุ่ม');
+      var tog = el('button', '', allOn ? 'clear group' : 'all');
       tog.type = 'button';
       tog.setAttribute('data-kind-all', kind);
       row.appendChild(tog);
@@ -1305,8 +1305,8 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     }
     if (plan.open) {
       rail.style.gridTemplateColumns = '1.2fr 1fr';
-      seg('packseg', 'หว่านต้นนานก่อน');
-      seg('growseg', 'ต้นสั้นตามหลัง');
+      seg('packseg', 'sow long crops first');
+      seg('growseg', 'short crops follow');
     } else {
       seg('sow', 'sow');
       seg('growseg', plan.deadline ? ('grow ' + plan.deadline + 'd') : '—');
@@ -1316,7 +1316,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var box = document.getElementById('cropList');
     box.textContent = '';
     if (!plan.rows.length) {
-      box.appendChild(el('div', 'showempty', 'เลือกพืชด้านบนเพื่อแสดงวันจริง — รายการแยก Food / Textile / Drug ตามที่ติ๊ก'));
+      box.appendChild(el('div', 'showempty', 'Pick crops above to show real days — the list splits Food / Textile / Drug as ticked'));
     }
     var eat = crew.adults * 1.6 + crew.kids * 1.28;
     var vegNeed = (eat / 0.9 * 0.5 + crew.babies * 0.1) * (1 + buffer);
@@ -1335,11 +1335,11 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       var feedCrop = CROP_FEED[row.id];
       if (feedCrop && row.real != null && Math.floor(season / row.real + 1e-9) >= 1) {
         var plants = Math.ceil(vegNeed / (feedCrop.yield / row.real * seasonFactor) - 1e-9);
-        metaEl.appendChild(document.createTextNode(' · ปลูก '));
-        metaEl.appendChild(el('b', '', plants + ' ต้น'));
+        metaEl.appendChild(document.createTextNode(' · grow '));
+        metaEl.appendChild(el('b', '', plants + ' plants'));
       }
       cr.appendChild(metaEl);
-      cr.appendChild(el('span', 'tag ' + row.tag, row.tag === 'plan' ? 'หว่าน' : (row.ok ? 'sow' : 'skip')));
+      cr.appendChild(el('span', 'tag ' + row.tag, row.tag === 'plan' ? 'sow' : (row.ok ? 'sow' : 'skip')));
       box.appendChild(cr);
     });
 
@@ -1362,14 +1362,14 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var coolEl = document.getElementById('diagCool');
     if (document.activeElement !== coolEl) coolEl.value = String(d.cool);
     document.getElementById('tempNoteGrow').textContent =
-      tempNoteText(GT.tempFactor(grow.heat, grow.cool), ' → expected ลดตามสูตร wiki');
+      tempNoteText(GT.tempFactor(grow.heat, grow.cool), ' → expected drops per the wiki formula');
     var out = document.getElementById('diagOut');
     if (d.real == null) {
-      out.textContent = d.name + ' ปลูก Hydro ไม่ได้ — เปลี่ยนดินก่อนวินิจฉัย';
+      out.textContent = d.name + ' can\'t grow in hydro — switch soil before diagnosing';
     } else if (d.days <= 0) {
-      out.textContent = 'ใส่ว่าอยู่มาแล้วกี่วัน';
+      out.textContent = 'Enter how long it has been growing';
     } else {
-      var exp = d.expected >= 100 ? 'ควรเก็บได้แล้ว' : ('ควรอยู่ที่ ~' + Math.round(d.expected) + '%');
+      var exp = d.expected >= 100 ? 'should be harvestable by now' : ('should be at ~' + Math.round(d.expected) + '%');
       var rate = Math.round(d.impliedGrf * 100);
       var tPct = Math.round(d.tempGrf * 100);
       var soilPct = d.soilGrf == null ? 100 : Math.round(d.soilGrf * 100);
@@ -1378,22 +1378,22 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       var lead = document.createElement('strong');
       lead.textContent = d.name;
       out.appendChild(lead);
-      out.appendChild(document.createTextNode(' ' + exp + ' · คุณอยู่ที่ ' + Math.round(d.percent) + '%'));
+      out.appendChild(document.createTextNode(' ' + exp + ' · you are at ' + Math.round(d.percent) + '%'));
       var row1 = document.createElement('div');
       row1.className = 'drow';
-      row1.textContent = 'ห้อง ' + d.heat + '–' + d.cool + '°C → โต ~' + tPct +
-        '% × ดิน ~' + soilPct + '% = เพดาน ~' + ceil + '%';
+      row1.textContent = 'Room ' + d.heat + '–' + d.cool + '°C → growth ~' + tPct +
+        '% × soil ~' + soilPct + '% = ceiling ~' + ceil + '%';
       out.appendChild(row1);
       var row2 = document.createElement('div');
       row2.className = 'drow';
-      row2.textContent = 'โตจริง ~' + rate + '%' + (rate <= ceil + 2
-        ? ' — กรอบอุณหภูมิ+ดินอธิบายได้แล้ว'
-        : ' — เกินเพดาน ต้องหาสาเหตุอื่น (แสง/เพาะล่าช้า)');
+      row2.textContent = 'Real growth ~' + rate + '%' + (rate <= ceil + 2
+        ? ' — temperature + soil explain it'
+        : ' — above the ceiling, look for another cause (light / late sowing)');
       out.appendChild(row2);
       if (rate > ceil + 2 && ceil >= 98) {
         var row3 = document.createElement('div');
         row3.className = 'drow';
-        row3.textContent = 'กรอบอุณหภูมิปกติดี → สงสัยแสงไม่เต็ม เช่นโคมธรรมดาให้แค่ 50% พืชอาหารส่วนใหญ่ไม่โต';
+        row3.textContent = 'Temperature frame is fine → suspect insufficient light, e.g. ordinary lamps give only 50% and most food crops will not grow';
         out.appendChild(row3);
       }
     }
@@ -1414,13 +1414,13 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var pickLabel = document.getElementById('drugPickLabel');
     pickLabel.hidden = false;
     pickLabel.textContent = ranked.length > 1
-      ? 'ยาที่เข้ากับ trait นี้ (เรียงจาก overdose ยากสุด → ง่ายสุด — ตัวแรกคือที่แนะนำ)'
-      : 'ยาประจำตัวจากยีน — ล็อคให้ตัวเดียว เพราะยีนของ xenotype นี้คุ้มครองยาตัวนี้ฝ่ายเดียว';
+      ? 'Drugs that fit this trait (hardest to overdose first — the first one is the recommendation)'
+      : 'The gene-locked drug — pinned to one because this xenotype\'s gene only protects that one';
     var pick = document.getElementById('drugPick');
     pick.textContent = '';
     var chips = el('div', 'chips');
     ranked.forEach(function (d, i) {
-      var label = d.name + (i === 0 ? (ranked.length > 1 ? ' · แนะนำ' : ' · ผูกยีน') : '');
+      var label = d.name + (i === 0 ? (ranked.length > 1 ? ' · recommended' : ' · gene-locked') : '');
       var ch = el('button', 'chip' + (d.id === drugState.drug ? ' on' : ''), label);
       ch.type = 'button';
       ch.setAttribute('data-drug', d.id);
@@ -1451,21 +1451,21 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 
     if (r.dependency) {
       out.appendChild(el('div', 'drow',
-        'ตั้งไว้เฉลี่ยทุก ' + r.intervalDays.toFixed(1) + ' วัน — ให้ทุกไม่เกิน ~' + r.recommendedMaxIntervalDays +
-        ' วันเพื่อกันพลาด (' + r.graceDays + ' วันแรกไม่มีผล mood, เข้าโคม่าวันที่ ~' + r.comaDays +
-        ', เสียชีวิตวันที่ ~' + r.deathDays + ' ถ้าขาดต่อเนื่อง)'));
+        'Averaging every ' + r.intervalDays.toFixed(1) + ' days — dose at most every ~' + r.recommendedMaxIntervalDays +
+        ' days to stay safe (first ' + r.graceDays + ' days cost no mood, coma around day ~' + r.comaDays +
+        ', death around day ~' + r.deathDays + ' if continuously deprived)'));
     } else if (r.drug.odChance > 0) {
       out.appendChild(el('div', 'drow',
-        Math.round(r.odPct * 1000) / 10 + '% โอกาส overdose สะสมต่อสัปดาห์ (เว้นทุก ' +
-        r.intervalDays.toFixed(2) + ' วัน/โดส ≈ ' + r.dosesPerWeek + ' โดส/สัปดาห์)'));
+        Math.round(r.odPct * 1000) / 10 + '% cumulative overdose chance per week (every ' +
+        r.intervalDays.toFixed(2) + ' days/dose ≈ ' + r.dosesPerWeek + ' doses/week)'));
     } else if (r.safeIntervalDays != null) {
       out.appendChild(el('div', 'drow',
-        'ไม่มี overdose — เว้นให้ ~' + r.safeIntervalDays.toFixed(1) + ' วัน/โดสเพื่อให้ tolerance คืนตัวทัน (ตอนนี้เว้นทุก ' +
-        r.intervalDays.toFixed(2) + ' วัน/โดส)'));
+        'No overdose — space ~' + r.safeIntervalDays.toFixed(1) + ' days/dose so tolerance recovers in time (currently every ' +
+        r.intervalDays.toFixed(2) + ' days/dose)'));
     }
     if (r.overStackWarning) out.appendChild(el('div', 'drow', r.overStackWarning));
     out.appendChild(el('div', 'drow',
-      'ตั้งในเกม: Drug Policy → Frequency = ' + r.policyFrequencyDays + ' วัน'));
+      'In game: Drug Policy → Frequency = ' + r.policyFrequencyDays + ' days'));
     r.notes.forEach(function (n) {
       out.appendChild(el('div', 'drow', n));
     });
@@ -1505,7 +1505,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       if (show) visible++;
     });
     document.getElementById('kCount').textContent =
-      'ทั้งหมด ' + KC.ANIMALS.length + ' สายพันธุ์ · โชว์ ' + visible + ' · ในคอก ' + kibbleState.shown.length;
+      'All ' + KC.ANIMALS.length + ' species · showing ' + visible + ' · in pen ' + kibbleState.shown.length;
   }
 
   function renderKibble() {
@@ -1515,7 +1515,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
         var ch = el('button', 'chip', chipLabel(a));
         ch.type = 'button';
         ch.setAttribute('data-kshow', a.id);
-        ch.setAttribute('aria-label', 'สลับแสดง' + a.name);
+        ch.setAttribute('aria-label', 'Toggle ' + a.name);
         picks.appendChild(ch);
       });
     }
@@ -1537,7 +1537,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       minus.type = 'button';
       minus.setAttribute('data-an', a.id);
       minus.setAttribute('data-d', '-1');
-      minus.setAttribute('aria-label', 'ลด' + a.name);
+      minus.setAttribute('aria-label', 'Fewer ' + a.name);
       z.appendChild(minus);
       var n = el('b', '', String(r.counts[a.id] || 0));
       z.appendChild(n);
@@ -1545,7 +1545,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       plus.type = 'button';
       plus.setAttribute('data-an', a.id);
       plus.setAttribute('data-d', '1');
-      plus.setAttribute('aria-label', 'เพิ่ม' + a.name);
+      plus.setAttribute('aria-label', 'More ' + a.name);
       z.appendChild(plus);
       z.appendChild(el('i', 'kz-diet', KC.DIET_LABEL[a.diet]));
       if (a.prod) z.appendChild(el('i', 'kz-tag', a.prod));
@@ -1553,20 +1553,20 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       zoo.appendChild(z);
     });
     if (!r.shown.length) {
-      zoo.appendChild(el('div', 'showempty', 'ยังไม่ได้เลือกสัตว์ — ค้นหาแล้วกดเพิ่มจาก "รายการสัตว์ทั้งเกม" ด้านล่าง'));
+      zoo.appendChild(el('div', 'showempty', 'No animals picked — search and add from the \'full game animal roster\' below'));
     }
     document.querySelectorAll('#kStn .chip').forEach(function (c) {
       c.classList.toggle('on', c.getAttribute('data-stn') === r.station);
     });
     var bufEl = document.getElementById('kDays');
     if (document.activeElement !== bufEl) bufEl.value = String(r.cycleDays);
-    document.getElementById('kDaysOut').textContent = r.cycleDays + ' วัน';
+    document.getElementById('kDaysOut').textContent = r.cycleDays + ' days';
     document.getElementById('kPieces').textContent = r.cyclePieces.toLocaleString('en-US');
     document.getElementById('kStory').textContent =
-      'ตั้ง bill "ทำ kibble จนมี ~' + r.cyclePieces.toLocaleString('en-US') +
-      '" ครั้งเดียว · พ่อครัวควัก ' + r.billsPerCycle + ' รอบ (รอบละ ' + KC.STATIONS[r.station].batch +
-      ' ชิ้น จาก 20 เนื้อ + 20 ผัก)' +
-      (r.station === 'spot' ? ' — Butcher spot ขาดทุนวัตถุดิบ 12.5%' : '');
+      'Bill \'make kibble until ~' + r.cyclePieces.toLocaleString('en-US') +
+      '\' once · the cook runs ' + r.billsPerCycle + ' batches (' + KC.STATIONS[r.station].batch +
+      ' each, from 20 meat + 20 veg)' +
+      (r.station === 'spot' ? ' — Butcher spot wastes 12.5% of ingredients' : '');
     document.getElementById('kDay').textContent = r.piecesDay.toLocaleString('en-US');
     document.getElementById('kMeat').textContent = r.meatPerCycle.toLocaleString('en-US');
     document.getElementById('kVeg').textContent = r.vegPerCycle.toLocaleString('en-US');
@@ -1574,19 +1574,19 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var wargEl = document.getElementById('kWarg');
     wargEl.hidden = r.strictCount === 0;
     if (r.strictCount > 0) {
-      wargEl.textContent = 'กินเนื้อเท่านั้น ' + r.strictCount + ' ตัว (' + r.strictNames.join(', ') +
-        ') กิน kibble ไม่ได้ — เตรียมเนื้อดิบ/ศพ ~' + r.strictMeatPerCycle + ' ชิ้น/รอบทำ (แยกจากช่องเนื้อดิบด้านบน)';
+      wargEl.textContent = 'Meat-only ' + r.strictCount + ' (' + r.strictNames.join(', ') +
+        ') can\'t eat kibble — stock ~' + r.strictMeatPerCycle + ' raw meat/corpses per cycle (separate from the raw meat box above)';
     }
     document.getElementById('kFoot').textContent =
-      'ผัก ' + r.vegPerCycle + ' ชิ้น/รอบ ต้องมีพร้อมก่อนวันทำ · ผัก/วัน ' + r.vegUnits +
-      ' ชิ้น ≈ ข้าว ~' + r.ricePlants + ' ต้นบนดิน (ต้นละ 6 เมล็ด ~5.5 วัน/รอบ) · kibble ไม่เน่า ตุนเกินรอบได้เลย · อัตรากินตัวเต็มวัยจากวิกิ 1.6 · ลูกสัตว์กินน้อยกว่า (วัยรุ่น 75% · วัยเด็ก 40%)';
+      'Veg ' + r.vegPerCycle + ' pieces/cycle must be ready before cook day · veg/day ' + r.vegUnits +
+      ' ≈ rice ~' + r.ricePlants + ' plants on soil (6 rice each, ~5.5 days/cycle) · kibble never rots, stock past a cycle freely · adult hunger rates from wiki 1.6 · juveniles eat less (juvenile 75% · baby 40%)';
     save();
   }
 
   function renderSettings() {
     var total = crew.adults;
-    var label = 'ลูกเรือ ' + total + ' คน' +
-      (crew.kids + crew.babies > 0 ? ' (นับผู้ใหญ่ ไม่รวมเด็ก)' : '');
+    var label = 'Crew of ' + total +
+      (crew.kids + crew.babies > 0 ? ' (adults counted, children excluded)' : '');
     var rows = document.querySelectorAll('#milestoneBody tr');
     var best = null;
     rows.forEach(function (tr) {
@@ -1598,7 +1598,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var out = document.getElementById('milestoneNow');
     if (best == null) {
       out.innerHTML = '';
-      out.appendChild(document.createTextNode(label + ' — ยังไม่ถึง milestone แรก (No. 2)'));
+      out.appendChild(document.createTextNode(label + ' — not past the first milestone (No. 2) yet'));
       return;
     }
     var tr = document.querySelector('#milestoneBody tr[data-no="' + best + '"]');
@@ -1606,7 +1606,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     var play = tr.cells[2].textContent.trim();
     out.innerHTML = '';
     out.appendChild(document.createTextNode(label + ' → No. ' + best));
-    var b = el('b', '', ' · ทำงาน ' + (work || '—') + ' / เล่น ' + play);
+    var b = el('b', '', ' · work ' + (work || '—') + ' / play ' + play);
     out.appendChild(b);
   }
 
@@ -1711,25 +1711,25 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   };
   var WEAPON_VERDICTS = [
     { w: 'Longsword', mat: 'Plasteel', type: 'sharp',
-      why: 'DPS สุดในบรรดาอาวุธปลอมวัสดุ — ปลายทางของสายแหลม' },
+      why: 'Top DPS among stuffable weapons — the sharp line\'s endpoint' },
     { w: 'Spear', mat: 'Plasteel', type: 'sharp',
-      why: 'AP แหลมสูงสุด 33.8% — เจาะคนใส่เกราะได้ดีสุด ทำง่ายตั้งแต่ยุคหิน' },
+      why: 'Highest sharp AP 33.8% — best against armored people, craftable from the stone age' },
     { w: 'Mace', mat: 'Uranium', type: 'blunt',
-      why: 'DPS ทุบสูงสุด — อาวุธมาตรฐานสู้ mech ตัวจริง' },
+      why: 'Highest blunt DPS — the standard anti-mech weapon' },
     { w: 'Warhammer', mat: 'Uranium', type: 'blunt',
-      why: 'ตีหนักสุดต่อฮิต + AP 40% สูงสุด — เก็บเป้าเกราะหนา แต่แกว่งช้า' },
+      why: 'Hardest hit + top 40% AP — deletes heavy armor, but swings slow' },
     { w: 'Gladius', mat: 'Plasteel', type: 'sharp',
-      why: 'คุณภาพต่อต้นทุนดี ใช้กลางเกมก่อนจะได้ longsword' },
+      why: 'Good quality-per-cost, mid-game until a longsword' },
     { w: 'Knife', mat: 'Plasteel', type: 'sharp',
-      why: 'แกว่งไวสุด 1.30 วิ — ของสำรองข้างตัวคนถือปืน' },
+      why: 'Fastest swing 1.30 s — a sidearm for gunners' },
     { w: 'Ikwa', mat: 'Plasteel', type: 'sharp',
-      why: 'ยุคหินทำได้ ตัวเลขใกล้ gladius' },
+      why: 'Neolithic-craftable, numbers near gladius' },
     { w: 'Axe', mat: 'Plasteel', type: 'sharp',
-      why: 'แทบเท่า ikwa/gladius — มี Royalty ค่อยเลือกใช้' },
+      why: 'Near ikwa/gladius — pick it if you have Royalty' },
     { w: 'Breach axe', mat: 'Steel', type: 'blunt',
-      why: 'มีไว้เจาะกำแพงเป็นหลัก ไม่ใช่อาวุธหลัก — ไม่ต้องลงทุนวัสดุแพง' },
+      why: 'Mainly for breaching walls, not a main weapon — no pricey material needed' },
     { w: 'Club', mat: null, type: 'blunt',
-      why: 'อาวุธชั่วคราว — ใช้ของที่มีไปก่อน พอมีทุนข้ามไปทำ mace เลย' }
+      why: 'Stopgap — use what you have, jump to a mace when funded' }
   ];
 
   function renderWeapons() {
@@ -1743,9 +1743,9 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       tr.appendChild(nameTd);
       var typeTd = el('td');
       typeTd.appendChild(el('span', 'chip ' + (v.type === 'sharp' ? 'ok' : 'warn'),
-        v.type === 'sharp' ? 'แหลม' : 'ทุบ'));
+        v.type === 'sharp' ? 'sharp' : 'blunt'));
       tr.appendChild(typeTd);
-      tr.appendChild(el('td', '', v.mat || 'อะไรก็ได้'));
+      tr.appendChild(el('td', '', v.mat || 'anything'));
       if (v.mat) {
         var m = WEAPON_MATS[v.mat];
         var dmg = base.dps * base.cd * m[v.type];
@@ -1809,55 +1809,55 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 
   var GUNS = [
     { n: 'Short bow', tech: 'Neo', dmg: 11, burst: 1, range: 22.9, ap: 16, dps: 3.67,
-      why: 'ธนูตั้งต้น — มีดีกว่าไม่มี' },
+      why: 'Starter bow — better than nothing' },
     { n: 'Recurve bow', tech: 'Neo', dmg: 14, burst: 1, range: 25.9, ap: 21, dps: 4.52,
-      why: 'ดีกว่า short bow ทุกด้าน — ใช้ช่วงก่อนมีปืน' },
+      why: 'Better than the short bow in every way — the pre-gun era pick' },
     { n: 'Greatbow', tech: 'Neo', dmg: 17, burst: 1, range: 29.9, ap: 15, dps: 4.86,
-      why: 'ธนูจบในตัว ดาเมจ 17 สูงกว่า revolver' },
+      why: 'The bow line finished — 17 damage beats a revolver' },
     { n: 'Pila', tech: 'Neo', dmg: 25, burst: 1, range: 18.9, ap: 10, dps: 3.85,
-      why: 'ทิ่มแรงสุดฝั่งยุคหิน แต่โยนช้า ระยะสั้น' },
+      why: 'Hardest-hitting neolithic throw, but slow and short-ranged' },
     { n: 'Revolver', tech: 'Ind', dmg: 12, burst: 1, range: 25.9, ap: 18, dps: 6.32,
-      why: 'ปืนกระบอกแรกของยุคอุตสาหกรรม' },
+      why: 'The industrial era\'s first gun' },
     { n: 'Autopistol', tech: 'Ind', dmg: 10, burst: 1, range: 25.9, ap: 15, dps: 7.69,
-      why: 'ยิงไว ตัวเบา — ปืนประจำตัวคนไม่ได้ออกรบ' },
+      why: 'Quick and light — a sidearm for non-combatants' },
     { n: 'Machine pistol', tech: 'Ind', dmg: 6, burst: 3, range: 19.9, ap: 9, dps: 11.02,
-      why: 'พ่นใกล้ 3 นัดติด — เบาแต่ไว' },
+      why: 'Close-range 3-round burst — light but fast' },
     { n: 'Bolt-action rifle', tech: 'Ind', dmg: 18, burst: 1, range: 36.9, ap: 27, dps: 5.63,
-      why: 'ม้างาน — ดาเมจ ระยะ AP คุ้มที่สุดของวิจัย' },
+      why: 'Workhorse — best damage/range/AP per research' },
     { n: 'Heavy SMG', tech: 'Ind', dmg: 12, burst: 3, range: 22.9, ap: 18, dps: 12.34,
-      why: 'สมดุลใกล้-กลาง — ตัวจริงช่วงกลางเกม' },
+      why: 'Balanced close-mid — the mid-game mainstay' },
     { n: 'Pump shotgun', tech: 'Ind', dmg: 18, burst: 1, range: 15.9, ap: 14, dps: 8.37,
-      why: 'ชิดจี้ 18 ดาเมจ แต่เข้าถึงแค่ 16 ช่อง' },
+      why: 'Point-blank 18 damage, but only reaches 16 tiles' },
     { n: 'Chain shotgun', tech: 'Ind', dmg: 18, burst: 3, range: 12.9, ap: 14, dps: 18.73,
-      why: 'DPS สูงสุดที่ craft ได้ — แลกด้วยการต้องเข้าให้ถึง 13 ช่อง' },
+      why: 'Highest craftable DPS — paid for by closing to 13 tiles' },
     { n: 'LMG', tech: 'Ind', dmg: 12, burst: 6, range: 25.9, ap: 16, dps: 18.08,
-      why: 'สาดรอบละ 6 นัด — ไล่ฝูงโดยยังยืนห่างได้' },
+      why: '6 rounds per burst — crowd control at stand-off range' },
     { n: 'Assault rifle', tech: 'Ind', dmg: 11, burst: 3, range: 30.9, ap: 16, dps: 10.88,
-      why: 'all-rounder ระยะ 31 — ปืนประจำทัพมาตรฐาน' },
+      why: 'All-rounder at 31 tiles — the standard army rifle' },
     { n: 'Sniper rifle', tech: 'Ind', dmg: 25, burst: 1, range: 44.9, ap: 38, dps: 5.00,
-      why: 'ไกลสุด 45 ช่อง + AP 38% — ค่อย ๆ ตัดศัตรูก่อนถึงตัว' },
+      why: 'Longest range 45 tiles + 38% AP — whittle enemies down before contact' },
     { n: 'Charge rifle', tech: 'Spacer', dmg: 16, burst: 3, range: 27.9, ap: 35, dps: 14.12,
-      why: 'เทพสุดที่ craft ได้ — จบเลยตอนถึง spacer' },
+      why: 'The craftable ceiling — done once you hit spacer' },
     { n: 'Charge lance', tech: 'Spacer', dmg: 30, burst: 1, range: 32.9, ap: 45, dps: 6.82,
-      why: 'AP 45% สูงสุด — งานปราบ mech โดยเฉพาะ' }
+      why: 'Top 45% AP — the dedicated anti-mech gun' }
   ];
   var BOOMS = [
     { n: 'Frag grenades', tech: 'Neo', dmg: 50, burst: 1, range: 12.9, ap: 10, dps: 12.00,
-      why: 'AoE พื้นฐาน ทำง่าย — โยนทับกองศัตรู' },
+      why: 'Basic AoE, easy to make — toss onto clusters' },
     { n: 'EMP grenades', tech: 'Neo', dmg: 50, burst: 1, range: 12.9, ap: null, dps: 12.00,
-      why: 'สตัน mech — ถูกและคุ้มสุด คู่กับคนเข้าตี' },
+      why: 'Stuns mechs — cheapest and best paired with melee' },
     { n: 'Molotov cocktails', tech: 'Neo', dmg: 10, burst: 1, range: 12.9, ap: null, dps: 2.40,
-      why: 'ปิดทางเดิน เผาศพ กันฝูงเดินเข้า' },
+      why: 'Blocks chokepoints, burns corpses, stops rushes' },
     { n: 'EMP launcher', tech: 'Ind', dmg: 50, burst: 1, range: 23.9, ap: null, dps: 7.14,
-      why: 'มืด mech จากระยะไกล แล้วให้คนตีตาม' },
+      why: 'Blinds mechs at range, then melee follows up' },
     { n: 'Incendiary launcher', tech: 'Ind', dmg: 10, burst: 1, range: 23.9, ap: 0, dps: 1.43,
-      why: 'เผาพื้นกวาดพื้นที่ — ไล่ศัตรูออกจากที่กำบัง' },
+      why: 'Burns the ground area-wide — flushes enemies from cover' },
     { n: 'Smoke launcher', tech: 'Ind', dmg: 0, burst: 1, range: 23.9, ap: null, dps: null,
-      why: 'ควันบังเป้า — ตัดเล็งของ sniper / turret' },
+      why: 'Smoke cover — breaks sniper/turret aim' },
     { n: 'Triple rocket launcher', tech: 'Ind', dmg: 50, burst: 3, range: 36, ap: 10, dps: 15.52,
-      why: 'จรวด AoE 3 ลูก — เปิดกองทห้าหนา' },
+      why: '3-rocket AoE — cracks heavy clusters' },
     { n: 'Doomsday rocket launcher', tech: 'Ind', dmg: 50, burst: 1, range: 36, ap: 10, dps: 5.56,
-      why: 'จรวดใหญ่จบกอง — ชาร์จนาน ใช้ตอนจำเป็น' }
+      why: 'One big rocket ends a group — long charge, use when needed' }
   ];
 
   function renderGuns() {
@@ -1882,35 +1882,35 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 
   var GEAR = [
     { n: 'Cataphract armor', sharp: 120, blunt: 50, heat: 60, cold: -70, move: -0.5, tech: 'Cataphract (Roy)',
-      why: 'ตัวตีประชิด — แกร่งสุดในเกม แต่ช้าที่สุด ใช้กับคนยืนโดน' },
+      why: 'Melee tank — toughest in the game but slowest, for standing in the line' },
     { n: 'Marine armor', sharp: 106, blunt: 45, heat: 54, cold: -68, move: -0.25, tech: 'Marine',
-      why: 'คุมทัพทั่วไป — สมดุลที่สุดของ power armor' },
+      why: 'General army suit — the most balanced power armor' },
     { n: 'Recon armor', sharp: 92, blunt: 40, heat: 46, cold: -64, move: 0, tech: 'Recon',
-      why: 'พลยิง-เดิน — ไม่ลดความเร็วเลย ครบชุดกับหมวกอวกาศ 95% ด้วย' },
+      why: 'Shoot-and-move — no speed penalty; 95% with the space helmet' },
     { n: 'Vacsuit', sharp: 52, blunt: 25, heat: 66, cold: -90, move: -1.25, tech: 'Orbital (OD)',
-      why: 'งานนอกเรือ — หมวกครบชุด = อวกาศ 100% แต่หนักมาก เหมาะคลุมตัวซ่อมเรือ' },
+      why: 'Hull work — full set with helmet = 100% space but very heavy, right for repairs' },
     { n: 'Flak vest', sharp: 100, blunt: 36, heat: 27, cold: -1, move: -0.12, tech: 'Flak',
-      why: 'ลำตัว 100% ราคาถูก ซ้อนใต้ duster ได้ — คุ้มที่สุดก่อนมี power armor' },
+      why: '100% torso on the cheap, layers under a duster — best value before power armor' },
     { n: 'Flak jacket', sharp: 55, blunt: 8, heat: 10, cold: -14.4, move: -0.12, tech: 'Flak',
-      why: 'ครอบเพิ่มไหล่แขน — ถ้าเลือกชิ้นเดียวเอา vest ก่อน' },
+      why: 'Adds shoulders/arms — if picking one piece, take the vest first' },
     { n: 'Flak pants', sharp: 55, blunt: 8, heat: 10, cold: -3.5, move: -0.12, tech: 'Flak',
-      why: 'ปิดขา — เติมช่องโหว่ระหว่างรอเงินทำ power armor' }
+      why: 'Covers the legs — fills gaps while saving for power armor' }
   ];
   var GEAR_STUFF = [
-    { n: 'Plate armor', x: 0.9, ins: 'ทนหนาวพอตัว', move: '-0.8',
-      why: 'ยุคกลาง — แกร่งกว่า flak ทั้งชุดรวมกัน แต่ช้าและไม่คุมหัว' },
-    { n: 'Flak helmet', x: 0.7, ins: 'หนาวนิด', move: '0',
-      why: 'หมวก flak — ใช้ plasteel ตีให้ดีสุด เกราะหัวสำคัญมาก' },
-    { n: 'Simple helmet', x: 0.5, ins: 'หนาวนิด', move: '0',
-      why: 'หมวกถูกสุด — ดีกว่าโล่งเปล่าเสมอ' },
-    { n: 'Duster', x: 0.3, ins: 'หนาว 60 / ร้อน 85', move: '0',
-      why: 'ชั้นนอกผ้า — devilstrand/hyperweave คือซับเกราะที่ดีที่สุด' },
-    { n: 'Parka', x: 0.2, ins: 'หนาว 200 (สุดในเกม)', move: '0',
-      why: 'ขั้วโลก — ทนหนาวเหลือเฟือ' },
-    { n: 'Button-down shirt', x: 0.2, ins: 'หนาว 26 / ร้อน 10', move: '0',
-      why: 'ชั้นใน — ซ้อนใต้ทุกอย่างเสมอ ใส่ไว้ไม่เสียหาย' },
-    { n: 'Pants', x: 0.2, ins: 'หนาว 20 / ร้อน 8', move: '0',
-      why: 'ชั้นในขา — เหมือนเสื้อ ใส่ทุกคน' }
+    { n: 'Plate armor', x: 0.9, ins: 'decent cold insulation', move: '-0.8',
+      why: 'Medieval — tougher than a full flak set but slow and no head coverage' },
+    { n: 'Flak helmet', x: 0.7, ins: 'slightly warm', move: '0',
+      why: 'The flak helmet — forge in plasteel; head armor matters a lot' },
+    { n: 'Simple helmet', x: 0.5, ins: 'slightly warm', move: '0',
+      why: 'Cheapest helmet — always better than bare' },
+    { n: 'Duster', x: 0.3, ins: 'cold 60 / heat 85', move: '0',
+      why: 'Cloth outer layer — devilstrand/hyperweave is the best armor liner' },
+    { n: 'Parka', x: 0.2, ins: 'cold 200 (game best)', move: '0',
+      why: 'Polar — abundant cold insulation' },
+    { n: 'Button-down shirt', x: 0.2, ins: 'cold 26 / heat 10', move: '0',
+      why: 'Base layer — always worn under everything, no downside' },
+    { n: 'Pants', x: 0.2, ins: 'cold 20 / heat 8', move: '0',
+      why: 'Leg base layer — like the shirt, wear on everyone' }
   ];
 
   function renderGear() {
@@ -1944,16 +1944,16 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   }
 
   var SPACE = [
-    { n: 'Vacsuit + หมวก vacsuit', vac: 100, dur: 'ไม่จำกัด', move: '-1.25',
-      why: 'ของจริง — 100% ถาวร ถูกที่สุด วิจัย Orbital ทำที่ machining แต่ตัวหนักสุด' },
-    { n: 'Recon + หมวก vacsuit', vac: 99, dur: '~5 วัน', move: '0',
-      why: 'ผสมของดีสุด — รบเต็มรูปแบบ วิ่งปกติไม่โทษ อยู่นอกยาว ๆ ได้' },
-    { n: 'Marine / Cataphract + หมวก vacsuit', vac: 99, dur: 'นาน', move: '-0.25 ~ -0.5',
-      why: 'เกราะแน่นกว่า recon แต่ vacuum เท่ากันและช้ากว่า — เผื่อสู้บนเรือทอด' },
-    { n: 'Recon + หมวก recon', vac: 95, dur: '~1 วัน', move: '0',
-      why: 'แวะออกไปซ่อมเรื่อย ๆ แล้วกลับห้องออกซิเจน ไม่ต้องเปลี่ยนตัว' },
-    { n: 'ไม่ใส่อะไร', vac: 0, dur: 'ตายในไม่กี่วิ', move: '0',
-      why: 'อย่า — ปล่อยเรือสนิทแทน หรือฝัง gene ต้าน vacuum' }
+    { n: 'Vacsuit + vacsuit helmet', vac: 100, dur: 'unlimited', move: '-1.25',
+      why: 'The real thing — permanent 100%, cheapest, Orbital research and a machining bench, but heaviest' },
+    { n: 'Recon + vacsuit helmet', vac: 99, dur: '~5 days', move: '0',
+      why: 'The best mix — full combat, no move penalty, long stays outside' },
+    { n: 'Marine / Cataphract + vacsuit helmet', vac: 99, dur: 'long', move: '-0.25 ~ -0.5',
+      why: 'Tougher than recon with the same vacuum but slower — kept for fighting on the beached ship' },
+    { n: 'Recon + recon helmet', vac: 95, dur: '~1 day', move: '0',
+      why: 'Pop out to repair and back into the oxygen room — no changing' },
+    { n: 'Nothing worn', vac: 0, dur: 'dead in seconds', move: '0',
+      why: 'Don\'t — keep the ship sealed or implant a vacuum-resisting gene' }
   ];
 
   function renderSpace() {
@@ -1989,20 +1989,20 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     });
   });
   var MECHS = [
-    { n: 'Militor', sharp: 20, blunt: 10, why: 'ปืนลูกซองจิ๋ว — ตัวระดม' },
-    { n: 'War urchin', sharp: 20, blunt: 10, why: 'หนามพิษ มีชีวิตไม่กี่ชั่วโมง' },
-    { n: 'Scyther', sharp: 40, blunt: 20, why: 'ใบมีดเข้าประชิด — อันตรายสุดกับคน' },
-    { n: 'Lancer', sharp: 40, blunt: 20, why: 'charge lance ยิงไกล' },
-    { n: 'Pikeman', sharp: 40, blunt: 20, why: 'needle gun ยิงไกล' },
-    { n: 'Legionary', sharp: 40, blunt: 20, why: 'มีโล่ ยิง needle launcher' },
+    { n: 'Militor', sharp: 20, blunt: 10, why: 'Tiny shotgun bot — chaff' },
+    { n: 'War urchin', sharp: 20, blunt: 10, why: 'Poison spines, lives only a few hours' },
+    { n: 'Scyther', sharp: 40, blunt: 20, why: 'Blades up close — most dangerous to people' },
+    { n: 'Lancer', sharp: 40, blunt: 20, why: 'Charge lance at range' },
+    { n: 'Pikeman', sharp: 40, blunt: 20, why: 'Needle gun at range' },
+    { n: 'Legionary', sharp: 40, blunt: 20, why: 'Has a shield, fires a needle launcher' },
     { n: 'Tesseron', sharp: 40, blunt: 20, why: 'beam graser (OD)' },
     { n: 'Cyclops', sharp: 40, blunt: 20, why: 'beam repeater (OD)' },
-    { n: 'Centipede ทุกสายพันธุ์', sharp: 72, blunt: 22, why: 'ตัวอ้วน — ปืนใหญ่ / ลูกไฟ / มินิกัน' },
-    { n: 'Centurion', sharp: 75, blunt: 25, why: 'โล่ + ปืนบนหลัง' },
-    { n: 'Diabolus', sharp: 75, blunt: 25, why: 'hellsphere cannon — บอสเผาไหม้' },
-    { n: 'Warqueen', sharp: 75, blunt: 25, why: 'คลอก mech เรื่อย ๆ' },
-    { n: 'Tunneler', sharp: 80, blunt: 40, why: 'เกราะหนาสุด ขุดอุโมงค์' },
-    { n: 'Apocriton', sharp: 75, blunt: 40, why: 'หัวหน้ากลุ่ม ปืนพิษ' }
+    { n: 'Centipede (all variants)', sharp: 72, blunt: 22, why: 'The fat one — cannon / inferno / minigun' },
+    { n: 'Centurion', sharp: 75, blunt: 25, why: 'Shield + back-mounted gun' },
+    { n: 'Diabolus', sharp: 75, blunt: 25, why: 'Hellsphere cannon — the burning boss' },
+    { n: 'Warqueen', sharp: 75, blunt: 25, why: 'Spawns mechs endlessly' },
+    { n: 'Tunneler', sharp: 80, blunt: 40, why: 'Thickest armor, digs tunnels' },
+    { n: 'Apocriton', sharp: 75, blunt: 40, why: 'Group leader, poison gun' }
   ];
 
   function renderMechs() {

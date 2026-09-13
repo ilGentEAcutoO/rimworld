@@ -10,7 +10,7 @@ test('roster integrity: 95 species, unique ids, sane rates and enums', () => {
   assert.equal(ids.size, 95);
   const diets = new Set(['herb', 'omni', 'carn', 'strict']);
   const tags = new Set(['', 'OD', 'B']);
-  const prods = new Set(['', 'ไข่', 'นม', 'ขน', 'เชื้อเพลิง']);
+  const prods = new Set(['', 'Eggs', 'Milk', 'Wool', 'Chemfuel']);
   kc.ANIMALS.forEach((a) => {
     assert.ok(a.rate > 0 && a.rate <= 5, a.id + ' rate out of range');
     assert.ok(diets.has(a.diet), a.id + ' bad diet');
@@ -70,7 +70,7 @@ test('no buffer anywhere: results are pure hunger rates, old buffer input ignore
   const base = kc.planKibble({ counts: { cow: 1 }, station: 'table', cycleDays: 3 });
   const withLegacyBuf = kc.planKibble({ counts: { cow: 1 }, station: 'table', cycleDays: 3, buffer: 0.5, kbuf: 200 });
   assert.equal(base.cyclePieces, withLegacyBuf.cyclePieces);
-  assert.equal(base.piecesDay, 18); // 0.86/0.05 = 17.2 ไม่มีการเผื่อ
+  assert.equal(base.piecesDay, 18); // 0.86/0.05 = 17.2, no margin
 });
 
 test('sample pen on a 3-day cycle: 338 pieces, 7 bills at table, 135 meat/veg', () => {
@@ -109,7 +109,7 @@ test('strict raw meat scales with the cycle', () => {
     shown: ['warg', 'wolverine', 'vulture'],
     station: 'table', cycleDays: 3
   });
-  assert.equal(r.strictMeatUnits, 31); // 1.51/0.05 = 30.2 ต่อวัน
+  assert.equal(r.strictMeatUnits, 31); // 1.51/0.05 = 30.2 per day
   assert.equal(r.strictMeatPerCycle, 91); // 1.51*3/0.05 = 90.6
 });
 
@@ -148,12 +148,12 @@ test('isStarterShown matches the starter set regardless of order', () => {
 });
 
 test('filterAnimals searches Thai names and English ids, case-insensitive', () => {
-  assert.equal(kc.filterAnimals('หมี').length, 2); // กริซลี + ขั้ว
+  assert.equal(kc.filterAnimals('bear').length, 2); // Grizzly + Polar
   assert.deepEqual(
     kc.filterAnimals('fox').map((a) => a.id),
     ['redfox', 'arcticfox', 'fennecfox']
   );
-  assert.equal(kc.filterAnimals('จิ้งจอก').length, 3);
+  assert.equal(kc.filterAnimals('wolf').length, 3); // Timber + Arctic + Greatwolf
   assert.ok(kc.filterAnimals('FOX').length >= 3);
   assert.equal(kc.filterAnimals('').length, 95);
   assert.equal(kc.filterAnimals('   ').length, 95);
@@ -166,7 +166,7 @@ test('shown list filters the calculation but keeps stored counts', () => {
   assert.ok(Math.abs(r.nutrition - 1.32) < 1e-9);
   assert.equal(r.strictCount, 0);
   assert.equal(r.strictMeatUnits, 0);
-  // ตัวที่ซ่อนไว้เลขยังถูกจำใน counts
+  // hidden animals keep their counts
   assert.equal(r.counts.warg, 1);
   assert.equal(r.counts.chicken, 6);
 });
@@ -179,7 +179,7 @@ test('hiding warg removes the strict bar data; unhiding restores it', () => {
   assert.equal(withWarg.strictMeatUnits, 16);
   assert.equal(noWarg.strictCount, 0);
   assert.equal(noWarg.strictMeatUnits, 0);
-  // husky ยังนับเหมือนเดิมทั้งสองกรณี
+  // husky counts the same in both cases
   assert.ok(Math.abs(noWarg.nutrition - 0.8) < 1e-9);
 });
 
@@ -199,7 +199,7 @@ test('parseKibbleState reads kcycle, ignores legacy kbuf; default cycle = 3', ()
 
 test('parseKibbleState kshown still parses arrays, empty and defaults', () => {
   const server = kc.parseKibbleState({ kshown: ['cat', 'pig'] });
-  // เรียงกลับตามลำดับในตาราง: หมู (omni) มาก่อนแมว (carn)
+  // re-ordered like the roster: pig (omni) before cat (carn)
   assert.deepEqual(server.shown, ['pig', 'cat']);
   assert.deepEqual(kc.parseKibbleState({ kshown: '' }).shown, []);
   assert.deepEqual(kc.parseKibbleState({}).shown, kc.STARTER);
@@ -228,7 +228,7 @@ test('shown empty → zero results, never NaN', () => {
 test('quadrum (15 days) and rice plant equivalents', () => {
   const r = kc.planKibble({ counts: { cow: 1 }, station: 'table', cycleDays: 3 });
   assert.equal(r.quadrumPieces, 258); // 17.2*15 = 258
-  // veg/day 0.86/2.5*20 = 6.88 → 7 units/day → 6.88*5.54/6 = 6.35 → 7 plants (อิงค่า/วัน)
+  // veg/day 0.86/2.5*20 = 6.88 → 7 units/day → 6.88*5.54/6 = 6.35 → 7 plants (per-day basis)
   assert.equal(r.vegUnits, 7);
   assert.equal(r.ricePlants, 7);
 });
@@ -238,6 +238,6 @@ test('legacy 11-animal kshown from a saved session still works untouched', () =>
   const s = kc.parseKibbleState({ kshown: legacy });
   assert.equal(s.shown.length, 11);
   const r = kc.planKibble({ ...s, counts: kc.DEFAULT_COUNTS });
-  // ไก่ 6 แมว 1 หมู 2 husky 2 วัว 1 = 5.62 เหมือนเดิม ค่าเดิมผู้ใช้เดิมต่อเนื่อง
+  // chicken 6 + cat 1 + pig 2 + husky 2 + cow 1 = 5.62 as before — legacy users stay continuous
   assert.ok(Math.abs(r.nutrition - 5.62) < 1e-9);
 });

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Plan · แอปเป็นอังกฤษทั้งหมด</title>
+<style>/* =============================================================
+   DESIGN SYSTEM — fresh theme (Y2K playful) + app-green mock
+   Light-only (forced) · self-contained · Thai-friendly
+   ============================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+:root{
+  --bg:#FFF4EC; --card:#FFFFFF; --card-2:#FFEDDF;
+  --chrome:#FFE0C9; --line:#FFCEB0; --line-2:#FFB088;
+  --ink:#2D1B1F; --ink-2:#6E4548; --ink-3:#9B7A7D; --ink-4:#C9ADB0;
+  --accent:#FF5E8E; --accent-rgb:255,94,142;
+  --accent-soft:#FFD6E3; --accent-line:#FFA8C3; --accent-deep:#E03570;
+  --ok:#14B89A; --ok-soft:#D4F5EC; --ok-line:#7DDDC2; --ok-deep:#0E8970;
+  --bad:#D63060; --bad-soft:#FCE0E8; --bad-line:#F09AB3; --bad-deep:#A41E48;
+  --r:22px; --r-s:16px; --r-xs:10px;
+  --shadow:0 6px 0 rgba(255,94,142,.18),0 18px 36px -10px rgba(255,94,142,.35);
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI','Sukhumvit Set',sans-serif;
+  --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light only;
+}
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+.lead{font-size:16px;color:var(--ink-2);line-height:1.65}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);
+  padding:2px 8px;border-radius:6px;color:var(--accent-deep);font-weight:600}
+.window{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 24px}
+.note{border-radius:var(--r-s);padding:13px 16px;font-size:14px;border:1px solid;
+  display:flex;gap:11px;line-height:1.55}
+.note .ic{font-weight:800;flex:none}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad-deep)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2);font-weight:700}
+td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+.brief-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.btab{font-family:var(--sans);font-size:13px;cursor:pointer;font-weight:700;
+  padding:10px 18px;border-radius:999px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .18s}
+.btab:hover{border-color:var(--accent-line);color:var(--accent-deep);background:var(--accent-soft)}
+.btab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.brief{display:none}
+.brief.on{display:block;animation:b-fade .35s ease}
+.cta-strip{margin-top:16px;padding:13px 16px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--ok-soft) 100%);
+  border:1px solid var(--accent-line);border-radius:var(--r-s);
+  font-size:13px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{color:var(--accent);font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{color:var(--accent-deep);font-weight:600;background:var(--card);
+  padding:4px 10px;border-radius:8px;border:1px solid var(--accent-line);
+  font-family:var(--mono);font-size:12px}
+.notes-list{font-size:14px;line-height:1.65;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:11px}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-family:var(--mono);font-size:11px;color:var(--accent);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;border-radius:6px;background:var(--accent-soft)}
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+.page{max-width:1060px;margin:0 auto;padding:32px 24px 36px}
+.hero{margin-bottom:20px;padding:6px 0 0}
+.hero h1{font-size:clamp(28px,4vw,40px);margin:10px 0 12px;line-height:1.2}
+.hero h1 em{color:var(--accent);font-style:normal;font-weight:800}
+.hero .lead{max-width:640px;font-size:15.5px}
+.foot{margin-top:14px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+@media(max-width:920px){.b2{grid-template-columns:1fr!important}}
+@media print{body{background:#fff}.brief-tabs{display:none}}
+
+/* ---------- app mock (สไตล์เว็บกรีนชิพ — ฉบับอังกฤษ) ---------- */
+.app{
+  --abg:#E7F0E4; --acard:#FFFEFA; --aink:#132016; --aink2:#3C5341; --aink3:#6D8571;
+  --aline:#C3D6C0; --asoft:#D8EDD6; --aac:#1B7A3C; --aac2:#14582B;
+  --ameat:#8B3A2A; --ameatbg:#F8E4DE; --awarn:#8A6A12; --awarnbg:#FFF4D4;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:var(--abg);color:var(--aink);border-radius:16px;padding:16px;
+  font-variant-numeric:tabular-nums;line-height:1.5
+}
+.app .anav{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 10px}
+.app .anav span{border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;
+  background:var(--acard);color:var(--aink2);box-shadow:0 1px 2px rgba(19,32,22,.05)}
+.app .anav span.on{background:var(--aac);color:#fff}
+.app h2{font-size:18px;letter-spacing:-.035em;margin:2px 0 3px}
+.app .alead{color:var(--aink2);font-size:12.5px;margin-bottom:8px}
+.app .kzoo{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 10px}
+.app .kz{display:flex;align-items:center;gap:5px;background:var(--acard);border-radius:10px;
+  padding:5px 6px 5px 9px;box-shadow:0 1px 2px rgba(19,32,22,.05);font-size:11px;font-weight:700;color:var(--aink2)}
+.app .kz .fakebtn{width:20px;height:20px;border-radius:6px;background:var(--asoft);color:var(--aac2);
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.app .kz .dn{font-size:13px;min-width:12px;text-align:center}
+.app .kz .dt{font-size:8px;font-weight:800;padding:1px 4px;border-radius:4px;margin-left:auto;
+  background:var(--asoft);color:var(--aac2);text-transform:uppercase;white-space:nowrap}
+.app .kz.warg{outline:2px solid var(--ameat);outline-offset:-2px}
+.app .kz.warg .dt{background:var(--ameatbg);color:var(--ameat)}
+.app .astn{display:inline-flex;border-radius:999px;overflow:hidden;box-shadow:0 1px 2px rgba(19,32,22,.05);margin-bottom:8px}
+.app .astn button{border:0;padding:7px 12px;font-size:11.5px;font-weight:800;cursor:pointer;
+  background:var(--acard);color:var(--aink2);font-family:inherit}
+.app .astn button.on{background:var(--aac);color:#fff}
+.app .acycle{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--aink2);margin-bottom:4px}
+.app .anum{font-size:50px;font-weight:800;letter-spacing:-.05em;color:var(--aac2);line-height:.9}
+.app .asub{font-size:12.5px;color:var(--aink2);font-weight:700}
+.app .astory{font-size:11.5px;color:var(--aink3);font-weight:700;margin-top:2px}
+.app .astats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.app .as{background:var(--asoft);border-radius:10px;padding:7px 10px}
+.app .as em{display:block;font-style:normal;font-size:9px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--aink3);font-weight:700}
+.app .as b{font-size:16px;font-weight:800}
+.app .flare{background:var(--ameatbg);color:var(--ameat);border-radius:10px;
+  padding:8px 11px;font-size:12px;font-weight:700}
+.app .psearch{display:flex;align-items:center;gap:7px;background:var(--abg);border-radius:9px;
+  padding:7px 11px;margin-bottom:8px}
+.app .psearch input{border:0;background:transparent;outline:none;font:inherit;font-size:12.5px;
+  font-weight:600;color:var(--aink);width:100%}
+.gloss{display:flex;flex-wrap:wrap;gap:6px}
+.gloss span{background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:5px 11px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.gloss b{color:var(--accent-deep)}
+.b2{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="kicker">Plan · 2026-09-13 12:34 · แปลทั้งแอป</div>
+    <h1>ทั้งเว็บเป็น<em>ภาษาอังกฤษ</em>หมด ตรงศัพท์เกม</h1>
+    <p class="lead">แปล UI ทุกแท็บ ป้าย ข้อความอธิบาย ชื่อสัตว์ทั้ง 95 ตัว และหน้าล็อกอิน
+      เป็นอังกฤษโดยใช้ชื่อทางการของ RimWorld — ของที่เป็นอังกฤษอยู่แล้ว (Simple meal, Hydro, DPS) คงเดิม
+      เช็คจบด้วยการสแกนหาตัวอักษรไทยในโค้ด = 0</p>
+  </header>
+
+  <nav class="brief-tabs">
+    <button class="btab on" data-t="mock">หน้าตาที่จะได้</button>
+    <button class="btab" data-t="req">สิ่งที่ขอ</button>
+    <button class="btab" data-t="spec">แผนทางเทคนิค</button>
+  </nav>
+
+  <!-- ===== TAB 1 ===== -->
+  <section class="brief on" data-tab="mock">
+    <div class="b2">
+      <div class="app">
+        <div class="anav"><span>Food</span><span class="on">Animals</span><span>Battery</span><span>Grow</span><span>Drugs</span><span>Gear</span><span>Settings</span></div>
+        <h2>How much kibble per cook cycle</h2>
+        <p class="alead">One kibble pile feeds everything except meat-only animals (warg, wolverine, vulture) — no separate "plant kibble" needed</p>
+        <div class="kzoo">
+          <div class="kz"><span>Chicken</span><span class="fakebtn">−</span><span class="dn">6</span><span class="fakebtn">+</span><span class="dt">Herbivore</span></div>
+          <div class="kz"><span>Cat</span><span class="fakebtn">−</span><span class="dn">1</span><span class="fakebtn">+</span><span class="dt">Carnivore</span></div>
+          <div class="kz"><span>Pig</span><span class="fakebtn">−</span><span class="dn">2</span><span class="fakebtn">+</span><span class="dt">Omnivore</span></div>
+          <div class="kz"><span>Husky</span><span class="fakebtn">−</span><span class="dn">2</span><span class="fakebtn">+</span><span class="dt">Omnivore</span></div>
+          <div class="kz"><span>Cow</span><span class="fakebtn">−</span><span class="dn">1</span><span class="fakebtn">+</span><span class="dt">Herbivore</span></div>
+          <div class="kz warg"><span>Warg</span><span class="fakebtn">−</span><span class="dn">1</span><span class="fakebtn">+</span><span class="dt">Meat only</span></div>
+        </div>
+        <div class="astn">
+          <button class="on">Butcher table · 50/cycle</button>
+          <button>Butcher spot · 35/cycle</button>
+        </div>
+        <div class="acycle"><span>Cook every</span><b style="color:var(--aac2)">3 days</b></div>
+        <div style="display:flex;align-items:flex-end;gap:11px">
+          <span class="anum">338</span>
+          <div>
+            <div class="asub">kibble per cook cycle</div>
+            <div class="astory">bill "make kibble until ~338" once · cook runs 7 batches</div>
+          </div>
+        </div>
+        <div class="astats">
+          <div class="as"><em>per day</em><b>113</b></div>
+          <div class="as"><em>raw meat/cycle</em><b>135</b></div>
+          <div class="as"><em>veg/cycle</em><b>135</b></div>
+          <div class="as"><em>per quadrum</em><b>1,686</b></div>
+        </div>
+        <div class="flare">Meat-only 1 (Warg) can't eat kibble — stock ~24 raw meat/corpse per cycle</div>
+        <div class="psearch" style="margin-top:10px">
+          <span aria-hidden="true">⌕</span>
+          <input type="text" value="bear" readonly>
+        </div>
+        <div class="gloss" style="gap:5px">
+          <span style="background:var(--aac);color:#fff;border-color:var(--aac)">Grizzly bear</span>
+          <span style="background:var(--aac);color:#fff;border-color:var(--aac)">Polar bear</span>
+          <span>Wolverine (OD)</span>
+          <span>…</span>
+        </div>
+      </div>
+      <div>
+        <div class="kicker" style="margin-bottom:10px">ศัพท์หลักที่ใช้ (ตรงเกม)</div>
+        <div class="gloss">
+          <span><b>Food</b> อาหาร</span><span><b>Animals</b> สัตว์</span>
+          <span><b>Battery</b> แบต</span><span><b>Grow</b> โตจริง</span>
+          <span><b>Drugs</b> ยา</span><span><b>Gear</b> ชุด</span>
+          <span><b>Settings</b> ตั้งค่า</span><span><b>Herbivore/Omnivore/Carnivore/Meat only</b></span>
+          <span><b>Eggs/Milk/Wool/Chemfuel</b> ผลผลิต</span>
+          <span><b>Basin</b> อ่าง</span><span><b>Sun lamp</b> โคม</span>
+          <span><b>Safety margin</b> กันเหนียว</span><span><b>Cook every N days</b> ทำทุกกี่วัน</span>
+          <span><b>quadrum</b> เก็บเดิม</span>
+        </div>
+        <div class="note ok" style="margin-top:14px">
+          <span class="ic">✓</span>
+          <div><strong>ชื่อสัตว์ทั้ง 95 ตัว</strong>ใช้ชื่อวิกิอังกฤษเป๊ะ (Grizzly bear, Red fox,
+            Yorkshire terrier, Wild boar…) — ค้นหา "bear", "fox", "wolf" เจอครบทุกตัว</div>
+        </div>
+        <ul class="notes-list" style="margin-top:10px">
+          <li><span class="mk">01</span><div>ครอบคลุมทุกหน้า: ทุกแท็บ + หน้าล็อกอิน + ข้อความที่โปรแกรมสร้าง (ตารางหนัง/อาวุธ/เกราะ/ยา รวมอยู่ด้วย)</div></li>
+          <li><span class="mk">02</span><div>ตัวเลข สูตร การจำค่า ไม่แตะเลย — เปลี่ยนแค่ภาษา</div></li>
+          <li><span class="mk">03</span><div>เช็คจบ: สแกนไฟล์แอปหาตัวอักษรไทยต้องได้ 0</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <span><span class="arrow">→</span> ตอบใน chat:
+        <strong>"ลุย"</strong>
+        <strong>"เก็บไทยไว้หน้า settings"</strong>
+        <strong>"หน้า login ไม่ต้องแปล"</strong></span>
+      <span class="muted">mock = หน้าตาจริงที่จะได้</span>
+    </div>
+  </section>
+
+  <!-- ===== TAB 2 ===== -->
+  <section class="brief" data-tab="req">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">brief · requirements record</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:8px">คำขอต้นฉบับ (คงถ้อยคำเดิม)</div>
+        <blockquote style="background:var(--card-2);border-left:4px solid var(--accent);
+          border-radius:0 var(--r-xs) var(--r-xs) 0;padding:14px 18px;font-size:15.5px;
+          color:var(--ink-2);margin:0 0 16px;font-style:italic">
+          ขอเป็นภาษาอังกฤษทั้งหมดละกันนะ จะไ้ดหาง่าย ๆ</blockquote>
+        <div class="kicker" style="margin-bottom:8px">ข้อตกลง</div>
+        <ul class="notes-list">
+          <li><span class="mk">01</span><div>แปลทั้งแอป: 6 แท็บหลัก + ซับแท็บชุด (หนัง/อาวุธ/ปืน/เกราะ) + หน้าตั้งค่า + หน้าล็อกอิน</div></li>
+          <li><span class="mk">02</span><div>ศัพท์ตามตัวเกม RimWorld — สิ่งที่เป็นอังกฤษอยู่แล้วไม่ยุ่ง · ตัวเลข/สูตร/state ไม่เปลี่ยน</div></li>
+          <li><span class="mk">03</span><div>ชื่อสัตว์ 95 ตัวเป็นชื่อวิกิอังกฤษ · ค้นหาชิปทำงานกับอังกฤษเต็มรูปแบบ</div></li>
+          <li><span class="mk">04</span><div>เกณฑ์จบ: ไม่มีตัวอักษรไทยเหลือใน public/ + src/ (สแกนด้วยสคริปต์)</div></li>
+        </ul>
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ ..."</strong></span>
+          <span class="muted">บันทึนี้อยู่ใน requirements.html ด้วย</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TAB 3 ===== -->
+  <section class="brief" data-tab="spec">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">spec · source of truth สำหรับ workers</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:10px">ขอบเขตไฟล์ (นับบรรทัดที่มีไทยจริง)</div>
+        <table>
+          <thead><tr><th>ไฟล์</th><th>บรรทัดไทย</th><th>อะไรบ้าง</th></tr></thead>
+          <tbody>
+            <tr><td>index.html</td><td>333</td><td>HTML ทุกแท็บ + ข้อความที่ render() สร้าง + ตารางหนัง/อาวุธ/เกราะ/mech</td></tr>
+            <tr><td>kibble.js</td><td>95</td><td>ชื่อสัตว์ 95 ตัว + DIET_LABEL + prod (ไข่/นม/ขน/เชื้อเพลิง → Eggs/Milk/Wool/Chemfuel)</td></tr>
+            <tr><td>drugs.js</td><td>63</td><td>effect/safetyNote/กลุ่มยา/label ทั้งชุด</td></tr>
+            <tr><td>login.html</td><td>13</td><td>ฟอร์มล็อกอิน + error messages (ภาษาอยู่ฝั่งหน้า ไม่ใช่ worker)</td></tr>
+            <tr><td>calc.js</td><td>1</td><td>reason เดียว ('ปลูกผักบนเรือ…')</td></tr>
+            <tr><td>เทส</td><td>21</td><td>kibble.test (10) · drugs.test (10) · grow.test (1) — เปลี่ยน assertion เป็นอังกฤษ</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note danger" style="margin-top:6px">
+          <span class="ic">⚠</span>
+          <div><strong>Security:</strong> งานแปลล้วน ไม่แตะ logic/state/endpoint — ระวังเพียงอย่าแตะค่า enum ที่ state ใช้จริง
+            (id สัตว์, 'table'/'spot', 'herb'/'omni'/'carn'/'strict') เปลี่ยนแค่ label ที่โชว์ · executionProfile standard</div>
+        </div>
+
+        <div class="kicker" style="margin:14px 0 10px">Test specs (TDD)</div>
+        <table>
+          <thead><tr><th>กลุ่ม</th><th>เคสหลัก</th></tr></thead>
+          <tbody>
+            <tr><td>ข้อมูลสัตว์</td><td>ชื่อ 95 ตัวเป็นอังกฤษหมด (สแกน [ก-๙] ใน name = 0) · id ไม่เปลี่ยนแม้แต่ตัวเดียว</td></tr>
+            <tr><td>ค้นหา</td><td>'bear' → 2 · 'fox' → 3 · 'wolf' → Timber/Arctic/Greatwolf · 'หมี' → 0 (ไทยหายไปตามจริง)</td></tr>
+            <tr><td>enum/label</td><td>prod เป็น Eggs/Milk/Wool/Chemfuel · DIET_LABEL Herbivore/Omnivore/Carnivore/Meat only</td></tr>
+            <tr><td>state compat</td><td>state/URL เดิม (an/kb/kcycle/kshown) โหลดค่าเดิมได้ · id สัตว์ไม่มีการเปลี่ยน</td></tr>
+            <tr><td>เทสเดิม</td><td>drugs/grow assertions เปลี่ยนเป็นอังกฤษ · ตัวเลขทุกตัวยังเท่าเดิม</td></tr>
+            <tr><td>สแกนจบ</td><td>grep [ก-๙] public/ src/ = 0 บรรทัด</td></tr>
+          </tbody>
+        </table>
+
+        <div class="kicker" style="margin:14px 0 10px">งาน</div>
+        <ul class="notes-list">
+          <li><span class="mk">001</span><div><strong>โมดูล + เทส</strong> — kibble.js (ชื่อ/label/prod) + drugs.js + calc.js + อัปเดต 3 ไฟล์เทส (high)</div></li>
+          <li><span class="mk">002</span><div><strong>index.html + login.html</strong> — แปล UI ทุกแท็บ + lang="en" + หน้าล็อกอิน (high)</div></li>
+          <li><span class="mk">003</span><div><strong>ตรวจ + ขึ้น production</strong> — สแกนไทย=0 + browser ทุกแท็บ + npm test + commit/push/deploy (medium)</div></li>
+        </ul>
+
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> อนุมัติแล้วตอบ:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ก่อน: ..."</strong></span>
+          <span class="muted">เริ่มงานด้วย workflow-work</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">plan 2026-09-13 12:34 · ต่อจาก archive/006 · แปลล้วน ไม่แตะตัวเลข</div>
+</div>
+
+<script>
+document.querySelectorAll('.btab').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.btab').forEach(function (x) { x.classList.remove('on'); });
+    document.querySelectorAll('.brief').forEach(function (x) { x.classList.remove('on'); });
+    b.classList.add('on');
+    document.querySelector('.brief[data-tab="' + b.dataset.t + '"]').classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

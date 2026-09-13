@@ -127,12 +127,12 @@ test('nearestFreqIndex snaps an arbitrary days value to the closest step', () =>
 });
 
 test('formatFrequency mirrors the in-game slider wording on one scale', () => {
-  assert.equal(D.formatFrequency(1), 'วันละครั้ง');
-  assert.equal(D.formatFrequency(0.5), 'วันละ 2 ครั้ง');
-  assert.equal(D.formatFrequency(0.25), 'วันละ 4 ครั้ง');
-  assert.equal(D.formatFrequency(2), 'ทุก 2 วัน');
-  assert.equal(D.formatFrequency(3), 'ทุก 3 วัน');
-  assert.equal(D.formatFrequency(90), 'ทุก 90 วัน');
+  assert.equal(D.formatFrequency(1), 'once a day');
+  assert.equal(D.formatFrequency(0.5), '2x a day');
+  assert.equal(D.formatFrequency(0.25), '4x a day');
+  assert.equal(D.formatFrequency(2), 'every 2 days');
+  assert.equal(D.formatFrequency(3), 'every 3 days');
+  assert.equal(D.formatFrequency(90), 'every 90 days');
 });
 
 test('parseIntervalDays clamps to the FREQ_STEPS range and rejects junk', () => {
@@ -251,7 +251,7 @@ test('evaluate: addiction risk is surfaced for unprotected drugs, absent for gen
   assert.equal(r.addictionRisk.expectedDoses, 50);
   // daily dosing for 30 days: 1 - (1 - 0.02)^30 ≈ 45.5%
   assert.ok(r.addictionRisk.pct30d > 0.44 && r.addictionRisk.pct30d < 0.47);
-  assert.ok(r.notes.some((n) => n.includes('ติดภายใน 30 วัน')));
+  assert.ok(r.notes.some((n) => n.includes('addicted within 30 days')));
 
   const immune = D.evaluate({ trait: 'waster', drug: 'wakeup', intervalDays: 1 });
   assert.equal(immune.addictionRisk, null);
@@ -262,11 +262,11 @@ test('evaluate: addiction risk is surfaced for unprotected drugs, absent for gen
 
 test('stackForTrait rows carry a cadence prescription for the combo', () => {
   const hussar = D.stackForTrait('hussar');
-  assert.equal(hussar.find((r) => r.drug.id === 'gojuice').cadence, 'วันละ 1 เข็ม');
+  assert.equal(hussar.find((r) => r.drug.id === 'gojuice').cadence, '1 dose/day');
   // tea add-on has NO hussar gene protection — cadence follows its own tolerance, not daily
-  assert.equal(hussar.find((r) => r.drug.id === 'psychitetea').cadence, 'ทุก 2 วัน');
+  assert.equal(hussar.find((r) => r.drug.id === 'psychitetea').cadence, 'every 2 days');
   assert.ok(hussar.every((r) => r.cadence && r.cadence.length > 0));
 
   const waster = D.stackForTrait('waster');
-  assert.equal(waster.find((r) => r.drug.id === 'psychitetea').cadence, 'ทุก 2–5 วัน');
+  assert.equal(waster.find((r) => r.drug.id === 'psychitetea').cadence, 'every 2–5 days');
 });

@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light only">
 <meta name="robots" content="noindex,nofollow">
-<title>Log in · Gravship life support</title>
+<title>เข้าสู่ระบบ · Gravship life support</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231B7A3C'/><path d='M16 26V14' stroke='%23E7F0E4' stroke-width='2.5' stroke-linecap='round'/><path d='M16 16c0-4.4 3.4-8 7.5-8 0 4.4-3.4 8-7.5 8z' fill='%23E7F0E4'/><path d='M16 20.5c0-3.7-2.9-6.7-6.5-6.7 0 3.7 2.9 6.7 6.5 6.7z' fill='%23A8D5A2'/></svg>">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -84,27 +84,27 @@ h1{font-size:24px;letter-spacing:-.035em;line-height:1.15;margin:6px 0 4px}
     <path d="M16 20.5c0-3.7-2.9-6.7-6.5-6.7 0 3.7 2.9 6.7 6.5 6.7z" fill="#A8D5A2"/>
   </svg>
   <p class="kicker">Gravship · basic life support</p>
-  <h1>Log in</h1>
-  <p class="lead">Use your existing username and password</p>
+  <h1>เข้าสู่ระบบ</h1>
+  <p class="lead">ใช้ชื่อผู้ใช้และรหัสผ่านเดิมที่ตั้งไว้</p>
 
   <div class="banner" id="banner" role="alert" aria-live="polite" hidden></div>
 
   <form method="post" action="/login">
-    <!-- next is filled from ?next= by the script at the bottom; without JS the form still submits normally, just back to the home page instead of the original one -->
+    <!-- next ถูกเติมจาก ?next= ด้วยสคริปต์ท้ายไฟล์; ถ้าปิด JS ฟอร์มยังส่งได้ตามปกติ แค่กลับไปหน้าแรกแทนหน้าเดิม -->
     <input type="hidden" name="next" id="next" value="">
     <div class="field">
-      <label for="username">Username</label>
+      <label for="username">ชื่อผู้ใช้</label>
       <input id="username" name="username" type="text" autocomplete="username"
              autocapitalize="none" autocorrect="off" spellcheck="false" required autofocus>
     </div>
     <div class="field">
-      <label for="password">Password</label>
+      <label for="password">รหัสผ่าน</label>
       <input id="password" name="password" type="password" autocomplete="current-password" required>
     </div>
-    <button class="go" type="submit" id="go">Log in</button>
+    <button class="go" type="submit" id="go">เข้าสู่ระบบ</button>
   </form>
 
-  <p class="foot">Log in once, remembered for 30 days on this device</p>
+  <p class="foot">เข้าสู่ระบบครั้งเดียว จำไว้ 30 วันบนอุปกรณ์นี้</p>
 </main>
 
 <script>
@@ -112,7 +112,7 @@ h1{font-size:24px;letter-spacing:-.035em;line-height:1.15;margin:6px 0 4px}
   var q;
   try { q = new URLSearchParams(location.search); } catch (e) { return; }
 
-  // Only accepts same-origin paths — blocks ?next=https://... or //host from leading elsewhere
+  // รับเฉพาะ path ภายในเว็บเดียวกัน — กัน ?next=https://... หรือ //host พาไปเว็บอื่น
   var next = q.get('next') || '';
   if (next.charAt(0) === '/' && next.charAt(1) !== '/' && next.charAt(1) !== '\\') {
     document.getElementById('next').value = next;
@@ -128,12 +128,12 @@ h1{font-size:24px;letter-spacing:-.035em;line-height:1.15;margin:6px 0 4px}
   if (err === 'locked') {
     var secs = parseInt(q.get('retry'), 10);
     var mins = Number.isFinite(secs) && secs > 0 ? Math.ceil(secs / 60) : 15;
-    head.textContent = 'Too many failed attempts';
-    body.textContent = 'Try again in about ' + mins + ' minutes, then reload this page';
+    head.textContent = 'พิมพ์ผิดหลายครั้งเกินไป';
+    body.textContent = 'ลองใหม่ในอีกประมาณ ' + mins + ' นาที แล้วโหลดหน้านี้ใหม่';
     document.getElementById('go').disabled = true;
   } else if (err === 'wrong') {
-    head.textContent = 'Wrong username or password';
-    body.textContent = 'Try typing it again';
+    head.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+    body.textContent = 'ลองพิมพ์ใหม่อีกครั้ง';
   } else {
     return;
   }

@@ -18,9 +18,9 @@ var DRUGS = [
     id: 'wakeup',
     name: 'Wake-up',
     group: 'work',
-    groupLabel: 'Work drugs',
+    groupLabel: 'ยาเพื่อทำงาน',
     workFocus: true,
-    effect: '+50% work speed · +10% consciousness · +10% moving · restores rest to 100% instantly · slower sleep (×80% sleep fall rate) · +20% psyfocus',
+    effect: '+50% ความเร็วงาน · +10% consciousness · +10% เดิน · ฟื้น rest ทันที 100% · หลับช้าลง (×80% sleep fall) · +20% psyfocus',
     odChance: 0.005,
     addictChance: 0.02,
     toleranceGain: null,
@@ -28,15 +28,15 @@ var DRUGS = [
     heuristicSafeDays: 3,
     minRedoseHours: 12,
     firstRedoseHours: 8,
-    safetyNote: 'Lasts ~12 h. No re-dose before 8 h (first dose), then 12 h+ between doses — tighter dosing just stacks severity past 100% for nothing'
+    safetyNote: 'ฤทธิ์อยู่ ~12 ชม. อย่าแทงซ้ำก่อน 8 ชม. (เข็มแรก) แล้วเว้น 12 ชม.ขึ้นไปหลังจากนั้น — แทงถี่กว่านี้ทำให้ severity ซ้อนเกิน 100% เสียเปล่า ไม่ได้ผลเพิ่ม'
   },
   {
     id: 'gojuice',
     name: 'Go-juice',
     group: 'work',
-    groupLabel: 'Work drugs',
+    groupLabel: 'ยาเพื่อทำงาน',
     workFocus: true,
-    effect: '+consciousness · +moving · +sight · pain reduction · +psyfocus · better saved for combat/emergencies than daily work',
+    effect: '+consciousness · +moving · +sight · ลดเจ็บปวด · +psyfocus · เก็บไว้ใช้รบ/ฉุกเฉินมากกว่าทำงานประจำวัน',
     odChance: 0.005,
     addictChance: 0.026,
     toleranceGain: null,
@@ -44,46 +44,46 @@ var DRUGS = [
     heuristicSafeDays: 3,
     minRedoseHours: 16,
     firstRedoseHours: 4.8,
-    safetyNote: 'Lasts ~16 h. No re-dose before 4.8 h and 16 h+ between doses so nothing is wasted — not a daily work drug, keep it for emergencies'
+    safetyNote: 'ฤทธิ์อยู่ ~16 ชม. อย่าแทงซ้ำก่อน 4.8 ชม. และเว้น 16 ชม.ขึ้นไปเพื่อไม่ให้เสียเปล่า — ไม่ใช่ยาที่ควรใช้ทำงานทุกวัน เก็บไว้เป็นของฉุกเฉิน'
   },
   {
     id: 'psychitetea',
     name: 'Psychite tea',
     group: 'work',
-    groupLabel: 'Work drugs',
+    groupLabel: 'ยาเพื่อทำงาน',
     workFocus: true,
-    effect: '+12 mood · ×80% sleep fall rate (stay awake longer) · ×90% pain — zero overdose chance, the safest pick for cutting sleep',
+    effect: '+12 mood · ×80% sleep fall rate (ตื่นได้นานขึ้น) · ×90% pain — ไม่มี overdose เลย ตัวเลือกปลอดภัยสุดถ้าอยากลดง่วง',
     odChance: 0,
     addictChance: 0.02,
     toleranceGain: 0.03,
     toleranceDecay: 0.015,
-    safetyNote: 'No overdose risk at all — only tolerance/addiction matter; just follow the safe interval below'
+    safetyNote: 'ไม่มีความเสี่ยง overdose — จำกัดแค่ tolerance/ติดยา ให้กินตามช่วงปลอดภัยด้านล่างพอ'
   },
   {
     id: 'yayo',
     name: 'Yayo',
     group: 'psychoid',
-    groupLabel: 'Psychoid raw/processed',
+    groupLabel: 'ไซคอยต์ดิบ/แปรรูป',
     workFocus: false,
-    effect: '+35 mood · pain reduction · better moving · slightly less sleep needed',
+    effect: '+35 mood · ลดเจ็บปวด · เดินดีขึ้น · ลดความต้องการนอนเล็กน้อย',
     odChance: 0.01,
     addictChance: 0.01,
     toleranceGain: 0.04,
     toleranceDecay: 0.015,
-    safetyNote: 'Tolerance above 45% risks permanent kidney damage — never dose tighter than the safe interval below'
+    safetyNote: 'tolerance เกิน 45% เสี่ยงไตเสียหายถาวร — อย่ากินถี่กว่าช่วงปลอดภัยด้านล่าง'
   },
   {
     id: 'flake',
     name: 'Flake',
     group: 'psychoid',
-    groupLabel: 'Psychoid raw/processed',
+    groupLabel: 'ไซคอยต์ดิบ/แปรรูป',
     workFocus: false,
-    effect: '+35 mood · pain reduction · better moving — cheaper and easier to make than yayo but far more addictive',
+    effect: '+35 mood · ลดเจ็บปวด · เดินดีขึ้น — ถูก/ผลิตง่ายกว่า yayo แต่ติดง่ายกว่ามาก',
     odChance: 0.015,
     addictChance: 0.05,
     toleranceGain: 0.04,
     toleranceDecay: 0.015,
-    safetyNote: 'Highest addiction chance in this group at 5% per dose — avoid regular use; keep it for sale or true emergencies'
+    safetyNote: 'โอกาสติดยา 5% ต่อโดสสูงสุดในกลุ่มนี้ — แนะนำเลี่ยงใช้ประจำ เก็บไว้ขาย/กรณีจำเป็นจริง ๆ'
   },
 ];
 
@@ -96,60 +96,60 @@ var DRUGS = [
 var ALL_DRUG_IDS = DRUGS.map(function (d) { return d.id; });
 
 var MODIFIERS = [
-  { id: 'none', name: 'None (plain baseliner)' },
+  { id: 'none', name: 'ไม่มี (Baseliner ปกติ)' },
   {
     id: 'chemFascination',
     name: 'Trait: Chemical fascination',
-    note: 'Does not lower overdose chance — it raises risk because the pawn secretly binges more often than your policy says (always ignores "no recreation"). Policy alone cannot control it; budget extra stock and mood swings',
+    note: 'ไม่ได้ลดโอกาส overdose — กลับเพิ่มความเสี่ยงเพราะตัวละครจะแอบใช้ยาเองบ่อยกว่าที่ตั้งไว้ (เมิน "ห้ามใช้เพื่อสันทนาการ" เสมอ) คุมด้วยนโยบายอย่างเดียวไม่พอ ต้องเผื่อสต๊อกและใจกว้างเรื่อง mood swing',
     riskBump: 1
   },
   {
     id: 'chemInterest',
     name: 'Trait: Chemical interest',
-    note: 'Like Chemical fascination but milder — can still self-administer when mood is low; keep some spare stock',
+    note: 'เหมือน Chemical fascination แต่เบากว่า — ยังแอบใช้ยาเองได้เมื่อ mood ต่ำ เผื่อสต๊อกไว้บ้าง',
     riskBump: 0.5
   },
   {
     id: 'chemDamageNone',
     name: 'Gene: Chemical damage — none',
-    note: 'If an overdose does happen there is no permanent organ damage/death — but the per-dose overdose chance is unchanged; you still lose time and mood',
+    note: 'ถ้า overdose เกิดขึ้นจริง จะไม่มีความเสียหายอวัยวะถาวร/ตาย — แต่ตัว "โอกาสเกิด overdose" ต่อโดสยังเท่าเดิม ยังเสียเวลา/mood อยู่ดี',
     consequenceMult: 0
   },
   {
     id: 'chemDamageReduced',
     name: 'Gene: Chemical damage — reduced',
-    note: 'Overdose damage is halved if it happens, but the chance stays the same',
+    note: 'ความเสียหายจาก overdose เบาลงถ้าเกิดขึ้น แต่โอกาสเกิดยังเท่าเดิม',
     consequenceMult: 0.5
   },
   {
     id: 'chemDamageIncreased',
     name: 'Gene: Chemical damage — increased',
-    note: 'Overdose damage is worse than normal if it happens — add margin and space doses further apart than the calculated interval',
+    note: 'ความเสียหายจาก overdose รุนแรงกว่าปกติถ้าเกิดขึ้น — ควรเผื่อ margin เพิ่ม ยืดช่วงกินให้ห่างกว่าค่าที่คำนวณ',
     consequenceMult: 2,
     riskBump: 1
   },
   {
     id: 'wakeupImpervious',
     name: 'Gene: Wake-up impervious',
-    note: 'Full immunity to both addiction and overdose (random and cumulative) from Wake-up specifically — dose as often as you like, only stacked highs go to waste. Does not cover flake/yayo/go-juice. The one thing the gene does not fix: wake-up has a rare heart-attack chance while active (anyone can get it) — a prosthetic/bionic heart prevents it 100%',
+    note: 'ภูมิคุ้มกันทั้งการติดยาและ overdose (ทั้งแบบสุ่มและแบบสะสม) จาก Wake-up โดยเฉพาะ — ใช้ถี่แค่ไหนก็ได้ จำกัดแค่เรื่องฤทธิ์ซ้อนเสียเปล่า ยีนนี้ไม่ครอบคลุม flake/yayo/go-juice ข้อควรรู้เดียวที่ยีนไม่ช่วย: wake-up มีโอกาสหัวใจวายหายากระหว่างฤทธิ์ (ใครก็เจอได้) — ใส่หัวใจ prosthetic/bionic แล้วป้องกันได้ 100%',
     immune: true
   },
   {
     id: 'gojuiceDependency',
     name: 'Gene: Go-juice dependency',
-    note: 'The dependency gene removes Go-juice random overdose and addiction entirely — unlimited injections with zero health downside, plus +4 metabolic efficiency. The only burden is regular intake: past ~5 days mood drops, ~30 days coma, ~60 days death',
+    note: 'ยีน dependency ตัดทิ้งทั้งโอกาส overdose แบบสุ่มและการติดของ Go-juice — ฉีดไม่จำกัดไม่มีผลข้างเคียงสุขภาพเลย แถม +4 metabolic efficiency เหลือภาระเดียวคือต้องได้รับสม่ำเสมอ: เว้นเกิน ~5 วันเริ่ม mood drop, ~30 วันเข้าโคม่า, ~60 วันตาย',
     dependency: true
   },
   {
     id: 'psychiteDependency',
     name: 'Gene: Psychite dependency',
-    note: 'The dependency gene blocks overdose (random+cumulative) and addiction for every psychite form — tea/yayo/flake, any of them tops up the need. Only the regular-intake burden remains (>5 days mood drop, ~30 days coma, ~60 days death) plus one health caveat: tolerance still exists — only very heavy use (~11 back-to-back doses) triggers kidney damage; keep ≥5 days/dose and the kidneys stay safe forever',
+    note: 'ยีน dependency กันทั้ง overdose (สุ่ม+สะสม) และการติดของไซคอยต์ทุกรูปแบบ tea/yayo/flake — ตัวไหนก้อนไหนก็เติม need ได้หมด เหลือภาระต้องกินสม่ำเสมอ (เว้น >5 วันเริ่ม mood drop, ~30 วันโคม่า, ~60 วันตาย) สุขภาพที่ยีนไม่คุ้มคือ tolerance: กินถี่มาก (~11 โดสติดกัน) ถึงจะเด้งไต — เว้นช่วง ≥5 วัน/โดส ไตปลอดภัยตลอดไป',
     dependency: true
   },
   {
     id: 'genericDependency',
-    name: 'Gene: [this drug] dependency (custom xenotype)',
-    note: 'A custom per-drug dependency gene (from the gene editor) — same mechanism as Hussar/Waster: immunity to this drug\'s normal overdose/addiction in exchange for a regular intake requirement',
+    name: 'Gene: [ยานี้] dependency (custom xenotype)',
+    note: 'ยีน dependency แบบกำหนดเองต่อยา (จาก gene editor) — กลไกเดียวกับ Hussar/Waster: ภูมิคุ้มกัน overdose/ติดยาปกติของยานี้ แลกกับต้องได้รับสม่ำเสมอ',
     dependency: true
   }
 ];
@@ -162,10 +162,10 @@ var MODIFIERS = [
 var TRAITS = [
   {
     id: 'baseliner',
-    name: 'None / plain baseliner',
+    name: 'ไม่มี / Baseliner ปกติ',
     drugFilter: null,
     modifier: 'none',
-    note: 'A normal human with no chemistry genes/traits — the base drug numbers from the table apply'
+    note: 'มนุษย์ปกติไม่มียีน/trait พิเศษด้านเคมี — ใช้ตัวเลขพื้นฐานของยาตามตาราง'
   },
   {
     id: 'chemFascination',
@@ -184,7 +184,7 @@ var TRAITS = [
     name: 'Trait: Teetotaler',
     drugFilter: null,
     modifier: 'none',
-    note: 'Normally refuses recreational drugs without orders — this tool only matters for doses you order for work/medicine; everything else uses base values'
+    note: 'ปกติจะไม่ยอมกินยาเพื่อสันทนาการเอง — ใช้เครื่องคิดนี้เฉพาะช่วงที่เราสั่งให้กินเพื่อทำงาน/รักษา ค่าอื่นเป็นค่าพื้นฐานปกติ'
   },
   {
     id: 'chemDamageNone',
@@ -210,9 +210,9 @@ var TRAITS = [
     drugFilter: ['gojuice'],
     autoDrug: 'gojuice',
     modifier: 'gojuiceDependency',
-    note: 'Hussars are born with Go-juice dependency — unlimited Go-juice with no overdose (even random), no addiction, no health effects. Other drugs the gene does not touch use normal base values',
+    note: 'Hussar ผูกกับ Go-juice dependency ตั้งแต่เกิด — ฉีด Go-juice ได้ไม่จำกัด ไม่มี overdose (แม้แบบสุ่ม) ไม่มีการติด ไม่มีผลสุขภาพ ยาอื่น ๆ ที่ยีนไม่กระทบใช้ค่าพื้นฐานปกติ',
     stack: [
-      { drug: 'gojuice', coverage: 'gene', cadence: '1 dose/day', note: 'Free straight from the gene — ~16 h of effect, one dose covers a whole work day; extra combat doses cost nothing' }
+      { drug: 'gojuice', coverage: 'gene', cadence: 'วันละ 1 เข็ม', note: 'ฟรีจากยีนโดยตรง — ฤทธิ์ ~16 ชม. เข็มเดียวคุบทั้งวันทำงาน ใช้เพิ่มตอนรบได้สบายไม่มีโทษ' }
     ]
   },
   {
@@ -224,19 +224,19 @@ var TRAITS = [
     modifierByDrug: function (drugId) {
       return drugId === 'wakeup' ? 'wakeupImpervious' : 'psychiteDependency';
     },
-    note: 'Waster = Wake-up impervious + Psychite dependency — the best drug stacking in the game: unlimited Wake-up with no OD/addiction (only the rare heart-attack chance remains) and any psychite form freely with no OD/addiction; just keep the dependency fed',
+    note: 'Waster = Wake-up impervious + Psychite dependency — ผสมยาได้คุ้มสุดในเกม: Wake-up แทงไม่จำกัดไม่มี OD/ติด (เหลือแค่โอกาสหัวใจวายหายาก) และไซคอยต์ก้อนไหนก็กินได้อิสระไม่มี OD/ติด แค่ต้องกินสม่ำเสมอเพื่อเลี้ยง dependency',
     stack: [
-      { drug: 'wakeup', coverage: 'gene', cadence: '1 dose/day', note: 'Free from the impervious gene — ~12 h of effect, a morning dose covers the work day; never inject more often than 8 h or highs stack for nothing' },
-      { drug: 'psychitetea', coverage: 'gene', cadence: 'every 2–5 days', note: 'Feeds the Psychite dependency directly — tea is fine every 2 days without building tolerance; rotate flake (every 2.7 days) which is cheaper and more efficient per psychoid leaf, yayo is strongest. Whichever form, ≤5 days/dose keeps the kidneys safe for life' }
+      { drug: 'wakeup', coverage: 'gene', cadence: 'วันละ 1 เข็ม', note: 'ฟรีจากยีน impervious — ฤทธิ์ ~12 ชม. แทงตอนเช้าคุบงานทั้งวัน อย่าแทงถี่กว่า 8 ชม. ฤทธิ์จะซ้อนเสียเปล่า' },
+      { drug: 'psychitetea', coverage: 'gene', cadence: 'ทุก 2–5 วัน', note: 'เลี้ยง Psychite dependency ตรง ๆ — tea กินได้ทุก 2 วันไม่สะสม tolerance, สลับ flake (ทุก 2.7 วัน) ถูกกว่า/เวิร์คกว่าต่อใบ psychoid, yayo แรงสุด ไม่ว่าก้อนไหนเว้น ≤5 วัน/โดสไตปลอดภัยตลอด' }
     ]
   },
   {
     id: 'customDependency',
-    name: 'Gene: [this drug] dependency (custom xenotype)',
+    name: 'Gene: [ยานี้] dependency (custom xenotype)',
     drugFilter: ['wakeup', 'gojuice', 'yayo', 'flake', 'psychitetea'],
     primaryDrug: 'wakeup',
     modifier: 'genericDependency',
-    note: 'The example uses Wake-up — if your custom gene binds a different drug in this group the math is identical, only the drug name changes'
+    note: 'ตัวอย่างใช้ Wake-up — ถ้ายีนกำหนดเองของคุณผูกกับยาตัวอื่นในกลุ่มนี้ กลไกคำนวณเดียวกันทุกประการ แค่เปลี่ยนชื่อยา'
   }
 ];
 
@@ -278,24 +278,24 @@ function nearestFreqIndex(days) {
   return best;
 }
 
-/* "every 3 days" for day-or-more intervals, "4x a day" for sub-day ones,
- * "once a day" exactly at 1 — the same wording the in-game slider uses. */
+/* "ทุก 3 วัน" for day-or-more intervals, "วันละ 4 ครั้ง" for sub-day ones,
+ * "วันละครั้ง" exactly at 1 — the same wording the in-game slider uses. */
 function formatFrequency(days) {
   var d = Number(days);
   if (!Number.isFinite(d) || d <= 0) d = 1;
-  if (Math.abs(d - 1) < 1e-9) return 'once a day';
+  if (Math.abs(d - 1) < 1e-9) return 'วันละครั้ง';
   if (d < 1) {
     var perDay = Math.round(1 / d);
-    return perDay + 'x a day';
+    return 'วันละ ' + perDay + ' ครั้ง';
   }
   var days2 = Math.round(d * 10) / 10;
-  return 'every ' + (Number.isInteger(days2) ? days2 : days2.toFixed(1)) + ' days';
+  return 'ทุก ' + (Number.isInteger(days2) ? days2 : days2.toFixed(1)) + ' วัน';
 }
 
 var STACK_COVERAGE_LABELS = {
-  gene: 'free from gene',
-  'zero-risk': 'safe add-on',
-  normal: 'normal risk'
+  gene: 'ฟรีจากยีน',
+  'zero-risk': 'ปลอดภัยเสริม',
+  normal: 'ความเสี่ยงปกติ'
 };
 
 function drugById(id) {
@@ -369,8 +369,8 @@ function stackForTrait(traitId) {
       drugId: best,
       coverage: bd.odChance === 0 ? 'zero-risk' : 'normal',
       note: bd.odChance === 0
-        ? '0% overdose by itself — no special gene needed'
-        : 'No protective gene — follow the safe interval above; this drug\'s full risk still applies',
+        ? 'overdose 0% โดยตัวมันเองอยู่แล้ว ไม่ต้องพึ่งยีนพิเศษ'
+        : 'ไม่มียีนพิเศษคุ้มครอง — ใช้ตามช่วงปลอดภัยด้านบน ความเสี่ยงยังเป็นของยานี้เต็ม ๆ',
       cadence: null
     });
   }
@@ -378,7 +378,7 @@ function stackForTrait(traitId) {
     rows.push({
       drugId: 'psychitetea',
       coverage: 'zero-risk',
-      note: '0% overdose on its own — can always be added to the mix without raising the other drugs\' overdose risk (its own tolerance/addiction still needs its own safe interval)',
+      note: 'overdose 0% ด้วยตัวเอง เติมเข้าไปในสูตรได้เสมอโดยไม่เพิ่มความเสี่ยง overdose ของยาตัวอื่น (ยังมี tolerance/ติดยาของมันเองให้คุมแยกตามช่วงปลอดภัยของมัน)',
       cadence: null
     });
   }
@@ -445,9 +445,9 @@ function cumulativeOdChance(perDoseChance, doses) {
 }
 
 function verdictFor(pct) {
-  if (pct <= 0.03) return { level: 'ok', label: 'Low risk' };
-  if (pct <= 0.15) return { level: 'warn', label: 'Medium risk — careful' };
-  return { level: 'bad', label: 'High risk — avoid' };
+  if (pct <= 0.03) return { level: 'ok', label: 'เสี่ยงต่ำ' };
+  if (pct <= 0.15) return { level: 'warn', label: 'เสี่ยงปานกลาง — ระวัง' };
+  return { level: 'bad', label: 'เสี่ยงสูง — ควรเลี่ยง' };
 }
 
 function evaluate(input) {
@@ -472,14 +472,14 @@ function evaluate(input) {
     dependency: false,
     odPct: 0,
     addictionRisk: null,
-    verdict: { level: 'ok', label: 'Low risk' },
+    verdict: { level: 'ok', label: 'เสี่ยงต่ำ' },
     notes: [],
     overStackWarning: null,
     policyFrequencyDays: Math.round(intervalDays * 100) / 100
   };
 
   if (drug.minRedoseHours && intervalDays * 24 < drug.minRedoseHours) {
-    result.overStackWarning = 'Dosing tighter than the drug lasts (~' + drug.minRedoseHours + ' h) — severity stacks past 100% for nothing; cut doses per day';
+    result.overStackWarning = 'ให้ถี่กว่าที่ยาออกฤทธิ์อยู่ (~' + drug.minRedoseHours + ' ชม.) — severity จะซ้อนเกิน 100% เสียเปล่า ไม่ได้ผลเพิ่มจริง ลดจำนวนครั้ง/วันลง';
   }
 
   var immune = !!mod.immune;
@@ -494,8 +494,8 @@ function evaluate(input) {
     result.odPct = 0;
     var okInterval = intervalDays <= DEP_SAFE_MARGIN_DAYS;
     result.verdict = okInterval
-      ? { level: 'ok', label: 'Safe — a mandatory need, not an addiction' }
-      : { level: 'bad', label: 'Gap too long — withdrawal risk' };
+      ? { level: 'ok', label: 'ปลอดภัย — เป็นความต้องการบังคับ ไม่ใช่การติดยา' }
+      : { level: 'bad', label: 'ช่วงห่างเกินไป เสี่ยงเข้าสู่อาการขาดยา' };
     if (mod.note) result.notes.push(mod.note);
     if (trait.note) result.notes.push(trait.note);
     return result;
@@ -503,7 +503,7 @@ function evaluate(input) {
 
   if (immune) {
     result.odPct = 0;
-    result.verdict = { level: 'ok', label: 'Safe — this gene blocks both addiction and overdose' };
+    result.verdict = { level: 'ok', label: 'ปลอดภัย — ยีนนี้กันทั้งติดยาและ overdose' };
     if (mod.note) result.notes.push(mod.note);
     if (trait.note) result.notes.push(trait.note);
     return result;
@@ -522,9 +522,9 @@ function evaluate(input) {
       pct30d: cumulativeOdChance(drug.addictChance, 30 / intervalDays)
     };
     result.notes.push(
-      'Addiction chance ' + Math.round(drug.addictChance * 1000) / 10 + '% per dose — at this frequency ~' +
-      Math.round(result.addictionRisk.pct30d * 1000) / 10 + '% addicted within 30 days (on average it takes hold at dose ' +
-      result.addictionRisk.expectedDoses + '). Once addicted it behaves like a dependency: work is unaffected while stock lasts; the only danger is a dry day hitting withdrawal');
+      'โอกาสติด ' + Math.round(drug.addictChance * 1000) / 10 + '%/โดส — ณ ความถี่นี้ ~' +
+      Math.round(result.addictionRisk.pct30d * 1000) / 10 + '% ติดภายใน 30 วัน (เฉลี่ยโดสที่ ' +
+      result.addictionRisk.expectedDoses + ' จึงตั้งไข่) พอติด = กลายเป็นความต้องการบังคับแบบ dependency: สต๊อกไม่ขาดก็งานไม่กระทบ อันตรายเดียวคือวันที่ยาหมดแล้วเจอ withdrawal');
   }
 
   var effectivePct = odPct * (1 + riskBump * 0.5);
@@ -532,16 +532,16 @@ function evaluate(input) {
 
   if (drug.odChance === 0 && result.safeIntervalDays != null) {
     var tightness = intervalDays > 0 ? result.safeIntervalDays / intervalDays : 99;
-    if (tightness <= 1) verdict = { level: 'ok', label: 'Low risk — tolerance recovers in time' };
-    else if (tightness <= 1.8) verdict = { level: 'warn', label: 'Tolerance building — space doses further apart' };
-    else verdict = { level: 'bad', label: 'Heavy tolerance buildup — addiction/organ damage risk' };
+    if (tightness <= 1) verdict = { level: 'ok', label: 'เสี่ยงต่ำ — tolerance คืนตัวทัน' };
+    else if (tightness <= 1.8) verdict = { level: 'warn', label: 'tolerance เริ่มสะสม — เว้นให้ห่างขึ้น' };
+    else verdict = { level: 'bad', label: 'tolerance สะสมมาก — เสี่ยงติดยา/อวัยวะเสีย' };
   }
 
   result.verdict = verdict;
   if (consequenceMult === 0 && drug.odChance > 0) {
-    result.notes.push('Gene prevents permanent damage if an overdose happens, but the chance (' + Math.round(odPct * 1000) / 10 + '%/week) is unchanged');
+    result.notes.push('ยีนกันความเสียหายถาวรถ้า overdose เกิดขึ้นจริง แต่โอกาสเกิด (' + Math.round(odPct * 1000) / 10 + '%/สัปดาห์) ยังเท่าเดิม');
   } else if (consequenceMult && consequenceMult !== 1 && drug.odChance > 0) {
-    result.notes.push('Overdose severity x' + consequenceMult + ' of normal if it happens');
+    result.notes.push('ความรุนแรงถ้า overdose เกิดขึ้นจริงคูณ ' + consequenceMult + '× จากปกติ');
   }
   if (modId !== 'none' && mod.note) result.notes.push(mod.note);
   if (trait.note) result.notes.push(trait.note);

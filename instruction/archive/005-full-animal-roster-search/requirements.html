@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Requirements · รายการสัตว์ทั้งเกม + search</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:#FFFEF5;color:#0A0A0A;line-height:1.7;font-size:15px;padding:36px 20px}
+.page{max-width:720px;margin:0 auto}
+.kicker{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#171717}
+h1{font-size:25px;margin:8px 0 14px}
+blockquote{background:#fff;border-left:4px solid #171717;border-radius:0 2px 2px 0;
+  padding:16px 20px;font-size:16px;color:#404040;margin:0 0 18px;font-style:italic}
+ul{padding-left:0;list-style:none}
+li{padding:9px 0;border-bottom:1px solid #E8FF6B;display:flex;gap:11px}
+li:last-child{border-bottom:none}
+li .mk{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#171717;
+  min-width:18px;font-weight:700;padding:3px 6px;border-radius:2px;background:#E8FF6B;height:fit-content}
+.muted{color:#737373;font-size:13px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Requirements record · 2026-09-12</div>
+  <h1>รายการสัตว์ทั้งเกม + ย้ายช่องเลือกลงล่าง + ค้นหาได้</h1>
+  <blockquote>รายาการสัตว์เลี้ยงทั้งเกมมันมากกว่านี้อ่ะ เอาไปเลือกด้านลา่งได้ไหม แล้วก็ให้มัน search หาได้ด้วย</blockquote>
+  <div class="kicker">restated goal</div>
+  <p style="margin:6px 0 16px">ขยายรายการสัตว์จาก 11 เป็นครบทุกตัวที่เลี้ยงได้ในเกม (เกมหลัก + Odyssey + Biotech = 94 สายพันธุ์) ย้ายช่องเลือกรายการไปไว้ท้ายหน้า และเพิ่มช่องค้นหา</p>
+  <ul>
+    <li><span class="mk">01</span><div>ครบ 94 สายพันธุ์ที่เลี้ยงได้จริง — อัตรากินทุกตัวยืนยันจากหน้าวิกิรายตัวแล้ว (ทีมวิจัย 4 ทีม)</div></li>
+    <li><span class="mk">02</span><div>ช่องเลือกย้ายไปล่างสุดของหน้า พร้อมช่องค้นหากรองตามชื่อไทย/อังกฤษ</div></li>
+    <li><span class="mk">03</span><div>ค่าเริ่มต้นแสดงแค่ชุดตัวอย่าง 6 ตัวเดิม — เพิ่มตัวไหนก็ค้นหาแล้วกด</div></li>
+    <li><span class="mk">04</span><div>ติดป้าย DLC (OD/B) ให้ตัวจาก DLC และป้ายผลผลิต (ไข่/นม/ขน) ในการ์ด</div></li>
+  </ul>
+  <p class="muted">บันทึกเงียบตาม workflow — รายละเอียดเต็มใน plan.html</p>
+</div>
+</body>
+</html>

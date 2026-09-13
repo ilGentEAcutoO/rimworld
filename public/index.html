@@ -296,8 +296,29 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   margin-left:auto;padding:2px 5px;border-radius:5px;background:var(--soft);color:var(--accent2);
   white-space:nowrap;
 }
+.kz .kz-tag{
+  font-style:normal;font-size:9px;font-weight:800;padding:2px 5px;border-radius:5px;
+  background:#FFF4D4;color:var(--warn);white-space:nowrap;
+}
 .kz.warg{outline:2px solid var(--meat);outline-offset:-2px}
 .kz.warg .kz-diet{background:var(--meat-bg);color:var(--meat)}
+.kpicker{
+  margin-top:14px;background:var(--card);border-radius:16px;padding:13px 15px 11px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 14px 30px -16px rgba(27,122,60,.28);
+}
+.kpicker-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.kpicker-h b{font-size:13.5px}
+.kpicker-h small{font-size:11.5px;color:var(--ink3);font-weight:700}
+.ksearch{
+  display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:10px;
+  padding:8px 12px;margin-bottom:9px;
+}
+.ksearch span{color:var(--ink3);font-weight:800;font-size:15px}
+.ksearch input{
+  border:0;background:transparent;outline:none;font:inherit;font-size:13.5px;font-weight:600;
+  color:var(--ink);width:100%;min-height:24px;
+}
+#kPicks{max-height:190px;overflow-y:auto;padding-right:4px}
 
 @media(max-width:800px){
   .ranks,.stats,.corn,.plist,.crops{grid-template-columns:1fr}
@@ -395,10 +416,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   <div class="view" id="view-kibble">
   <h1>ต้องทำ kibble วันละกี่ชิ้น</h1>
   <p class="lead">นับจากจำนวนสัตว์ — kibble กองเดียวเลี้ยงได้ทุกตัว: กินพืช กินเนื้อ กินทั้งคู่ กินร่วมกันได้หมด ไม่ต้องทำ "kibble พืช" แยก</p>
-  <p class="need">ยกเว้น warg ตัวเดียว — กินได้แค่เนื้อดิบ/ศพ · kibble 1 ชิ้น = 0.05 โภชนาการ ไม่เน่า ใช้เทรนสัตว์ได้</p>
-
-  <div class="kset-h">รายการสัตว์ <small>· ตัดออก = ไม่นับในการคำนวณ เลขเดิมยังจำให้</small></div>
-  <div class="chips" id="kPicks"></div>
+  <p class="need">ยกเว้นพวกกินเนื้อเท่านั้น (warg, wolverine, vulture) — กินได้แค่เนื้อดิบ/ศพ · kibble 1 ชิ้น = 0.05 โภชนาการ ไม่เน่า ใช้เทรนสัตว์ได้</p>
 
   <div class="kzoo" id="kZoo"></div>
 
@@ -429,6 +447,19 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   </div>
   <div class="flare" id="kWarg"></div>
   <p class="foot" id="kFoot"></p>
+
+  <div class="kpicker">
+    <div class="kpicker-h">
+      <b>รายการสัตว์ทั้งเกม</b>
+      <small id="kCount"></small>
+    </div>
+    <div class="ksearch">
+      <span aria-hidden="true">⌕</span>
+      <input id="kSearch" type="text" placeholder="ค้นหาสัตว์… เช่น หมี, fox, ไก่" autocomplete="off" aria-label="ค้นหาสัตว์">
+    </div>
+    <div class="chips" id="kPicks"></div>
+    <p class="need" style="margin:8px 0 0">ชิปเขียว = อยู่ในคอก กดเพื่อเพิ่ม/ตัด · ตัวที่ตัดไม่ถูกนับ แต่เลขเดิมยังจำให้ · OD = Odyssey · B = Biotech</p>
+  </div>
   </div>
 
   <div class="view" id="view-power">
@@ -1066,7 +1097,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       p.set('kb', kibbleState.station);
       p.set('kbuf', String(Math.round(kibbleState.buffer * 100)));
       if (kibbleState.shown.length === 0) p.set('kshown', '');
-      else if (kibbleState.shown.length !== KC.ANIMALS.length) {
+      else if (!KC.isStarterShown(kibbleState.shown)) {
         p.set('kshown', kibbleState.shown.join(','));
       }
       var next = location.pathname + '?' + p.toString();
@@ -1456,11 +1487,32 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     save();
   }
 
+  var kQuery = '';
+
+  function chipLabel(a) {
+    var t = a.name;
+    if (a.tag) t += ' (' + a.tag + ')';
+    return t;
+  }
+
+  function updateKPickVisibility() {
+    var hits = {};
+    KC.filterAnimals(kQuery).forEach(function (a) { hits[a.id] = true; });
+    var visible = 0;
+    document.querySelectorAll('#kPicks .chip').forEach(function (c) {
+      var show = !!hits[c.getAttribute('data-kshow')];
+      c.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('kCount').textContent =
+      'ทั้งหมด ' + KC.ANIMALS.length + ' สายพันธุ์ · โชว์ ' + visible + ' · ในคอก ' + kibbleState.shown.length;
+  }
+
   function renderKibble() {
     var picks = document.getElementById('kPicks');
     if (!picks.childNodes.length) {
       KC.ANIMALS.forEach(function (a) {
-        var ch = el('button', 'chip', a.name);
+        var ch = el('button', 'chip', chipLabel(a));
         ch.type = 'button';
         ch.setAttribute('data-kshow', a.id);
         ch.setAttribute('aria-label', 'สลับแสดง' + a.name);
@@ -1473,6 +1525,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     document.querySelectorAll('#kPicks .chip').forEach(function (c) {
       c.classList.toggle('on', !!shownIdx[c.getAttribute('data-kshow')]);
     });
+    updateKPickVisibility();
     var zoo = document.getElementById('kZoo');
     zoo.textContent = '';
     r.shown.forEach(function (id) {
@@ -1495,10 +1548,12 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       plus.setAttribute('aria-label', 'เพิ่ม' + a.name);
       z.appendChild(plus);
       z.appendChild(el('i', 'kz-diet', KC.DIET_LABEL[a.diet]));
+      if (a.prod) z.appendChild(el('i', 'kz-tag', a.prod));
+      if (a.tag) z.appendChild(el('i', 'kz-tag', a.tag));
       zoo.appendChild(z);
     });
     if (!r.shown.length) {
-      zoo.appendChild(el('div', 'showempty', 'ยังไม่ได้เลือกสัตว์ — เปิดจากชิปรายการสัตว์ด้านบน'));
+      zoo.appendChild(el('div', 'showempty', 'ยังไม่ได้เลือกสัตว์ — ค้นหาแล้วกดเพิ่มจาก "รายการสัตว์ทั้งเกม" ด้านล่าง'));
     }
     document.querySelectorAll('#kStn .chip').forEach(function (c) {
       c.classList.toggle('on', c.getAttribute('data-stn') === r.station);
@@ -1516,10 +1571,10 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     document.getElementById('kNut').textContent = r.nutrition.toFixed(2);
     document.getElementById('kQuad').textContent = r.quadrumPieces.toLocaleString('en-US');
     var wargEl = document.getElementById('kWarg');
-    wargEl.hidden = r.wargCount === 0;
-    if (r.wargCount > 0) {
-      wargEl.textContent = 'warg ' + r.wargCount + ' ตัว กิน kibble ไม่ได้ — ต้องมีเนื้อดิบ/ศพอีก ~' +
-        r.wargMeatUnits + ' ชิ้น/วัน (แยกจากช่องเนื้อดิบด้านบน)';
+    wargEl.hidden = r.strictCount === 0;
+    if (r.strictCount > 0) {
+      wargEl.textContent = 'กินเนื้อเท่านั้น ' + r.strictCount + ' ตัว (' + r.strictNames.join(', ') +
+        ') กิน kibble ไม่ได้ — ต้องมีเนื้อดิบ/ศพอีก ~' + r.strictMeatUnits + ' ชิ้น/วัน (แยกจากช่องเนื้อดิบด้านบน)';
     }
     document.getElementById('kFoot').textContent =
       'ผัก ' + r.vegUnits + ' ชิ้น/วัน ≈ ข้าว ~' + r.ricePlants +
@@ -2115,6 +2170,10 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     if (!t) return;
     kibbleState.station = KC.parseStation(t.getAttribute('data-stn'));
     renderKibble();
+  });
+  document.getElementById('kSearch').addEventListener('input', function () {
+    kQuery = this.value;
+    updateKPickVisibility();
   });
   document.getElementById('kBuf').addEventListener('input', function () {
     kibbleState.buffer = KC.clampBuffer(Number(this.value) / 100);

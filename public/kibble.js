@@ -1,22 +1,107 @@
 'use strict';
 
-// อัตรากิน (โภชนาการ/วัน) ของสัตว์ตัวเต็มวัย — ยืนยันจากหน้าวิกิของแต่ละตัว 1.6
-// diet: herb กินพืช · omni กินทั้งคู่ · carn กินเนื้อ · strict = warg กินเนื้อเท่านั้น
+// อัตรากิน (โภชนาการ/วัน) ของสัตว์ตัวเต็มวัย — ยืนยันจากหน้าวิกิรายตัว 1.6 (เก็บ 13 ก.ย. 2569)
+// diet: herb กินพืช · omni กินทั้งคู่ · carn กินเนื้อ · strict กินเนื้อเท่านั้น (กิน kibble ไม่ได้)
+// tag: '' เกมหลัก · 'OD' Odyssey · 'B' Biotech · prod: ผลผลิตระหว่างเลี้ยง (ถ้ามี)
 var ANIMALS = [
-  { id: 'chicken', name: 'ไก่', rate: 0.22, diet: 'herb' },
-  { id: 'cat', name: 'แมว', rate: 0.24, diet: 'carn' },
-  { id: 'alpaca', name: 'Alpaca', rate: 0.44, diet: 'herb' },
-  { id: 'pig', name: 'หมู', rate: 0.8, diet: 'omni' },
-  { id: 'husky', name: 'Husky', rate: 0.8, diet: 'omni' },
-  { id: 'horse', name: 'ม้า', rate: 0.86, diet: 'herb' },
-  { id: 'cow', name: 'วัว', rate: 0.86, diet: 'herb' },
-  { id: 'muffalo', name: 'Muffalo', rate: 0.86, diet: 'herb' },
-  { id: 'dromedary', name: 'อูฐ', rate: 0.86, diet: 'herb' },
-  { id: 'thrumbo', name: 'Thrumbo', rate: 2.8, diet: 'herb' },
-  { id: 'warg', name: 'Warg', rate: 0.4, diet: 'strict' }
+  { id: 'chicken', name: 'ไก่', rate: 0.22, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'duck', name: 'เป็ด', rate: 0.28, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'goose', name: 'ห่าน', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'turkey', name: 'ไก่งวง', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'cassowary', name: 'Cassowary', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'emu', name: 'Emu', rate: 0.45, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'ostrich', name: 'Ostrich', rate: 0.67, diet: 'herb', tag: '', prod: 'ไข่' },
+  { id: 'guineapig', name: 'กินีพิก', rate: 0.16, diet: 'herb', tag: '', prod: '' },
+  { id: 'chinchilla', name: 'ชินชิลลา', rate: 0.2, diet: 'herb', tag: '', prod: '' },
+  { id: 'squirrel', name: 'กระรอก', rate: 0.16, diet: 'herb', tag: '', prod: '' },
+  { id: 'hare', name: 'กระต่ายป่า', rate: 0.18, diet: 'herb', tag: '', prod: '' },
+  { id: 'snowhare', name: 'กระต่ายหิมะ', rate: 0.18, diet: 'herb', tag: '', prod: '' },
+  { id: 'capybara', name: 'คาปิบารา', rate: 0.36, diet: 'herb', tag: '', prod: '' },
+  { id: 'goat', name: 'แพะ', rate: 0.36, diet: 'herb', tag: '', prod: 'นม' },
+  { id: 'sheep', name: 'แกะ', rate: 0.36, diet: 'herb', tag: '', prod: 'ขน' },
+  { id: 'alpaca', name: 'Alpaca', rate: 0.44, diet: 'herb', tag: '', prod: 'ขน' },
+  { id: 'cow', name: 'วัว', rate: 0.86, diet: 'herb', tag: '', prod: 'นม' },
+  { id: 'yak', name: 'Yak', rate: 0.86, diet: 'herb', tag: '', prod: 'นม' },
+  { id: 'horse', name: 'ม้า', rate: 0.86, diet: 'herb', tag: '', prod: '' },
+  { id: 'donkey', name: 'ลา', rate: 0.52, diet: 'herb', tag: '', prod: '' },
+  { id: 'dromedary', name: 'อูฐ', rate: 0.86, diet: 'herb', tag: '', prod: 'นม' },
+  { id: 'muffalo', name: 'Muffalo', rate: 0.86, diet: 'herb', tag: '', prod: 'ขน' },
+  { id: 'bison', name: 'Bison', rate: 0.86, diet: 'herb', tag: '', prod: 'ขน' },
+  { id: 'boomalope', name: 'Boomalope', rate: 0.86, diet: 'herb', tag: '', prod: 'เชื้อเพลิง' },
+  { id: 'elephant', name: 'ช้าง', rate: 2.57, diet: 'herb', tag: '', prod: '' },
+  { id: 'rhinoceros', name: 'แรด', rate: 1.71, diet: 'herb', tag: '', prod: '' },
+  { id: 'megasloth', name: 'Megasloth', rate: 1.6, diet: 'herb', tag: '', prod: 'ขน' },
+  { id: 'thrumbo', name: 'Thrumbo', rate: 2.8, diet: 'herb', tag: '', prod: '' },
+  { id: 'alphabeaver', name: 'Alphabeaver', rate: 4.8, diet: 'herb', tag: '', prod: '' },
+  { id: 'pig', name: 'หมู', rate: 0.8, diet: 'omni', tag: '', prod: '' },
+  { id: 'boar', name: 'หมูป่า', rate: 0.48, diet: 'omni', tag: '', prod: '' },
+  { id: 'iguana', name: 'อิกัวนา', rate: 0.32, diet: 'omni', tag: '', prod: 'ไข่' },
+  { id: 'tortoise', name: 'เต่า', rate: 0.13, diet: 'omni', tag: '', prod: 'ไข่' },
+  { id: 'monkey', name: 'ลิง', rate: 0.2, diet: 'omni', tag: '', prod: '' },
+  { id: 'raccoon', name: 'แรคคูน', rate: 0.32, diet: 'omni', tag: '', prod: '' },
+  { id: 'husky', name: 'Husky', rate: 0.8, diet: 'omni', tag: '', prod: '' },
+  { id: 'labrador', name: 'ลาบราดอร์', rate: 0.64, diet: 'omni', tag: '', prod: '' },
+  { id: 'yorkie', name: 'Yorkshire terrier', rate: 0.24, diet: 'omni', tag: '', prod: '' },
+  { id: 'grizzly', name: 'หมีกริซลี', rate: 0.56, diet: 'omni', tag: '', prod: '' },
+  { id: 'polarbear', name: 'หมีขั้ว', rate: 0.56, diet: 'omni', tag: '', prod: '' },
+  { id: 'boomrat', name: 'Boomrat', rate: 0.22, diet: 'omni', tag: '', prod: '' },
+  { id: 'rat', name: 'หนู', rate: 0.16, diet: 'omni', tag: '', prod: '' },
+  { id: 'cat', name: 'แมว', rate: 0.24, diet: 'carn', tag: '', prod: '' },
+  { id: 'cobra', name: 'งูเห่า', rate: 0.11, diet: 'carn', tag: '', prod: 'ไข่' },
+  { id: 'timberwolf', name: 'หมาป่า', rate: 0.29, diet: 'carn', tag: '', prod: '' },
+  { id: 'arcticwolf', name: 'หมาป่าขั้ว', rate: 0.29, diet: 'carn', tag: '', prod: '' },
+  { id: 'panther', name: 'เสือดำ', rate: 0.32, diet: 'carn', tag: '', prod: '' },
+  { id: 'cougar', name: 'พูมา', rate: 0.32, diet: 'carn', tag: '', prod: '' },
+  { id: 'lynx', name: 'ลินซ์', rate: 0.19, diet: 'carn', tag: '', prod: '' },
+  { id: 'redfox', name: 'จิ้งจอกแดง', rate: 0.16, diet: 'carn', tag: '', prod: '' },
+  { id: 'arcticfox', name: 'จิ้งจอกขั้ว', rate: 0.16, diet: 'carn', tag: '', prod: '' },
+  { id: 'fennecfox', name: 'จิ้งจอกฟีเนค', rate: 0.16, diet: 'carn', tag: '', prod: '' },
+  { id: 'warg', name: 'Warg', rate: 0.4, diet: 'strict', tag: '', prod: '' },
+  { id: 'hippo', name: 'ฮิปโป', rate: 1.6, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'moose', name: 'มูส', rate: 0.86, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'muskox', name: 'Muskox', rate: 0.86, diet: 'herb', tag: 'OD', prod: 'ขน' },
+  { id: 'panda', name: 'แพนด้า', rate: 0.32, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'mastodon', name: 'Mastodon', rate: 2.88, diet: 'herb', tag: 'OD', prod: 'ขน' },
+  { id: 'porcupine', name: 'เม่น', rate: 0.24, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'prairiedog', name: 'แพร์รีด็อก', rate: 0.16, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'lavasnail', name: 'Lava snail', rate: 0.32, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'peafowl', name: 'นกยูง', rate: 0.37, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'quail', name: 'นกควาย', rate: 0.19, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'swan', name: 'หงส์', rate: 0.45, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'macaw', name: 'มะคอว์', rate: 0.19, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'bluebird', name: 'บลูเบิร์ด', rate: 0.13, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'sparrow', name: 'นกกระจอก', rate: 0.13, diet: 'herb', tag: 'OD', prod: 'ไข่' },
+  { id: 'alphathrumbo', name: 'Alpha thrumbo', rate: 2.8, diet: 'herb', tag: 'OD', prod: '' },
+  { id: 'gorilla', name: 'กอริลลา', rate: 0.86, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'badger', name: 'แบดเจอร์', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'armadillo', name: 'อาร์มาดิลโล', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'otter', name: 'นาก', rate: 0.24, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'mink', name: 'มิงก์', rate: 0.16, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'boghound', name: 'Bog hound', rate: 0.29, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'megavole', name: 'Megavole', rate: 0.8, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'crow', name: 'อีกา', rate: 0.13, diet: 'omni', tag: 'OD', prod: 'ไข่' },
+  { id: 'flamingo', name: 'ฟลามิงโก', rate: 0.45, diet: 'omni', tag: 'OD', prod: 'ไข่' },
+  { id: 'heron', name: 'นกกระสา', rate: 0.45, diet: 'omni', tag: 'OD', prod: 'ไข่' },
+  { id: 'seaturtle', name: 'เต่าทะเล', rate: 0.16, diet: 'omni', tag: 'OD', prod: 'ไข่' },
+  { id: 'monitorlizard', name: 'Monitor lizard', rate: 0.32, diet: 'omni', tag: 'OD', prod: 'ไข่' },
+  { id: 'bullfrog', name: 'บูลฟรอก', rate: 0.16, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'colossustoad', name: 'Colossus toad', rate: 0.32, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'hermitcrab', name: 'ปูเจ้าสำนัก', rate: 0.13, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'stonecrab', name: 'ปูหิน', rate: 0.19, diet: 'omni', tag: 'OD', prod: '' },
+  { id: 'greatwolf', name: 'Greatwolf', rate: 0.64, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'scimitarcat', name: 'Scimitar cat', rate: 0.42, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'tiger', name: 'เสือโคร่ง', rate: 0.32, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'walrus', name: 'วอลรัส', rate: 0.86, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'sealion', name: 'สิงโตทะเล', rate: 0.48, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'seal', name: 'แมวน้ำ', rate: 0.48, diet: 'carn', tag: 'OD', prod: '' },
+  { id: 'penguin', name: 'เพนกวิน', rate: 0.45, diet: 'carn', tag: 'OD', prod: 'ไข่' },
+  { id: 'alligator', name: 'Alligator', rate: 0.48, diet: 'carn', tag: 'OD', prod: 'ไข่' },
+  { id: 'wolverine', name: 'Wolverine', rate: 0.37, diet: 'strict', tag: 'OD', prod: '' },
+  { id: 'vulture', name: 'Vulture', rate: 0.37, diet: 'strict', tag: 'OD', prod: 'ไข่' },
+  { id: 'toxalope', name: 'Toxalope', rate: 0.86, diet: 'herb', tag: 'B', prod: '' }
 ];
 
-var DIET_LABEL = { herb: 'กินพืช', omni: 'กินทั้งคู่', carn: 'กินเนื้อ', strict: 'warg' };
+var DIET_LABEL = { herb: 'กินพืช', omni: 'กินทั้งคู่', carn: 'กินเนื้อ', strict: 'เนื้อเท่านั้น' };
 
 // สูตร: 20 เนื้อ + 20 ผัก ต่อรอบ — Butcher table ได้ 50 ชิ้น (125%) · Butcher spot ได้ 35 (87.5%)
 var STATIONS = {
@@ -32,9 +117,11 @@ var QUADRUM_DAYS = 15;
 var RICE_REAL_DAYS_SOIL = 5.54;
 var RICE_YIELD = 6;
 
+// เปิดมาครั้งแรกแสดงแค่ชุดตัวอย่างนี้ — 96 ตัวโชว์หมดจะรกเกิน ให้ค้นหาแล้วกดเพิ่มเอง
+var STARTER = ['chicken', 'cat', 'pig', 'husky', 'cow', 'warg'];
+
 var DEFAULT_COUNTS = {
-  chicken: 6, cat: 1, alpaca: 0, pig: 2, husky: 2, horse: 0,
-  cow: 1, muffalo: 0, dromedary: 0, thrumbo: 0, warg: 1
+  chicken: 6, cat: 1, pig: 2, husky: 2, cow: 1, warg: 1
 };
 
 function clampInt(n, lo, hi) {
@@ -94,9 +181,9 @@ function allShown() {
 }
 
 // รายการสัตว์ที่เลือกแสดง: รับ array หรือ string 'chicken,cat' (จาก URL)
-// ไม่มีค่า = แสดงทั้งหมด · ค่าว่าง = ไม่เหลือตัวไหน · id ที่ไม่รู้จักทิ้ง · เรียงตามลำดับ ANIMALS
+// ไม่มีค่า = ชุดตัวอย่างเริ่มต้น · ค่าว่าง = ไม่เหลือตัวไหน · id ที่ไม่รู้จักทิ้ง · เรียงตามลำดับ ANIMALS
 function parseShownList(raw) {
-  if (raw == null) return allShown();
+  if (raw == null) return STARTER.slice();
   var arr = Array.isArray(raw)
     ? raw.map(function (x) { return String(x); })
     : String(raw).split(',');
@@ -107,6 +194,22 @@ function parseShownList(raw) {
   });
   return ANIMALS.filter(function (a) { return keep[a.id]; })
     .map(function (a) { return a.id; });
+}
+
+function isStarterShown(shown) {
+  var list = parseShownList(shown);
+  if (list.length !== STARTER.length) return false;
+  return STARTER.every(function (id) { return list.indexOf(id) >= 0; });
+}
+
+// ค้นหาสัตว์จากชื่อไทยหรือ id อังกฤษ — pure function ให้ UI และเทสใช้ร่วมกัน
+function filterAnimals(query, list) {
+  var q = String(query || '').trim().toLowerCase();
+  var src = list || ANIMALS;
+  if (!q) return src.slice();
+  return src.filter(function (a) {
+    return a.name.toLowerCase().indexOf(q) >= 0 || a.id.indexOf(q) >= 0;
+  });
 }
 
 function encodeCounts(counts) {
@@ -128,15 +231,17 @@ function planKibble(input) {
   var buffer = clampBuffer(src.buffer);
 
   var nutrition = 0;
-  var wargNutrition = 0;
-  var wargCount = 0;
+  var strictNutrition = 0;
+  var strictCount = 0;
+  var strictNames = [];
   var total = 0;
   ANIMALS.forEach(function (a) {
     var n = shown.indexOf(a.id) >= 0 ? (counts[a.id] || 0) : 0;
     total += n;
     if (a.diet === 'strict') {
-      wargNutrition += a.rate * n;
-      wargCount += n;
+      strictNutrition += a.rate * n;
+      strictCount += n;
+      if (n > 0) strictNames.push(a.name);
     } else {
       nutrition += a.rate * n;
     }
@@ -145,7 +250,7 @@ function planKibble(input) {
   var need = nutrition * (1 + buffer);
   var pieces = need / KIBBLE_NUT;
   var ingExact = need / station.outNut * BATCH_IN;
-  var wargNeed = wargNutrition * (1 + buffer);
+  var strictNeed = strictNutrition * (1 + buffer);
 
   return {
     counts: counts,
@@ -153,9 +258,10 @@ function planKibble(input) {
     station: station.id,
     buffer: buffer,
     animalTotal: total,
-    wargCount: wargCount,
+    strictCount: strictCount,
+    strictNames: strictNames,
     nutrition: nutrition,
-    wargNutrition: wargNutrition,
+    strictNutrition: strictNutrition,
     pieces: pieces,
     piecesDay: ceilCount(pieces),
     batches: pieces / station.batch,
@@ -163,7 +269,7 @@ function planKibble(input) {
     meatUnits: ceilCount(ingExact),
     vegUnits: ceilCount(ingExact),
     ricePlants: ceilCount(ingExact * RICE_REAL_DAYS_SOIL / RICE_YIELD),
-    wargMeatUnits: ceilCount(wargNeed / KIBBLE_NUT),
+    strictMeatUnits: ceilCount(strictNeed / KIBBLE_NUT),
     quadrumPieces: ceilCount(pieces * QUADRUM_DAYS),
     quadrumMeat: ceilCount(ingExact * QUADRUM_DAYS),
     quadrumVeg: ceilCount(ingExact * QUADRUM_DAYS)
@@ -191,7 +297,7 @@ function defaultKibbleState() {
     counts: parseCounts(DEFAULT_COUNTS),
     station: 'table',
     buffer: DEFAULT_BUFFER,
-    shown: allShown()
+    shown: STARTER.slice()
   };
 }
 
@@ -201,6 +307,7 @@ var api = {
   STATIONS: STATIONS,
   KIBBLE_NUT: KIBBLE_NUT,
   QUADRUM_DAYS: QUADRUM_DAYS,
+  STARTER: STARTER,
   DEFAULT_COUNTS: DEFAULT_COUNTS,
   clampInt: clampInt,
   clampBuffer: clampBuffer,
@@ -208,6 +315,8 @@ var api = {
   parseCounts: parseCounts,
   parseStation: parseStation,
   parseShownList: parseShownList,
+  isStarterShown: isStarterShown,
+  filterAnimals: filterAnimals,
   encodeCounts: encodeCounts,
   planKibble: planKibble,
   parseKibbleState: parseKibbleState,

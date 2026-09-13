@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Plan · รายการสัตว์ทั้งเกม + ค้นหาได้</title>
+<style>/* =============================================================
+   DESIGN SYSTEM — mono theme (brutalist tech) + app-green mock
+   Light-only (forced) · self-contained · Thai-friendly
+   ============================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light only}
+:root{
+  --bg:#FFFEF5; --card:#FFFFFF; --card-2:#F5F4ED;
+  --chrome:#F0EFE6; --line:#1A1A1A; --line-2:#1A1A1A;
+  --ink:#0A0A0A; --ink-2:#404040; --ink-3:#737373; --ink-4:#A3A3A3;
+  --accent:#171717; --accent-soft:#E8FF6B; --accent-deep:#000000;
+  --ok:#16A34A; --ok-soft:#DCFCE7; --ok-deep:#15803D;
+  --bad:#DC2626; --bad-soft:#FEE2E2; --bad-deep:#B91C1C;
+  --warn:#CA8A04; --warn-soft:#FEF9C3; --warn-deep:#854D0E;
+  --sans:'JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Sukhumvit Set',monospace;
+  --r:2px; --r-s:2px;
+  --shadow:4px 4px 0 #1A1A1A;
+  color-scheme:light only;
+}
+html,body{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);line-height:1.7;font-size:15px;
+  font-weight:450;-webkit-font-smoothing:antialiased}
+.kicker{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.18}
+.lead{font-size:15.5px;color:var(--ink-2);line-height:1.65}
+.muted{color:var(--ink-3)} .small{font-size:13px}
+code{font-size:.88em;background:var(--accent-soft);padding:2px 7px;border-radius:0;
+  color:var(--accent-deep);font-weight:600;border:1px solid var(--line)}
+.window{background:var(--card);border:1px solid var(--line);border-radius:0;
+  box-shadow:var(--shadow);overflow:hidden}
+.window>.bar{background:var(--chrome);border-bottom:1px solid var(--line);
+  padding:13px 16px;display:flex;align-items:center;position:relative}
+.window>.bar .dots{display:flex;gap:7px}
+.window>.bar .dots i{width:11px;height:11px;border-radius:0;background:var(--ink-4);display:block;border:1px solid var(--line)}
+.window>.bar .title{position:absolute;left:0;right:0;text-align:center;
+  font-size:12px;color:var(--ink-3);font-weight:500}
+.window>.body{padding:22px 24px}
+.note{border-radius:0;padding:13px 16px;font-size:14px;border:1.5px solid;line-height:1.55}
+.note .ic{font-weight:800;flex:none;margin-right:10px}
+.note.ok{background:var(--ok-soft);border-color:var(--ok-deep);color:var(--ok-deep)}
+.note.danger{background:var(--bad-soft);border-color:var(--bad-deep);color:var(--bad-deep)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:8px 10px;border-bottom:2px solid var(--line);font-weight:700}
+td{padding:8px 10px;border-bottom:1px solid #D8D8C8;color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+.brief-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.btab{font-size:13px;cursor:pointer;font-weight:700;
+  padding:10px 18px;border:1.5px solid var(--line);
+  background:var(--card);color:var(--ink-2);transition:all .15s;border-radius:0;
+  box-shadow:3px 3px 0 #1A1A1A}
+.btab:hover{background:var(--accent-soft)}
+.btab.on{background:var(--ink);color:var(--accent-soft)}
+.brief{display:none}
+.brief.on{display:block;animation:b-fade .35s ease}
+.cta-strip{margin-top:16px;padding:13px 16px;
+  background:var(--accent-soft);border:1.5px solid var(--line);border-radius:0;
+  font-size:13px;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta-strip .arrow{font-weight:800;font-size:15px;margin-right:6px}
+.cta-strip strong{font-weight:700;background:var(--card);
+  padding:4px 10px;border:1.5px solid var(--line);font-size:12px}
+.notes-list{font-size:14px;line-height:1.65;color:var(--ink-2);padding:0;list-style:none}
+.notes-list li{padding:10px 0;border-bottom:1px solid #D8D8C8;display:flex;gap:11px}
+.notes-list li:last-child{border-bottom:none}
+.notes-list .mk{font-size:11px;color:var(--accent-deep);
+  flex:none;min-width:18px;font-weight:700;padding:3px 6px;line-height:1;
+  background:var(--accent-soft);border:1px solid var(--line);height:fit-content}
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+.page{max-width:1080px;margin:0 auto;padding:32px 24px 36px}
+.hero{margin-bottom:20px;padding:6px 0 0}
+.hero h1{font-size:clamp(26px,4vw,38px);margin:10px 0 12px;line-height:1.2}
+.hero h1 em{color:var(--ink-2);font-style:normal;background:var(--accent-soft);
+  padding:0 10px;box-shadow:3px 3px 0 #1A1A1A}
+.hero .lead{max-width:660px;font-size:15px}
+.foot{margin-top:14px;text-align:center;font-size:11px;color:var(--ink-4);letter-spacing:.04em}
+@media(max-width:900px){.cmp{grid-template-columns:1fr!important}}
+@media print{body{background:#fff}.brief-tabs{display:none}}
+
+/* ---------- app mock (สไตล์เว็บกรีนชิพ) ---------- */
+.app{
+  --abg:#E7F0E4; --acard:#FFFEFA; --aink:#132016; --aink2:#3C5341; --aink3:#6D8571;
+  --aline:#C3D6C0; --asoft:#D8EDD6; --aac:#1B7A3C; --aac2:#14582B;
+  --ameat:#8B3A2A; --ameatbg:#F8E4DE;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Sukhumvit Set',sans-serif;
+  background:var(--abg);color:var(--aink);border-radius:10px;padding:16px;
+  font-variant-numeric:tabular-nums;line-height:1.45
+}
+.app .anav{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 10px}
+.app .anav span{border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;
+  background:var(--acard);color:var(--aink2);box-shadow:0 1px 2px rgba(19,32,22,.05)}
+.app .anav span.on{background:var(--aac);color:#fff}
+.app h2{font-size:18px;letter-spacing:-.035em;margin:2px 0 3px}
+.app .alead{color:var(--aink2);font-size:12.5px;margin-bottom:8px}
+.kzoo{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 10px}
+.kz{display:flex;align-items:center;gap:5px;background:var(--acard);border-radius:10px;
+  padding:4px 6px 4px 9px;box-shadow:0 1px 2px rgba(19,32,22,.05);font-size:11.5px;font-weight:700;color:var(--aink2)}
+.kz .fakebtn{width:20px;height:20px;border-radius:6px;background:var(--asoft);color:var(--aac2);
+  font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.kz .dn{font-size:14px;min-width:12px;text-align:center}
+.kz .dt{font-size:8px;font-weight:800;padding:1px 4px;border-radius:4px;margin-left:auto;
+  background:var(--asoft);color:var(--aac2);text-transform:uppercase;white-space:nowrap}
+.kz.warg{outline:2px solid var(--ameat);outline-offset:-2px}
+.kz.warg .dt{background:var(--ameatbg);color:var(--ameat)}
+.kz .pt{font-size:8px;font-weight:800;padding:1px 4px;border-radius:4px;
+  background:#FFF4D4;color:#8A6A12;margin-left:2px;white-space:nowrap}
+.app .astats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.app .as{background:var(--asoft);border-radius:10px;padding:7px 10px}
+.app .as em{display:block;font-style:normal;font-size:9.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--aink3);font-weight:700}
+.app .as b{font-size:17px;font-weight:800}
+.app .flare{background:var(--ameatbg);color:var(--ameat);border-radius:10px;
+  padding:8px 11px;font-size:12px;font-weight:700}
+.app .anum{font-size:40px;font-weight:800;letter-spacing:-.04em;color:var(--aac2);line-height:1}
+.app .asub{font-size:11px;color:var(--aink3);font-weight:700}
+/* ส่วนเลือกด้านล่าง */
+.picker{background:var(--acard);border-radius:12px;padding:11px 13px;margin-top:10px;
+  box-shadow:0 1px 2px rgba(19,32,22,.05),0 10px 24px -14px rgba(27,122,60,.28)}
+.picker .ph{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.picker .ph b{font-size:12.5px;color:var(--aink2)}
+.picker .ph small{color:var(--aink3);font-size:10.5px;font-weight:700}
+.psearch{display:flex;align-items:center;gap:7px;background:var(--abg);border-radius:9px;
+  padding:7px 11px;margin-bottom:8px}
+.psearch input{border:0;background:transparent;outline:none;font:inherit;font-size:13px;
+  font-weight:600;color:var(--aink);width:100%}
+.psearch .ico{color:var(--aink3);font-weight:800}
+.picks{display:flex;flex-wrap:wrap;gap:5px;max-height:150px;overflow-y:auto;padding-right:4px}
+.pchip{border:1.5px solid var(--aline);background:var(--acard);border-radius:999px;
+  padding:4px 10px;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--aink2)}
+.pchip.on{background:var(--aac);color:#fff;border-color:var(--aac)}
+.pchip .dlc{font-size:8.5px;font-weight:800;margin-left:4px;opacity:.85}
+.pchip:active{transform:scale(.95)}
+.pempty{font-size:12px;color:var(--aink3);padding:6px 2px}
+.dim-note{margin-top:8px;font-size:11.5px;color:var(--aink3)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="kicker">Plan · 2026-09-13 11:44 · ต่อยอดแท็บสัตว์</div>
+    <h1>รายการสัตว์ <em>ครบทั้งเกม</em> เลือกด้านล่าง ค้นหาได้</h1>
+    <p class="lead">จาก 11 ตัว เป็น <strong>95 สายพันธุ์ที่เลี้ยงได้จริง</strong> (เกมหลัก + Odyssey + Biotech)
+      — อัตรากินทุกตัวเก็บจากหน้าวิกิรายตัวแล้ว ช่องเลือกย้ายไปท้ายหน้าพร้อมช่องค้นหา
+      ลองพิมพ์ในช่องค้นหาของ mock ได้เลย เช่น "หมี" "fox" "ไข่"</p>
+  </header>
+
+  <nav class="brief-tabs">
+    <button class="btab on" data-t="mock">หน้าจอใหม่ (ค้นหาได้จริง)</button>
+    <button class="btab" data-t="req">สิ่งที่ขอ</button>
+    <button class="btab" data-t="spec">แผนทางเทคนิค + ตารางข้อมูล</button>
+  </nav>
+
+  <!-- ===== TAB 1 : หน้าจอใหม่ ===== -->
+  <section class="brief on" data-tab="mock">
+    <div class="app" id="appMock">
+      <div class="anav"><span>อาหาร</span><span class="on">สัตว์</span><span>แบต</span><span>โตจริง</span><span>ยา</span><span>ชุด</span><span>ตั้งค่า</span></div>
+      <h2>ต้องทำ kibble วันละกี่ชิ้น</h2>
+      <p class="alead">คอกของฉัน — เพิ่ม/ตัดสัตว์ทำที่ "รายการสัตว์ทั้งเกม" ด้านล่างสุด</p>
+      <div class="kzoo" id="mZoo"></div>
+      <div style="display:flex;align-items:flex-end;gap:10px">
+        <span class="anum" id="mPieces">135</span>
+        <span class="asub" id="mStory">ชิ้น kibble/วัน · bill ~3 รอบ (Butcher table)</span>
+      </div>
+      <div class="astats">
+        <div class="as"><em>เนื้อดิบ</em><b id="mMeat">54</b></div>
+        <div class="as"><em>ผัก/ข้าว</em><b id="mVeg">54</b></div>
+        <div class="as"><em>โภชนาการรวม</em><b id="mNut">5.62</b></div>
+        <div class="as"><em>ต่อ quadrum</em><b id="mQuad">2,024</b></div>
+      </div>
+      <div class="flare" id="mWarg"></div>
+
+      <div class="picker">
+        <div class="ph">
+          <b>รายการสัตว์ทั้งเกม</b>
+          <small id="mCount"></small>
+        </div>
+        <div class="psearch">
+          <span class="ico">⌕</span>
+          <input id="mSearch" type="text" placeholder="ค้นหาสัตว์… เช่น หมี, fox, ไก่" autocomplete="off">
+        </div>
+        <div class="picks" id="mPicks"></div>
+        <p class="dim-note">ชิ้นเขียว = อยู่ในคอก · กดเพื่อเพิ่ม/ตัด · OD = Odyssey · B = Biotech · ค่าเริ่มต้นเปิดมาแค่ชุดตัวอย่าง 6 ตัว</p>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <span><span class="arrow">→</span> ตอบใน chat:
+        <strong>"ลุย"</strong>
+        <strong>"เอาเฉพาะเกมหลัก"</strong>
+        <strong>"ป้าย DLC ไม่ต้อง"</strong></span>
+      <span class="muted">mock = สูตร+ข้อมูลชุดเดียวกับที่จะ implement</span>
+    </div>
+  </section>
+
+  <!-- ===== TAB 2 : สิ่งที่ขอ ===== -->
+  <section class="brief" data-tab="req">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">brief · requirements record</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:8px">คำขอต้นฉบับ (คงถ้อยคำเดิม)</div>
+        <blockquote style="background:var(--card-2);border-left:4px solid var(--line);
+          border-radius:0;padding:14px 18px;font-size:15.5px;
+          color:var(--ink-2);margin:0 0 16px;font-style:italic">
+          รายาการสัตว์เลี้ยงทั้งเกมมันมากกว่านี้อ่ะ เอาไปเลือกด้านลา่งได้ไหม แล้วก็ให้มัน search หาได้ด้วย</blockquote>
+        <div class="kicker" style="margin-bottom:8px">ข้อตกลง</div>
+        <ul class="notes-list">
+          <li><span class="mk">01</span><div>ครบ 95 สายพันธุ์เลี้ยงได้: เกมหลัก 52 · Odyssey 41 · Biotech 1 (toxalope) — ทุกตัวยืนยันอัตรากินจากหน้าวิกิรายตัว ทีมวิจัย 4 ทีมเก็บพร้อมกัน</div></li>
+          <li><span class="mk">02</span><div>ช่องเลือกย้ายไปท้ายหน้าเป็นกล่องของตัวเอง มีช่องค้นหากรองตามชื่อไทย/อังกฤษแบบพิมพ์-เห็นทันที</div></li>
+          <li><span class="mk">03</span><div>ค่าเริ่มต้นเปิดมาแค่ชุดตัวอย่าง 6 ตัวเดิม — ก่อนหน้านี้ default = แสดงทุกตัว ซึ่ง 95 ใบจะรกเกิน จึงเปลี่ยน</div></li>
+          <li><span class="mk">04</span><div>ตัวจาก DLC ติดป้าย OD / B · การ์ดในคอกติดป้ายผลผลิต (ไข่/นม/ขน/เชื้อเพลิง) ถ้ามี</div></li>
+          <li><span class="mk">05</span><div>แถบแดงครอบคลุม "กินเนื้อเท่านั้น" ทุกตัว (warg + wolverine + vulture) ไม่ใช่ warg เฉพาะ</div></li>
+          <li><span class="mk">06</span><div>ค่าเดิมของผู้ใช้เดิม (kshown 10-11 ตัว) ยังใช้ได้ทันที ไม่ต้องตั้งใหม่</div></li>
+        </ul>
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> ตอบใน chat:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ ..."</strong></span>
+          <span class="muted">บันทึนี้อยู่ใน requirements.html ด้วย</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TAB 3 : แผนทางเทคนิค ===== -->
+  <section class="brief" data-tab="spec">
+    <div class="window">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="title">spec · source of truth — ตาราง 95 ตัวอยู่ใน script ของ mock (tab แรก)</span></div>
+      <div class="body">
+        <div class="kicker" style="margin-bottom:10px">สถาปัตยกรรม — อะไรเปลี่ยน อะไรเดิม</div>
+        <svg viewBox="0 0 860 200" style="width:100%;height:auto" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">
+          <defs>
+            <marker id="ar4" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#737373"/></marker>
+          </defs>
+          <rect x="14" y="24" width="180" height="60" rx="0" fill="var(--card-2)" stroke="var(--line)"/>
+          <text x="104" y="48" text-anchor="middle" fill="var(--ink)">ช่องค้นหา (ล่างหน้า)</text>
+          <text x="104" y="66" text-anchor="middle" fill="var(--ink-3)">พิมพ์ → กรองชิปสด ๆ</text>
+          <line x1="194" y1="54" x2="236" y2="54" stroke="#737373" marker-end="url(#ar4)"/>
+          <rect x="240" y="14" width="250" height="80" rx="0" fill="var(--accent-soft)" stroke="var(--line)"/>
+          <text x="365" y="38" text-anchor="middle" fill="var(--accent-deep)" font-weight="700">ANIMALS ×95</text>
+          <text x="365" y="58" text-anchor="middle" fill="var(--ink-2)">{ id, name, rate, diet,</text>
+          <text x="365" y="74" text-anchor="middle" fill="var(--ink-2)"> tag: OD/B, prod: ไข่/นม/ขน }</text>
+          <line x1="490" y1="54" x2="532" y2="54" stroke="#737373" marker-end="url(#ar4)"/>
+          <rect x="536" y="14" width="150" height="80" rx="0" fill="var(--card)" stroke="var(--line)"/>
+          <text x="611" y="38" text-anchor="middle" fill="var(--ink)">planKibble เดิม</text>
+          <text x="611" y="56" text-anchor="middle" fill="var(--ink-3)">สูตรไม่แตะเลย</text>
+          <text x="611" y="72" text-anchor="middle" fill="var(--ink-3)">แค่ข้อมูลใหญ่ขึ้น</text>
+          <path d="M686 54 L740 54" stroke="#737373" marker-end="url(#ar4)"/>
+          <rect x="744" y="24" width="106" height="60" rx="0" fill="var(--card)" stroke="var(--line)"/>
+          <text x="797" y="46" text-anchor="middle" fill="var(--ink-2)">kshown เดิม</text>
+          <text x="797" y="62" text-anchor="middle" fill="var(--ink-3)">URL/LS/D1 ได้แล้ว</text>
+          <text x="14" y="128" fill="var(--ink-3)" font-size="10.5">เปลี่ยน: default shown = ชุดตัวอย่าง 6 ตัว (ไม่ใช่ทั้งหมด) · wargCount → strictCount (warg+wolverine+vulture) · เพิ่ม filterAnimals(q) แบบ pure</text>
+          <text x="14" y="146" fill="var(--ink-3)" font-size="10.5">URL: ละ kshown เมื่อเท่ากับชุดตัวอย่าง · ค่าเดิมผู้ใช้เดิมใช้ได้ทันที (ids เดิมอยู่ครบ)</text>
+        </svg>
+
+        <div class="note danger" style="margin-top:6px">
+          <span class="ic">⚠</span>
+          <div><strong>Security:</strong> ไม่มี endpoint/schema ใหม่ — ค้นหาเป็น client-side pure filter,
+            ค่า query ไม่ยุ่งกับ state · ชิปทั้งหมด render ผ่าน textContent เหมือนเดิม · executionProfile standard</div>
+        </div>
+
+        <div class="kicker" style="margin:14px 0 10px">Test specs (TDD — node --test)</div>
+        <table>
+          <thead><tr><th>กลุ่ม</th><th>เคสหลัก</th></tr></thead>
+          <tbody>
+            <tr><td>ความสมบูรณ์ข้อมูล</td><td>95 ตัว · id ไม่ซ้ำ · rate จำกัด 0–5 · diet/tag/prod enum ถูก</td></tr>
+            <tr><td>ค้นหา</td><td>"หมี" เจอกริซลี+ขั้ว · "fox" เจอ 3 จิ้งจอก · "" เห็นทุกตัว · ตัวพิมพ์ไม่สำคัญ</td></tr>
+            <tr><td>default + state</td><td>ไม่มี kshown → ชุดตัวอย่าง 6 ตัว · kshown เดิม 11 ตัว round-trip · '' = ไม่มี</td></tr>
+            <tr><td>strict รวมกลุ่ม</td><td>warg+wolverine+vulture นับรวมแถบเนื้อดิบ · ซ่อนหมด = ไม่มีแถบ</td></tr>
+            <tr><td>ค่าเดิมผู้ใช้เดิม</td><td>เปิด state เก่า (11 ตัว) แล้วตัวเลขต่อเนื่อง ไม่กระโดด</td></tr>
+          </tbody>
+        </table>
+
+        <div class="kicker" style="margin:14px 0 10px">งาน</div>
+        <ul class="notes-list">
+          <li><span class="mk">001</span><div><strong>kibble.js + เทส</strong> — ตาราง 95 ตัว (ยกจาก script ของ mock นี้) + filterAnimals + default ชุดตัวอย่าง + strictCount (high)</div></li>
+          <li><span class="mk">002</span><div><strong>index.html</strong> — ย้ายช่องเลือกลงล่างเป็นกล่องเดียว + ช่องค้นหา + ป้าย OD/B/ผลผลิต + แถบแดงรวม strict (high)</div></li>
+          <li><span class="mk">003</span><div><strong>ตรวจ + ขึ้น production</strong> — npm test ครบ + browser (ค้นหา เพิ่ม/ตัด ค่าค้าน state เก่า) + commit/push/deploy (medium)</div></li>
+        </ul>
+
+        <div class="cta-strip">
+          <span><span class="arrow">→</span> อนุมัติแล้วตอบ:
+            <strong>"ลุย"</strong>
+            <strong>"แก้ก่อน: ..."</strong></span>
+          <span class="muted">เริ่มงานด้วย workflow-work</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">plan 2026-09-13 11:44 · ต่อจาก archive/004 · ข้อมูลสัตว์: rimworldwiki.com รายตัว (เก็บ 13 ก.ย. 2569)</div>
+</div>
+
+<script>
+document.querySelectorAll('.btab').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.btab').forEach(function (x) { x.classList.remove('on'); });
+    document.querySelectorAll('.brief').forEach(function (x) { x.classList.remove('on'); });
+    b.classList.add('on');
+    document.querySelector('.brief[data-tab="' + b.dataset.t + '"]').classList.add('on');
+  });
+});
+
+/* ============ ตารางสัตว์ 95 ตัว — SOURCE OF TRUTH สำหรับ implementation ============
+   รูปแบบ: [id, ชื่อ, อัตรากิน/วัน, diet(h=o พืช/c ทั้งคู่/c เนื้อ/s เนื้อเท่านั้น), tag(''|OD|B), prod(''|ไข่|นม|ขน|เชื้อเพลิง)]
+   ค่าทุกตัวจากหน้าวิกิรายตัว 1.6 (เก็บ 13 ก.ย. 2569) */
+var DATA = [
+  ['chicken','ไก่',0.22,'h','','ไข่'],['duck','เป็ด',0.28,'h','','ไข่'],
+  ['goose','ห่าน',0.45,'h','','ไข่'],['turkey','ไก่งวง',0.45,'h','','ไข่'],
+  ['cassowary','Cassowary',0.45,'h','','ไข่'],['emu','Emu',0.45,'h','','ไข่'],
+  ['ostrich','Ostrich',0.67,'h','','ไข่'],['guineapig','กินีพิก',0.16,'h','',''],
+  ['chinchilla','ชินชิลลา',0.2,'h','',''],['squirrel','กระรอก',0.16,'h','',''],
+  ['hare','กระต่ายป่า',0.18,'h','',''],['snowhare','กระต่ายหิมะ',0.18,'h','',''],
+  ['capybara','คาปิบารา',0.36,'h','',''],['goat','แพะ',0.36,'h','','นม'],
+  ['sheep','แกะ',0.36,'h','','ขน'],['alpaca','Alpaca',0.44,'h','','ขน'],
+  ['cow','วัว',0.86,'h','','นม'],['yak','Yak',0.86,'h','','นม'],
+  ['horse','ม้า',0.86,'h','',''],['donkey','ลา',0.52,'h','',''],
+  ['dromedary','อูฐ',0.86,'h','','นม'],['muffalo','Muffalo',0.86,'h','','ขน'],
+  ['bison','Bison',0.86,'h','','ขน'],['boomalope','Boomalope',0.86,'h','','เชื้อเพลิง'],
+  ['elephant','ช้าง',2.57,'h','',''],['rhinoceros','แรด',1.71,'h','',''],
+  ['megasloth','Megasloth',1.6,'h','','ขน'],['thrumbo','Thrumbo',2.8,'h','',''],
+  ['alphabeaver','Alphabeaver',4.8,'h','',''],
+  ['pig','หมู',0.8,'o','',''],['boar','หมูป่า',0.48,'o','',''],
+  ['iguana','อิกัวนา',0.32,'o','','ไข่'],['tortoise','เต่า',0.13,'o','','ไข่'],
+  ['monkey','ลิง',0.2,'o','',''],['raccoon','แรคคูน',0.32,'o','',''],
+  ['husky','Husky',0.8,'o','',''],['labrador','ลาบราดอร์',0.64,'o','',''],
+  ['yorkie','Yorkshire terrier',0.24,'o','',''],['grizzly','หมีกริซลี',0.56,'o','',''],
+  ['polarbear','หมีขั้ว',0.56,'o','',''],['boomrat','Boomrat',0.22,'o','',''],
+  ['rat','หนู',0.16,'o','',''],
+  ['cat','แมว',0.24,'c','',''],['cobra','งูเห่า',0.11,'c','','ไข่'],
+  ['timberwolf','หมาป่า',0.29,'c','',''],['arcticwolf','หมาป่าขั้ว',0.29,'c','',''],
+  ['panther','เสือดำ',0.32,'c','',''],['cougar','พูมา',0.32,'c','',''],
+  ['lynx','ลินซ์',0.19,'c','',''],['redfox','จิ้งจอกแดง',0.16,'c','',''],
+  ['arcticfox','จิ้งจอกขั้ว',0.16,'c','',''],['fennec','ฟีเนค',0.16,'c','',''],
+  ['warg','Warg',0.4,'s','',''],
+  ['hippo','ฮิปโป',1.6,'h','OD',''],['moose','มูส',0.86,'h','OD',''],
+  ['muskox','Muskox',0.86,'h','OD','ขน'],['panda','แพนด้า',0.32,'h','OD',''],
+  ['mastodon','Mastodon',2.88,'h','OD','ขน'],['porcupine','เม่น',0.24,'h','OD',''],
+  ['prairiedog','แพร์รีด็อก',0.16,'h','OD',''],['lavasnail','Lava snail',0.32,'h','OD',''],
+  ['peafowl','นกยูง',0.37,'h','OD','ไข่'],['quail','นกควาย',0.19,'h','OD','ไข่'],
+  ['swan','หงส์',0.45,'h','OD','ไข่'],['macaw','มะคอว์',0.19,'h','OD','ไข่'],
+  ['bluebird','บลูเบิร์ด',0.13,'h','OD','ไข่'],['sparrow','นกกระจอก',0.13,'h','OD','ไข่'],
+  ['alphathrumbo','Alpha thrumbo',2.8,'h','OD',''],
+  ['gorilla','กอริลลา',0.86,'o','OD',''],['badger','แบดเจอร์',0.32,'o','OD',''],
+  ['armadillo','อาร์มาดิลโล',0.32,'o','OD',''],['otter','นาก',0.24,'o','OD',''],
+  ['mink','มิงก์',0.16,'o','OD',''],['boghound','Bog hound',0.29,'o','OD',''],
+  ['megavole','Megavole',0.8,'o','OD',''],['crow','อีกา',0.13,'o','OD','ไข่'],
+  ['flamingo','ฟลามิงโก',0.45,'o','OD','ไข่'],['heron','นกกระสา',0.45,'o','OD','ไข่'],
+  ['seaturtle','เต่าทะเล',0.16,'o','OD','ไข่'],['monitorlizard','Monitor lizard',0.32,'o','OD','ไข่'],
+  ['bullfrog','บูลฟรอก',0.16,'o','OD',''],['colossustoad','Colossus toad',0.32,'o','OD',''],
+  ['hermitcrab','ปูเจ้าสำนัก',0.13,'o','OD',''],['stonecrab','ปูหิน',0.19,'o','OD',''],
+  ['greatwolf','Greatwolf',0.64,'c','OD',''],['scimitarcat','Scimitar cat',0.42,'c','OD',''],
+  ['tiger','เสือโคร่ง',0.32,'c','OD',''],['walrus','วอลรัส',0.86,'c','OD',''],
+  ['sealion','สิงโตทะเล',0.48,'c','OD',''],['seal','แมวน้ำ',0.48,'c','OD',''],
+  ['penguin','เพนกวิน',0.45,'c','OD','ไข่'],['alligator','Alligator',0.48,'c','OD','ไข่'],
+  ['wolverine','Wolverine',0.37,'s','OD',''],['vulture','Vulture',0.37,'s','OD','ไข่'],
+  ['toxalope','Toxalope',0.86,'h','B','']
+];
+var DL = { h: 'พืช', o: 'ทั้งคู่', c: 'เนื้อ', s: 'เนื้อเท่านั้น' };
+var STARTER = ['chicken', 'cat', 'pig', 'husky', 'cow', 'warg'];
+var state = { chicken: 6, cat: 1, pig: 2, husky: 2, cow: 1, warg: 1 };
+var shown = STARTER.slice();
+var query = '';
+
+var picks = document.getElementById('mPicks');
+DATA.forEach(function (a) {
+  var c = document.createElement('button');
+  c.type = 'button';
+  c.className = 'pchip';
+  c.dataset.id = a[0];
+  c.addEventListener('click', function () {
+    var i = shown.indexOf(a[0]);
+    if (i >= 0) shown.splice(i, 1); else shown.push(a[0]);
+    render();
+  });
+  picks.appendChild(c);
+});
+document.getElementById('mSearch').addEventListener('input', function () {
+  query = this.value.trim().toLowerCase();
+  render();
+});
+
+function render() {
+  var c = 0, w = 0, strictN = 0, strictNames = [], any = false;
+  var zoo = document.getElementById('mZoo');
+  zoo.textContent = '';
+  DATA.forEach(function (a) {
+    if (shown.indexOf(a[0]) < 0) return;
+    any = true;
+    var n = state[a[0]] || 0;
+    if (a[3] === 's') { w += a[2] * n; strictN += n; if (n > 0) strictNames.push(a[1]); }
+    else c += a[2] * n;
+    var z = document.createElement('div');
+    z.className = 'kz' + (a[3] === 's' ? ' warg' : '');
+    var html = '<span>' + a[1] + '</span><span class="fakebtn">−</span><span class="dn">' + n +
+      '</span><span class="fakebtn">+</span><span class="dt">' + DL[a[3]] + '</span>';
+    if (a[5]) html += '<span class="pt">' + a[5] + '</span>';
+    if (a[4]) html += '<span class="pt">' + a[4] + '</span>';
+    z.innerHTML = html;
+    zoo.appendChild(z);
+  });
+  if (!any) zoo.innerHTML = '<div class="pempty">ยังไม่ได้เลือกสัตว์ — ค้นหาแล้วกดเพิ่มจากด้านล่าง</div>';
+  var need = c * 1.2;
+  document.getElementById('mPieces').textContent = any ? Math.ceil(need / 0.05 - 1e-9) : '0';
+  document.getElementById('mStory').textContent = any ? 'ชิ้น kibble/วัน · bill ~' + Math.ceil(need / 0.05 / 50) + ' รอบ (Butcher table)' : 'เลือกสัตว์ก่อน';
+  document.getElementById('mMeat').textContent = any ? Math.ceil(need / 2.5 * 20 - 1e-9) : '0';
+  document.getElementById('mVeg').textContent = document.getElementById('mMeat').textContent;
+  document.getElementById('mNut').textContent = c.toFixed(2);
+  document.getElementById('mQuad').textContent = any ? Math.ceil(need / 0.05 * 15 - 1e-9).toLocaleString('en-US') : '0';
+  var wbox = document.getElementById('mWarg');
+  if (strictN === 0) { wbox.style.display = 'none'; }
+  else {
+    wbox.style.display = '';
+    wbox.textContent = 'กินเนื้อเท่านั้น ' + strictN + ' ตัว (' + strictNames.join(', ') +
+      ') กิน kibble ไม่ได้ — ต้องมีเนื้อดิบ/ศพอีก ~' + Math.ceil(w * 1.2 / 0.05 - 1e-9) + ' ชิ้น/วัน';
+  }
+  var visible = 0;
+  DATA.forEach(function (a) {
+    var chip = picks.querySelector('[data-id="' + a[0] + '"]');
+    var hit = !query || a[1].toLowerCase().indexOf(query) >= 0 || a[0].indexOf(query) >= 0;
+    chip.style.display = hit ? '' : 'none';
+    if (hit) visible++;
+    chip.classList.toggle('on', shown.indexOf(a[0]) >= 0);
+    chip.innerHTML = a[1] + (a[4] ? '<span class="dlc">' + a[4] + '</span>' : '');
+  });
+  document.getElementById('mCount').textContent =
+    '' + DATA.length + ' สายพันธุ์ · โชว์ ' + visible + ' · ในคอก ' + shown.length;
+}
+render();
+</script>
+</body>
+</html>

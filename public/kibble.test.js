@@ -4,6 +4,21 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const kc = require('./kibble.js');
 
+test('roster integrity: 95 species, unique ids, sane rates and enums', () => {
+  assert.equal(kc.ANIMALS.length, 95);
+  const ids = new Set(kc.ANIMALS.map((a) => a.id));
+  assert.equal(ids.size, 95);
+  const diets = new Set(['herb', 'omni', 'carn', 'strict']);
+  const tags = new Set(['', 'OD', 'B']);
+  const prods = new Set(['', 'ไข่', 'นม', 'ขน', 'เชื้อเพลิง']);
+  kc.ANIMALS.forEach((a) => {
+    assert.ok(a.rate > 0 && a.rate <= 5, a.id + ' rate out of range');
+    assert.ok(diets.has(a.diet), a.id + ' bad diet');
+    assert.ok(tags.has(a.tag), a.id + ' bad tag');
+    assert.ok(prods.has(a.prod), a.id + ' bad prod');
+  });
+});
+
 test('hunger rates sum: 6 chickens + 1 cat + 2 pigs + 2 huskies + 1 cow = 5.62/day', () => {
   const r = kc.planKibble({
     counts: { chicken: 6, cat: 1, pig: 2, husky: 2, cow: 1 },
@@ -13,16 +28,29 @@ test('hunger rates sum: 6 chickens + 1 cat + 2 pigs + 2 huskies + 1 cow = 5.62/d
   assert.ok(Math.abs(r.pieces - 112.4) < 1e-6);
 });
 
-test('warg is excluded from kibble and counted as raw meat', () => {
+test('strict-carnivores are excluded from kibble and counted as raw meat', () => {
   const r = kc.planKibble({
     counts: { warg: 1, husky: 1 },
     station: 'table', buffer: 0
   });
   assert.ok(Math.abs(r.nutrition - 0.8) < 1e-9);
-  assert.equal(r.wargCount, 1);
-  assert.ok(Math.abs(r.wargNutrition - 0.4) < 1e-9);
-  assert.equal(r.wargMeatUnits, 8);
+  assert.equal(r.strictCount, 1);
+  assert.deepEqual(r.strictNames, ['Warg']);
+  assert.ok(Math.abs(r.strictNutrition - 0.4) < 1e-9);
+  assert.equal(r.strictMeatUnits, 8);
   assert.equal(r.piecesDay, 16);
+});
+
+test('strict group covers warg + wolverine + vulture (Odyssey)', () => {
+  const r = kc.planKibble({
+    counts: { warg: 1, wolverine: 2, vulture: 1, husky: 1 },
+    shown: ['warg', 'wolverine', 'vulture', 'husky'],
+    station: 'table', buffer: 0
+  });
+  assert.equal(r.strictCount, 4);
+  assert.deepEqual(r.strictNames, ['Warg', 'Wolverine', 'Vulture']);
+  // 0.4 + 2*0.37 + 0.37 = 1.51 nut → 30.2 → 31 pieces of raw meat
+  assert.equal(r.strictMeatUnits, 31);
 });
 
 test('butcher table: 20+20 → 50 pieces at 125%; spot: 35 at 87.5%', () => {
@@ -72,43 +100,8 @@ test('encodeCounts round-trips through parseCounts', () => {
   assert.equal(back.cow, 0);
 });
 
-test('parseKibbleState reads an/kb/kbuf URL form and defaults safely', () => {
-  const s = kc.parseKibbleState({ an: 'chicken:6,husky:2', kb: 'spot', kbuf: '30' });
-  assert.equal(s.counts.chicken, 6);
-  assert.equal(s.station, 'spot');
-  assert.ok(Math.abs(s.buffer - 0.3) < 1e-9);
-  const d = kc.parseKibbleState({});
-  assert.equal(d.station, 'table');
-  assert.equal(d.buffer, 0.2);
-  assert.deepEqual(d.counts, kc.parseCounts(kc.DEFAULT_COUNTS));
-  const junk = kc.parseKibbleState({ an: '!!!', kb: 'microwave', kbuf: 'x' });
-  assert.equal(junk.station, 'table');
-  assert.equal(junk.counts.chicken, 0);
-});
-
-test('zero animals → all zeros, never NaN or negative', () => {
-  const r = kc.planKibble({ counts: {}, station: 'spot', buffer: 0.5 });
-  assert.equal(r.animalTotal, 0);
-  assert.equal(r.piecesDay, 0);
-  assert.equal(r.billsDay, 0);
-  assert.equal(r.meatUnits, 0);
-  assert.equal(r.vegUnits, 0);
-  assert.equal(r.wargMeatUnits, 0);
-  assert.equal(r.ricePlants, 0);
-  assert.ok(Number.isFinite(r.pieces));
-});
-
-test('quadrum (15 days) and rice plant equivalents', () => {
-  const r = kc.planKibble({ counts: { cow: 1 }, station: 'table', buffer: 0.2 });
-  // 0.86*1.2 = 1.032 nut → 20.64 pieces → 310/quadrum
-  assert.equal(r.quadrumPieces, 310);
-  // veg 1.032/2.5*20 = 8.256 → 9 units/day → 9*5.54/6... use exact: 8.256*5.54/6 = 7.63 → 8 plants
-  assert.equal(r.vegUnits, 9);
-  assert.equal(r.ricePlants, 8);
-});
-
-test('parseShownList: absent = all, empty = none, junk dropped, order follows ANIMALS', () => {
-  assert.equal(kc.parseShownList(null).length, kc.ANIMALS.length);
+test('parseShownList: absent = starter set, empty = none, junk dropped', () => {
+  assert.deepEqual(kc.parseShownList(null), kc.STARTER);
   assert.deepEqual(kc.parseShownList(''), []);
   assert.deepEqual(kc.parseShownList([]), []);
   const s = kc.parseShownList('warg,chicken,junk,husky');
@@ -116,44 +109,98 @@ test('parseShownList: absent = all, empty = none, junk dropped, order follows AN
   assert.deepEqual(kc.parseShownList(['cat', 9, '']), ['cat']);
 });
 
+test('isStarterShown matches the starter set regardless of order', () => {
+  assert.ok(kc.isStarterShown(kc.STARTER));
+  assert.ok(kc.isStarterShown('cow,warg,chicken,cat,pig,husky'));
+  assert.ok(!kc.isStarterShown('chicken'));
+  assert.ok(!kc.isStarterShown(''));
+});
+
+test('filterAnimals searches Thai names and English ids, case-insensitive', () => {
+  assert.equal(kc.filterAnimals('หมี').length, 2); // กริซลี + ขั้ว
+  assert.deepEqual(
+    kc.filterAnimals('fox').map((a) => a.id),
+    ['redfox', 'arcticfox', 'fennecfox']
+  );
+  assert.equal(kc.filterAnimals('จิ้งจอก').length, 3);
+  assert.ok(kc.filterAnimals('FOX').length >= 3);
+  assert.equal(kc.filterAnimals('').length, 95);
+  assert.equal(kc.filterAnimals('   ').length, 95);
+  assert.deepEqual(kc.filterAnimals('zzz'), []);
+});
+
 test('shown list filters the calculation but keeps stored counts', () => {
   const counts = { chicken: 6, cat: 1, pig: 2, husky: 2, cow: 1, warg: 1 };
   const r = kc.planKibble({ counts, shown: ['chicken'], station: 'table', buffer: 0 });
   assert.ok(Math.abs(r.nutrition - 1.32) < 1e-9);
-  assert.equal(r.wargCount, 0);
-  assert.equal(r.wargMeatUnits, 0);
+  assert.equal(r.strictCount, 0);
+  assert.equal(r.strictMeatUnits, 0);
   // ตัวที่ซ่อนไว้เลขยังถูกจำใน counts
   assert.equal(r.counts.warg, 1);
   assert.equal(r.counts.chicken, 6);
 });
 
-test('hiding warg removes the warg line; unhiding restores it', () => {
+test('hiding warg removes the strict bar data; unhiding restores it', () => {
   const base = { counts: { warg: 2, husky: 1 }, station: 'table', buffer: 0 };
   const withWarg = kc.planKibble({ ...base, shown: ['warg', 'husky'] });
   const noWarg = kc.planKibble({ ...base, shown: ['husky'] });
-  assert.equal(withWarg.wargCount, 2);
-  assert.equal(withWarg.wargMeatUnits, 16);
-  assert.equal(noWarg.wargCount, 0);
-  assert.equal(noWarg.wargMeatUnits, 0);
+  assert.equal(withWarg.strictCount, 2);
+  assert.equal(withWarg.strictMeatUnits, 16);
+  assert.equal(noWarg.strictCount, 0);
+  assert.equal(noWarg.strictMeatUnits, 0);
   // husky ยังนับเหมือนเดิมทั้งสองกรณี
   assert.ok(Math.abs(noWarg.nutrition - 0.8) < 1e-9);
 });
 
-test('parseKibbleState reads kshown from URL form and server form; default = all', () => {
+test('parseKibbleState reads kshown from URL form and server form; default = starter', () => {
   const url = kc.parseKibbleState({ an: 'chicken:6', kb: 'spot', kbuf: '30', kshown: 'chicken,warg' });
   assert.deepEqual(url.shown, ['chicken', 'warg']);
   const server = kc.parseKibbleState({ kshown: ['cat', 'pig'] });
-  assert.deepEqual(server.shown, ['cat', 'pig']);
+  // เรียงกลับตามลำดับในตาราง: หมู (omni) มาก่อนแมว (carn)
+  assert.deepEqual(server.shown, ['pig', 'cat']);
   const empty = kc.parseKibbleState({ kshown: '' });
   assert.deepEqual(empty.shown, []);
-  assert.equal(kc.parseKibbleState({}).shown.length, kc.ANIMALS.length);
-  assert.equal(kc.defaultKibbleState().shown.length, kc.ANIMALS.length);
+  assert.deepEqual(kc.parseKibbleState({}).shown, kc.STARTER);
+  assert.deepEqual(kc.defaultKibbleState().shown, kc.STARTER);
+  const junk = kc.parseKibbleState({ an: '!!!', kb: 'microwave', kbuf: 'x' });
+  assert.equal(junk.station, 'table');
+  assert.equal(junk.counts.chicken, 0);
+});
+
+test('zero animals → all zeros, never NaN', () => {
+  const r = kc.planKibble({ counts: {}, station: 'spot', buffer: 0.5 });
+  assert.equal(r.animalTotal, 0);
+  assert.equal(r.piecesDay, 0);
+  assert.equal(r.billsDay, 0);
+  assert.equal(r.meatUnits, 0);
+  assert.equal(r.vegUnits, 0);
+  assert.equal(r.strictMeatUnits, 0);
+  assert.equal(r.ricePlants, 0);
+  assert.ok(Number.isFinite(r.pieces));
 });
 
 test('shown empty → zero results, never NaN', () => {
   const r = kc.planKibble({ counts: { husky: 3 }, shown: [], station: 'spot', buffer: 0.5 });
   assert.equal(r.animalTotal, 0);
   assert.equal(r.piecesDay, 0);
-  assert.equal(r.wargMeatUnits, 0);
+  assert.equal(r.strictMeatUnits, 0);
   assert.ok(Number.isFinite(r.nutrition));
+});
+
+test('quadrum (15 days) and rice plant equivalents', () => {
+  const r = kc.planKibble({ counts: { cow: 1 }, station: 'table', buffer: 0.2 });
+  // 0.86*1.2 = 1.032 nut → 20.64 pieces → 310/quadrum
+  assert.equal(r.quadrumPieces, 310);
+  // veg 1.032/2.5*20 = 8.256 → 9 units/day → 8.256*5.54/6 = 7.63 → 8 plants
+  assert.equal(r.vegUnits, 9);
+  assert.equal(r.ricePlants, 8);
+});
+
+test('legacy 11-animal kshown from a saved session still works untouched', () => {
+  const legacy = 'chicken,cat,alpaca,pig,husky,horse,cow,muffalo,dromedary,thrumbo,warg';
+  const s = kc.parseKibbleState({ kshown: legacy });
+  assert.equal(s.shown.length, 11);
+  const r = kc.planKibble({ ...s, counts: kc.DEFAULT_COUNTS });
+  // ไก่ 6 แมว 1 หมู 2 husky 2 วัว 1 = 5.62 เหมือนเดิม ค่าเดิมผู้ใช้เดิมต่อเนื่อง
+  assert.ok(Math.abs(r.nutrition - 5.62) < 1e-9);
 });

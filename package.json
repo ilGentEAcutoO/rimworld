@@ -18,5 +18,8 @@
     "cross-env": "^10.1.0",
     "vitest": "^4.1.11",
     "wrangler": "^4.125.0"
+  },
+  "overrides": {
+    "undici": "7.30.0"
   }
 }

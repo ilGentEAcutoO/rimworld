@@ -775,11 +775,11 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
 
   <div class="dxbox">
     <h3>ของ stuff ได้ — เกราะตามวัสดุ ×</h3>
-    <p class="refnote">ตัวเลขคือตัวคูณฐาน คูณกับสถิติวัสดุ (โลหะ plasteel ดีสุด) และคุณภาพ 0.6–1.8 เช่น plate เหล็ก = 0.9 × 1.08</p>
+    <p class="refnote">ตัวเลขคือตัวคูณฐาน คูณกับสถิติวัสดุ (โลหะ plasteel ดีสุด) และคุณภาพ 0.6–1.8 เช่น plate เหล็ก normal = 0.9 × 0.9 = แหลม 81% · plate plasteel = 0.9 × 1.14 = 103%</p>
     <div class="reftable-wrap">
       <table class="reftable sortable">
         <thead>
-          <tr><th>ชื่อ</th><th>เกราะ ×</th><th>กันหนาว / ร้อน</th><th>โทษเดิน</th><th>เหมาะกับ</th></tr>
+          <tr><th>ชื่อ</th><th>เกราะ ×</th><th>กันหนาว / ร้อน</th><th>โทษเดิน</th><th>วัสดุที่ใช้</th><th>เหมาะกับ</th></tr>
         </thead>
         <tbody id="gearStuffBody"></tbody>
       </table>
@@ -1897,19 +1897,19 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       why: 'ปิดขา — เติมช่องโหว่ระหว่างรอเงินทำ power armor' }
   ];
   var GEAR_STUFF = [
-    { n: 'Plate armor', x: 0.9, ins: 'ทนหนาวพอตัว', move: '-0.8',
+    { n: 'Plate armor', x: 0.9, ins: 'ทนหนาวพอตัว', move: '-0.8', mat: 'plasteel · รอง uranium',
       why: 'ยุคกลาง — แกร่งกว่า flak ทั้งชุดรวมกัน แต่ช้าและไม่คุมหัว' },
-    { n: 'Flak helmet', x: 0.7, ins: 'หนาวนิด', move: '0',
+    { n: 'Flak helmet', x: 0.7, ins: 'หนาวนิด', move: '0', mat: 'plasteel',
       why: 'หมวก flak — ใช้ plasteel ตีให้ดีสุด เกราะหัวสำคัญมาก' },
-    { n: 'Simple helmet', x: 0.5, ins: 'หนาวนิด', move: '0',
+    { n: 'Simple helmet', x: 0.5, ins: 'หนาวนิด', move: '0', mat: 'เหล็ก / plasteel',
       why: 'หมวกถูกสุด — ดีกว่าโล่งเปล่าเสมอ' },
-    { n: 'Duster', x: 0.3, ins: 'หนาว 60 / ร้อน 85', move: '0',
+    { n: 'Duster', x: 0.3, ins: 'หนาว 60 / ร้อน 85', move: '0', mat: 'devilstrand / hyperweave',
       why: 'ชั้นนอกผ้า — devilstrand/hyperweave คือซับเกราะที่ดีที่สุด' },
-    { n: 'Parka', x: 0.2, ins: 'หนาว 200 (สุดในเกม)', move: '0',
+    { n: 'Parka', x: 0.2, ins: 'หนาว 200 (สุดในเกม)', move: '0', mat: 'thrumbofur / หนังหมาป่า',
       why: 'ขั้วโลก — ทนหนาวเหลือเฟือ' },
-    { n: 'Button-down shirt', x: 0.2, ins: 'หนาว 26 / ร้อน 10', move: '0',
+    { n: 'Button-down shirt', x: 0.2, ins: 'หนาว 26 / ร้อน 10', move: '0', mat: 'ผ้า / devilstrand',
       why: 'ชั้นใน — ซ้อนใต้ทุกอย่างเสมอ ใส่ไว้ไม่เสียหาย' },
-    { n: 'Pants', x: 0.2, ins: 'หนาว 20 / ร้อน 8', move: '0',
+    { n: 'Pants', x: 0.2, ins: 'หนาว 20 / ร้อน 8', move: '0', mat: 'ผ้า / devilstrand',
       why: 'ชั้นในขา — เหมือนเสื้อ ใส่ทุกคน' }
   ];
 
@@ -1937,6 +1937,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
         tr.appendChild(el('td', '', '×' + g.x));
         tr.appendChild(el('td', '', g.ins));
         tr.appendChild(el('td', '', g.move));
+        tr.appendChild(el('td', '', g.mat));
         tr.appendChild(el('td', 'dim', g.why));
         sBody.appendChild(tr);
       });

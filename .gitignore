@@ -5,6 +5,7 @@ node_modules/
 .env.*
 !.env.example
 agent-temp/
+.workflow-skills-backups/
 
 # transient lock guard written by the workflow-state helper
 *.lock.guard

@@ -476,6 +476,9 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
         <b id="hoursOut">15</b>
       </div>
     </div>
+    <div class="chips" id="growWattsRow">
+      <button type="button" class="chip" id="growWattsBtn">บวกไฟห้องปลูก</button>
+    </div>
     <div class="chips" id="hourPresets">
       <button type="button" class="chip on" data-h="15">โซลาร์ไม่เต็ม ~15 ชม.</button>
       <button type="button" class="chip" data-h="8">มืดสนิท 8 ชม.</button>
@@ -1204,8 +1207,24 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     save();
   }
 
+  // Same inputs as the food tab, so the number matches its "โคม / ไฟ" stat.
+  function growRoomPlan() {
+    var gf = GT.tempFactor(grow.heat, grow.cool);
+    return LS.planMeal({
+      adults: crew.adults, kids: crew.kids, babies: crew.babies,
+      meal: pick, crop: 'rice', buffer: buffer, growthFactor: gf
+    });
+  }
+
   function renderPower() {
     var r = PWR.batteriesNeeded(watts, hours);
+    var gp = growRoomPlan();
+    var gwBtn = document.getElementById('growWattsBtn');
+    if (gwBtn) {
+      gwBtn.textContent = '＋ บวกไฟห้องปลูก ' +
+        gp.wattsDay.toLocaleString('en-US') + ' W · ' +
+        gp.basins + ' อ่าง ' + gp.lamps + ' โคม';
+    }
     var inp = document.getElementById('wattsIn');
     if (document.activeElement !== inp) inp.value = String(r.watts);
     document.getElementById('hours').value = String(r.hours);
@@ -1627,6 +1646,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     document.getElementById('tabDrug').classList.toggle('on', tab === 'drug');
     document.getElementById('tabLeather').classList.toggle('on', tab === 'leather');
     document.getElementById('tabSettings').classList.toggle('on', tab === 'settings');
+    if (tab === 'power') renderPower();
     save();
   }
 
@@ -2117,6 +2137,10 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   });
   document.getElementById('wattsIn').addEventListener('input', function () {
     watts = PWR.parseWatts(this.value);
+    renderPower();
+  });
+  document.getElementById('growWattsBtn').addEventListener('click', function () {
+    watts = PWR.parseWatts(watts + growRoomPlan().wattsDay);
     renderPower();
   });
   document.getElementById('hours').addEventListener('input', function () {

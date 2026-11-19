@@ -112,6 +112,20 @@ test('parseAppState drops invalid JSON-like objects', () => {
   assert.equal(s.pick, 'simple');
 });
 
+test('gridTotal unsynced returns the base watts only', () => {
+  assert.equal(P.gridTotal(3400, 4020, false), 3400);
+  assert.equal(P.gridTotal('3,400', 4020, false), 3400);
+});
+
+test('gridTotal synced adds grow-room watts to the base', () => {
+  assert.equal(P.gridTotal(3400, 4020, true), 7420);
+  assert.equal(P.gridTotal(0, 4020, true), 4020);
+});
+
+test('gridTotal synced clamps the sum at MAX_WATTS', () => {
+  assert.equal(P.gridTotal(49000, 4020, true), P.MAX_WATTS);
+});
+
 test('defaultAppState is food 4+2 crew, 20% buffer, 1000 W × 15 h', () => {
   const d = P.defaultAppState();
   assert.equal(d.tab, 'food');

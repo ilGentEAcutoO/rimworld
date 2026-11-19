@@ -51,6 +51,15 @@ function batteriesNeeded(watts, hours) {
   };
 }
 
+function gridTotal(baseWatts, growWatts, synced) {
+  var base = parseWatts(baseWatts);
+  if (!synced) return base;
+  var grow = (typeof growWatts === 'number' && Number.isFinite(growWatts))
+    ? Math.max(0, Math.trunc(growWatts))
+    : 0;
+  return Math.min(MAX_WATTS, base + grow);
+}
+
 function flareReserve() {
   return { batteries: null, reason: 'solar flare cuts the whole grid' };
 }
@@ -113,6 +122,7 @@ var api = {
   MAX_WATTS: MAX_WATTS,
   parseWatts: parseWatts,
   parseHours: parseHours,
+  gridTotal: gridTotal,
   batteriesNeeded: batteriesNeeded,
   flareReserve: flareReserve,
   parseAppState: parseAppState,

@@ -52,6 +52,7 @@ const ALLOWED_KEYS = {
   pick: SCALAR,
   watts: SCALAR,
   hours: SCALAR,
+  gsync: SCALAR,
   leave: SCALAR,
   leaveSet: SCALAR,
   pack: SCALAR,

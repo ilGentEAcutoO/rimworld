@@ -477,8 +477,9 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       </div>
     </div>
     <div class="chips" id="growWattsRow">
-      <button type="button" class="chip" id="growWattsBtn">บวกไฟห้องปลูก</button>
+      <button type="button" class="chip" id="growSyncBtn">sync ห้องปลูก</button>
     </div>
+    <p class="refnote" id="syncNote" hidden>ช่อง W คือไฟฐาน — ห้องปลูกบวกให้อัตโนมัติ</p>
     <div class="chips" id="hourPresets">
       <button type="button" class="chip on" data-h="15">โซลาร์ไม่เต็ม ~15 ชม.</button>
       <button type="button" class="chip" data-h="8">มืดสนิท 8 ชม.</button>
@@ -898,7 +899,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       var q = new URLSearchParams(location.search);
       ['tab', 'soil', 'kind', 'leave', 'pack', 'hours', 'watts', 'pick',
         'diagCrop', 'diagDays', 'diagPercent', 'heat', 'cool', 'sort', 'shown',
-        'trait', 'drug', 'intervalDays', 'season', 'an', 'kb', 'kcycle', 'kshown'].forEach(function (k) {
+        'trait', 'drug', 'intervalDays', 'season', 'an', 'kb', 'kcycle', 'kshown', 'gsync'].forEach(function (k) {
         if (q.has(k)) o[k] = q.get(k);
       });
       if (q.has('a') || q.has('adults')) o.adults = q.get('adults') || q.get('a');
@@ -928,7 +929,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       q0.has('adults') || q0.has('kids') || q0.has('babies');
   } catch (e) {}
 
-  var rawStore, stored, crew, buffer, pick, tab, season, watts, hours, grow, drugState, kibbleState;
+  var rawStore, stored, crew, buffer, pick, tab, season, watts, hours, grow, drugState, kibbleState, growSync;
 
   // Re-runnable so the server state can replace the first-paint state.
   function applyRawState(raw) {
@@ -946,6 +947,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     season = Number.isFinite(n) ? Math.max(1, Math.min(60, n)) : 60;
     watts = stored.watts;
     hours = stored.hours;
+    growSync = !(rawStore.gsync === '0' || rawStore.gsync === 0 || rawStore.gsync === false);
     grow = GT.parseGrowState(rawStore);
     grow.kind = 'all';
     drugState = DC.parseDrugState(rawStore);
@@ -1045,6 +1047,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       pick: pick,
       watts: watts,
       hours: hours,
+      gsync: growSync ? 1 : 0,
       leave: grow.leave,
       leaveSet: grow.leave != null,
       pack: grow.pack,
@@ -1080,6 +1083,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
       p.set('pick', pick);
       p.set('watts', String(watts));
       p.set('hours', String(hours));
+      p.set('gsync', growSync ? '1' : '0');
       p.set('soil', grow.soil);
       p.set('kind', grow.kind);
       p.set('sort', grow.sort);
@@ -1217,21 +1221,28 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   }
 
   function renderPower() {
-    var r = PWR.batteriesNeeded(watts, hours);
     var gp = growRoomPlan();
-    var gwBtn = document.getElementById('growWattsBtn');
-    if (gwBtn) {
-      gwBtn.textContent = '＋ บวกไฟห้องปลูก ' +
-        gp.wattsDay.toLocaleString('en-US') + ' W · ' +
-        gp.basins + ' อ่าง ' + gp.lamps + ' โคม';
+    var baseW = PWR.parseWatts(watts);
+    var total = PWR.gridTotal(baseW, gp.wattsDay, growSync);
+    var r = PWR.batteriesNeeded(total, hours);
+    var syBtn = document.getElementById('growSyncBtn');
+    if (syBtn) {
+      syBtn.classList.toggle('on', growSync);
+      syBtn.textContent = 'sync ห้องปลูก: ' + (growSync ? 'เปิด' : 'ปิด') +
+        ' · ' + gp.wattsDay.toLocaleString('en-US') + ' W';
     }
+    var note = document.getElementById('syncNote');
+    if (note) note.hidden = !growSync;
     var inp = document.getElementById('wattsIn');
-    if (document.activeElement !== inp) inp.value = String(r.watts);
+    if (document.activeElement !== inp) inp.value = String(baseW);
     document.getElementById('hours').value = String(r.hours);
     document.getElementById('hoursOut').textContent = String(r.hours);
     document.getElementById('batN').textContent = String(r.batteries);
-    document.getElementById('batStory').textContent =
-      r.watts.toLocaleString('en-US') + ' W ตลอด ' + r.hours + ' ชม.';
+    document.getElementById('batStory').textContent = growSync
+      ? (baseW.toLocaleString('en-US') + ' + ' +
+         gp.wattsDay.toLocaleString('en-US') + ' = ' +
+         r.watts.toLocaleString('en-US') + ' W ตลอด ' + r.hours + ' ชม.')
+      : (r.watts.toLocaleString('en-US') + ' W ตลอด ' + r.hours + ' ชม.');
     document.getElementById('needWd').textContent = Math.round(r.needWd) + ' Wd';
     document.getElementById('storeWd').textContent = r.storedWd.toLocaleString('en-US') + ' Wd';
     document.getElementById('spareWd').textContent = Math.round(r.spareWd) + ' Wd';
@@ -1658,6 +1669,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     pick = d.pick;
     watts = d.watts;
     hours = d.hours;
+    growSync = true;
     grow = GT.defaultGrowState();
     grow.kind = 'all';
     drugState = DC.defaultDrugState();
@@ -1683,11 +1695,13 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     next[t.getAttribute('data-k')] += Number(t.getAttribute('data-d'));
     crew = LS.parseCrew(next);
     render();
+    renderPower();
     renderGrow();
   });
   document.getElementById('buffer').addEventListener('input', function () {
     buffer = Number(this.value) / 100;
     render();
+    renderPower();
     renderGrow();
   });
   document.getElementById('seasonIn').addEventListener('input', function () {
@@ -1700,6 +1714,7 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
     if (!t) return;
     pick = t.getAttribute('data-id');
     render();
+    renderPower();
   });
   document.getElementById('tabFood').addEventListener('click', function () { showTab('food'); });
   document.getElementById('tabKibble').addEventListener('click', function () { showTab('kibble'); });
@@ -2118,29 +2133,33 @@ h1{font-size:28px;letter-spacing:-.035em;line-height:1.15;text-wrap:balance;marg
   document.getElementById('heatIn').addEventListener('input', function () {
     grow.heat = GT.parseTemp(this.value, GT.DEFAULT_HEAT);
     render();
+    renderPower();
     renderGrow();
   });
   document.getElementById('coolIn').addEventListener('input', function () {
     grow.cool = GT.parseTemp(this.value, GT.DEFAULT_COOL);
     render();
+    renderPower();
     renderGrow();
   });
   document.getElementById('diagHeat').addEventListener('input', function () {
     grow.heat = GT.parseTemp(this.value, GT.DEFAULT_HEAT);
     render();
+    renderPower();
     renderGrow();
   });
   document.getElementById('diagCool').addEventListener('input', function () {
     grow.cool = GT.parseTemp(this.value, GT.DEFAULT_COOL);
     render();
+    renderPower();
     renderGrow();
   });
   document.getElementById('wattsIn').addEventListener('input', function () {
     watts = PWR.parseWatts(this.value);
     renderPower();
   });
-  document.getElementById('growWattsBtn').addEventListener('click', function () {
-    watts = PWR.parseWatts(watts + growRoomPlan().wattsDay);
+  document.getElementById('growSyncBtn').addEventListener('click', function () {
+    growSync = !growSync;
     renderPower();
   });
   document.getElementById('hours').addEventListener('input', function () {
